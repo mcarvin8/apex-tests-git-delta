@@ -21,6 +21,7 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     'to': Flags.string({
       char: 't',
       summary: messages.getMessage('flags.to.summary'),
+      required: true,
       default: TO_DEFAULT_VALUE,
     }),
     'from': Flags.string({

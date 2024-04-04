@@ -62,12 +62,12 @@ Recommend running this command in your project's root directory.
 
 ```
 USAGE
-  $ sf apex-tests-git-delta -f <value> -t <value> -e <value> [--json]
+  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> [--json]
 
 FLAGS
   -f, --from=<value> Git commit SHA from where the commit message log is done. This SHA's commit message will be included in the results.
-  -t, --to=<value> Git commit SHA to where the commit message log is done. [default: HEAD]
-  -e, --regular-expression=<value> [default: 'sfdx-project.json' in the current working directory] The path to your Salesforce DX configuration file, 'sfdx-project.json'.
+  -t, --to=<value> [default: HEAD] Git commit SHA to where the commit message log is done.
+  -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -76,5 +76,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range, including the '--from' commit, and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt"
+    $ sf apex-tests-git-delta delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt"
 ```
