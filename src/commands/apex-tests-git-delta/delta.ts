@@ -12,6 +12,7 @@ const messages = Messages.loadMessages('apex-tests-git-delta', 'delta');
 
 export type TestDeltaResult = {
   tests: string;
+  warnings: string[];
 };
 
 export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
@@ -62,15 +63,15 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const sfdxConfigFile = flags['sfdx-configuration'];
 
     const result = await extractTestClasses(fromGitRef, toGitRef, regExFile, sfdxConfigFile);
-    const deltaTests = result.validatedClasses;
+    const tests = result.validatedClasses;
     const warnings = result.warnings;
-    this.log(deltaTests);
-    fs.writeFileSync(output, deltaTests);
+    fs.writeFileSync(output, tests);
     if (warnings.length > 0) {
       warnings.forEach((warning) => {
         this.warn(warning);
       });
     }
-    return { tests: deltaTests };
+    this.log(tests);
+    return { tests, warnings };
   }
 }
