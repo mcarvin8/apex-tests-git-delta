@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.1...v1.0.2) (2024-04-05)
+
+### Bug Fixes
+
+- write test classes to a text file to ensure clean output ([4b062e1](https://github.com/mcarvin8/apex-tests-git-delta/commit/4b062e18dec7548ab6e35f6ee9dee467c69baa94))
+
 ## [1.0.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.0...v1.0.1) (2024-04-04)
 
 ### Bug Fixes
