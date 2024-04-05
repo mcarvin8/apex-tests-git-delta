@@ -4,7 +4,7 @@ Returns all of the Apex Tests defined in the commit messages between 2 git commi
 
 # description
 
-Given 2 git commits, this plugin will parse all of the commit messages between this range, including the '--from' commit, and return the delta Apex test class string. This can be used to execute delta deployments.
+Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 # examples
 
@@ -12,11 +12,11 @@ Given 2 git commits, this plugin will parse all of the commit messages between t
 
 # flags.from.summary
 
-Git commit SHA from where the commit message log is done.
+Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
 
 # flags.to.summary
 
-Git commit SHA to where the commit message log is done.
+Commit SHA to where the commit message log is done.
 
 # flags.regular-expression.summary
 

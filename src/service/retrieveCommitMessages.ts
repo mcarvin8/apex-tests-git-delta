@@ -3,8 +3,7 @@ import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 
 export function retrieveCommitMessages(fromCommit: string, toCommit: string, regexFilePath: string): string[] {
-    // ~1 to include the from commit SHA
-    const gitLogCommand = `git log --format=%s ${fromCommit}~1..${toCommit}`;
+    const gitLogCommand = `git log --format=%s ${fromCommit}..${toCommit}`;
     let commitMessages: string;
     try {
         commitMessages = execSync(gitLogCommand, { encoding: 'utf-8' });

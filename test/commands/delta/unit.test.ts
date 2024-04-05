@@ -57,6 +57,6 @@ describe('return the delta tests between git commits', () => {
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('SandboxTest TestClass00 TestClass3 TestClass4');
+    expect(output).to.include('SandboxTest TestClass3 TestClass4');
   });
 });
