@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.2...v1.0.3) (2024-04-05)
+
+### Bug Fixes
+
+- don't include `--from` commit message in the output ([23242c6](https://github.com/mcarvin8/apex-tests-git-delta/commit/23242c6329f388409b14a14f167d6c526a0ac000))
+
 ## [1.0.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.1...v1.0.2) (2024-04-05)
 
 ### Bug Fixes
