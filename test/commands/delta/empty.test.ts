@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
-import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
+import { regExPattern, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 describe('scan commit messages without the regex and return an empty string.', () => {
   const $$ = new TestContext();
@@ -24,7 +24,6 @@ describe('scan commit messages without the regex and return an empty string.', (
     fs.mkdirSync('packaged/classes', { recursive: true });
     execSync('git init', { cwd: tempDir });
     execSync('git branch -m main');
-    fs.writeFileSync(regExFile, regExFileContents);
     fs.writeFileSync(sfdxConfigFile, sfdxConfigJsonString);
     let userName = '';
     let userEmail = '';
@@ -63,7 +62,7 @@ describe('scan commit messages without the regex and return an empty string.', (
   });
 
   it('return an empty test string with no warnings.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
+    await ApexTestDelta.run(['--from', fromSha, '--to', toSha, '-e', regExPattern]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)

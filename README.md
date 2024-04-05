@@ -8,7 +8,7 @@ This plugin requires Git Bash to be installed in your environment.
 
 The tests are determined by looking at all commit messages in the commit range and extracting them with a regular expression defined in a text file.
 
-For example, if the user creates a file named `regex.txt` in their repository with the below regular expression, the plugin will extract all test classes that are found with this expression and return a space-separated string with unique test classes.
+For example, if the user provides the below regular expression via the `--regular-expression` flag, the plugin will extract all test classes that are found with this expression and return a space-separated string with unique test classes.
 
 ```
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
@@ -71,7 +71,7 @@ USAGE
 FLAGS
   -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
   -t, --to=<value> [default: HEAD] Commit SHA to where the commit message log is done.
-  -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
+  -e, --regular-expression=<value> [default: '[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]'] The regular expression to use when parsing commit messages for Apex Tests.
   -c, --sfdx-configuration=<value> [default: sfdx-project.json] Path to your project's Salesforce DX configuration file.
   --output=<value> [default: runTests.txt] The text file to save the delta test classes to.
 
@@ -82,5 +82,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "regex.txt" --sfdx-configuration "sfdx-project.json" --output "runTests.txt"
+    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]" --sfdx-configuration "sfdx-project.json" --output "runTests.txt"
 ```

@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
-import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
+import { regExPattern, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 describe('return the delta tests between git commits', () => {
   const $$ = new TestContext();
@@ -24,7 +24,6 @@ describe('return the delta tests between git commits', () => {
     fs.mkdirSync('packaged/classes', { recursive: true });
     execSync('git init', { cwd: tempDir });
     execSync('git branch -m main');
-    fs.writeFileSync(regExFile, regExFileContents);
     fs.writeFileSync(sfdxConfigFile, sfdxConfigJsonString);
     let userName = '';
     let userEmail = '';
@@ -71,7 +70,7 @@ describe('return the delta tests between git commits', () => {
   });
 
   it('scan the temporary commits and return the delta test class string without any warnings.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
+    await ApexTestDelta.run(['--from', fromSha, '--to', toSha, '-e', regExPattern]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)

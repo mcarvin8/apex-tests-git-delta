@@ -20,7 +20,7 @@ Commit SHA to where the commit message log is done.
 
 # flags.regular-expression.summary
 
-The text file containing the Apex Tests regular expression to search for.
+The regular expression to use when parsing commit messages for Apex Tests.
 
 # flags.sfdx-configuration.summary
 

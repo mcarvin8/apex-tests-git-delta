@@ -31,12 +31,11 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       summary: messages.getMessage('flags.from.summary'),
       required: true,
     }),
-    'regular-expression': Flags.file({
+    'regular-expression': Flags.string({
       char: 'e',
       summary: messages.getMessage('flags.regular-expression.summary'),
       required: true,
-      exists: true,
-      default: 'regex.txt',
+      default: '[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]',
     }),
     output: Flags.file({
       summary: messages.getMessage('flags.output.summary'),
