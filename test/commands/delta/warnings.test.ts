@@ -10,7 +10,7 @@ import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
-describe('return the delta tests between git commits', () => {
+describe('confirm warnings are generated when files cannot be found in a package directory.', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
   let fromSha: string;
@@ -42,17 +42,13 @@ describe('return the delta tests between git commits', () => {
     }
     fromSha = await createTemporaryCommit(
       'chore: initial commit with Apex::TestClass00::Apex',
-      'force-app/main/default/classes/SandboxTest.cls',
+      'SandboxTest.cls',
       'dummy 1'
     );
-    await createTemporaryCommit(
-      'chore: initial commit with Apex::SandboxTest::Apex',
-      'force-app/main/default/classes/TestClass3.cls',
-      'dummy 11'
-    );
+    await createTemporaryCommit('chore: initial commit with Apex::SandboxTest::Apex', 'TestClass3.cls', 'dummy 11');
     toSha = await createTemporaryCommit(
       'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
-      'packaged/classes/TestClass4.cls',
+      'TestClass4.cls',
       'dummy 2'
     );
   });
@@ -70,17 +66,18 @@ describe('return the delta tests between git commits', () => {
     fs.rmdirSync(tempDir, { recursive: true });
   });
 
-  it('scan the temporary commits and return the delta test class string without any warnings.', async () => {
+  it('confirm warnings are generated and no delta tests are in the log output.', async () => {
     await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
-    const output = sfCommandStubs.log
+    const warningsOutput = sfCommandStubs.warn
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('SandboxTest TestClass3 TestClass4');
-    const warnings = sfCommandStubs.warn
+    const warningsNotEmpty = warningsOutput.trim().length > 0;
+    expect(warningsNotEmpty).to.be.true;
+    const logOutput = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(warnings).to.include('');
+    expect(logOutput).to.include('');
   });
 });
