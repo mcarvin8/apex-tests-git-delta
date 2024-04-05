@@ -25,3 +25,7 @@ The text file containing the Apex Tests regular expression to search for.
 # flags.output.summary
 
 The text file to save the delta test classes to.
+
+# flags.sfdx-configuration.summary
+
+Path to your project's Salesforce DX configuration file.
