@@ -1,7 +1,8 @@
 'use strict';
 import { execSync } from 'node:child_process';
+import * as fs from 'node:fs';
 
-export function retrieveCommitMessages(fromCommit: string, toCommit: string, regexPattern: string): string[] {
+export function retrieveCommitMessages(fromCommit: string, toCommit: string, regexFilePath: string): string[] {
   const gitLogCommand = `git log --format=%s ${fromCommit}..${toCommit}`;
   let commitMessages: string;
   try {
@@ -11,10 +12,12 @@ export function retrieveCommitMessages(fromCommit: string, toCommit: string, reg
   }
 
   let regex: RegExp;
+  let regexPattern = '';
   try {
+    regexPattern = fs.readFileSync(regexFilePath, 'utf-8').trim();
     regex = new RegExp(regexPattern, 'g');
   } catch (err) {
-    throw Error(`The regular expression '${regexPattern}' is invalid.`);
+    throw Error(`The regular expression in '${regexFilePath}' is invalid.`);
   }
 
   const matchedMessages: string[] = [];

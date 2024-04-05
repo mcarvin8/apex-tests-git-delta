@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
-import { regExPattern, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
+import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 describe('confirm warnings are generated when files cannot be found in a package directory.', () => {
   const $$ = new TestContext();
@@ -24,6 +24,7 @@ describe('confirm warnings are generated when files cannot be found in a package
     fs.mkdirSync('packaged/classes', { recursive: true });
     execSync('git init', { cwd: tempDir });
     execSync('git branch -m main');
+    fs.writeFileSync(regExFile, regExFileContents);
     fs.writeFileSync(sfdxConfigFile, sfdxConfigJsonString);
     let userName = '';
     let userEmail = '';
@@ -66,7 +67,7 @@ describe('confirm warnings are generated when files cannot be found in a package
   });
 
   it('confirm warnings are generated and no delta tests are in the log output.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', toSha, '-e', regExPattern]);
+    await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
     const warningsOutput = sfCommandStubs.warn
       .getCalls()
       .flatMap((c) => c.args)
