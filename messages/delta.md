@@ -8,7 +8,7 @@ Given 2 git commits, this plugin will parse all of the commit messages between t
 
 # examples
 
-- `sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "regex.txt" --sfdx-configuration "sfdx-project.json" --output "runTests.txt"`
+- `sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]" --sfdx-configuration "sfdx-project.json" --output "runTests.txt"`
 
 # flags.from.summary
 
