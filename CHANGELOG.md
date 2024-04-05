@@ -1,3 +1,9 @@
+## [1.0.5](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.4...v1.0.5) (2024-04-05)
+
+### Bug Fixes
+
+- revert to regex in a file due to issues with flag ([3b6aa6b](https://github.com/mcarvin8/apex-tests-git-delta/commit/3b6aa6bc9fd97c6763493e1a51ac5dcaefc3fd4a))
+
 ## [1.0.4](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.3...v1.0.4) (2024-04-05)
 
 ### Bug Fixes
