@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.3...v1.0.4) (2024-04-05)
+
+### Bug Fixes
+
+- get regular expression from a command flag instead of a file ([e3d7d40](https://github.com/mcarvin8/apex-tests-git-delta/commit/e3d7d4075e0b02e1a4832a1df62e63ec17066eab))
+- validate tests against package directories ([5b9b94e](https://github.com/mcarvin8/apex-tests-git-delta/commit/5b9b94e937591897a23050bcd677c268df195d9e))
+
 ## [1.0.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.2...v1.0.3) (2024-04-05)
 
 ### Bug Fixes
