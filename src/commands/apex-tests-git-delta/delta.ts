@@ -4,7 +4,6 @@ import * as fs from 'node:fs';
 
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { TO_DEFAULT_VALUE } from '../../constants/gitConstants.js';
 import { extractTestClasses } from '../../service/extractTestClasses.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -25,7 +24,7 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       char: 't',
       summary: messages.getMessage('flags.to.summary'),
       required: true,
-      default: TO_DEFAULT_VALUE,
+      default: 'HEAD',
     }),
     from: Flags.string({
       char: 'f',
