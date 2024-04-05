@@ -4,7 +4,6 @@ import * as fs from 'node:fs';
 
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
-import { TO_DEFAULT_VALUE } from '../../constants/gitConstants.js';
 import { extractTestClasses } from '../../service/extractTestClasses.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -12,6 +11,7 @@ const messages = Messages.loadMessages('apex-tests-git-delta', 'delta');
 
 export type TestDeltaResult = {
   tests: string;
+  warnings: string[];
 };
 
 export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
@@ -20,29 +20,35 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
   public static readonly examples = messages.getMessages('examples');
 
   public static readonly flags = {
-    'to': Flags.string({
+    to: Flags.string({
       char: 't',
       summary: messages.getMessage('flags.to.summary'),
       required: true,
-      default: TO_DEFAULT_VALUE,
+      default: 'HEAD',
     }),
-    'from': Flags.string({
+    from: Flags.string({
       char: 'f',
       summary: messages.getMessage('flags.from.summary'),
       required: true,
     }),
-    'regular-expression': Flags.file({
+    'regular-expression': Flags.string({
       char: 'e',
       summary: messages.getMessage('flags.regular-expression.summary'),
       required: true,
-      exists: true,
-      default: 'regex.txt',
+      default: '[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]',
     }),
-    'output': Flags.file({
+    output: Flags.file({
       summary: messages.getMessage('flags.output.summary'),
       required: true,
       exists: false,
       default: 'runTests.txt',
+    }),
+    'sfdx-configuration': Flags.file({
+      summary: messages.getMessage('flags.sfdx-configuration.summary'),
+      char: 'c',
+      required: true,
+      exists: true,
+      default: 'sfdx-project.json',
     }),
   };
 
@@ -52,11 +58,18 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const fromGitRef = flags['from'];
     const regExFile = flags['regular-expression'];
     const output = flags['output'];
+    const sfdxConfigFile = flags['sfdx-configuration'];
 
-    const deltaTests = extractTestClasses(fromGitRef, toGitRef, regExFile);
-    this.log(deltaTests);
-    fs.writeFileSync(output, deltaTests);
-
-    return { tests: deltaTests };
+    const result = await extractTestClasses(fromGitRef, toGitRef, regExFile, sfdxConfigFile);
+    const tests = result.validatedClasses;
+    const warnings = result.warnings;
+    fs.writeFileSync(output, tests);
+    if (warnings.length > 0) {
+      warnings.forEach((warning) => {
+        this.warn(warning);
+      });
+    }
+    this.log(tests);
+    return { tests, warnings };
   }
 }

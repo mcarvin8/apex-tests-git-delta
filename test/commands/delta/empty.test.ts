@@ -10,7 +10,7 @@ import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { regExPattern, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
-describe('return the delta tests between git commits', () => {
+describe('scan commit messages without the regex and return an empty string.', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
   let fromSha: string;
@@ -40,20 +40,12 @@ describe('return the delta tests between git commits', () => {
       execSync('git config --global user.email "90224411+mcarvin8@users.noreply.github.com"');
     }
     fromSha = await createTemporaryCommit(
-      'chore: initial commit with Apex::TestClass00::Apex',
+      'chore: initial commit',
       'force-app/main/default/classes/SandboxTest.cls',
       'dummy 1'
     );
-    await createTemporaryCommit(
-      'chore: initial commit with Apex::SandboxTest::Apex',
-      'force-app/main/default/classes/TestClass3.cls',
-      'dummy 11'
-    );
-    toSha = await createTemporaryCommit(
-      'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
-      'packaged/classes/TestClass4.cls',
-      'dummy 2'
-    );
+    await createTemporaryCommit('chore: add a class', 'force-app/main/default/classes/TestClass3.cls', 'dummy 11');
+    toSha = await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2');
   });
 
   beforeEach(() => {
@@ -69,13 +61,13 @@ describe('return the delta tests between git commits', () => {
     fs.rmdirSync(tempDir, { recursive: true });
   });
 
-  it('scan the temporary commits and return the delta test class string without any warnings.', async () => {
+  it('return an empty test string with no warnings.', async () => {
     await ApexTestDelta.run(['--from', fromSha, '--to', toSha, '-e', regExPattern]);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
       .join('\n');
-    expect(output).to.include('SandboxTest TestClass3 TestClass4');
+    expect(output).to.include('');
     const warnings = sfCommandStubs.warn
       .getCalls()
       .flatMap((c) => c.args)

@@ -1,24 +1,41 @@
-'use strict'
+'use strict';
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
+import { validateClassPaths } from './validateClassPaths.js';
 
-export function extractTestClasses(fromRef: string, toRef: string, regex: string): string {
+export async function extractTestClasses(
+  fromRef: string,
+  toRef: string,
+  regex: string,
+  sfdxConfigFile: string
+): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
   const matchedMessages = retrieveCommitMessages(fromRef, toRef, regex);
 
   matchedMessages.forEach((message: string) => {
-      // Split the commit message by commas or spaces
-      const classes = message.split(/,|\s/);
+    // Split the commit message by commas or spaces
+    const classes = message.split(/,|\s/);
 
-      classes.forEach((testClass: string) => {
-          // Remove leading/trailing whitespaces and add non-empty strings to the set
-          const trimmedClass = testClass.trim();
-          if (trimmedClass !== '') {
-              testClasses.add(trimmedClass);
-          }
-      });
+    classes.forEach((testClass: string) => {
+      // Remove leading/trailing whitespaces and add non-empty strings to the set
+      const trimmedClass = testClass.trim();
+      if (trimmedClass !== '') {
+        testClasses.add(trimmedClass);
+      }
+    });
   });
 
-  // Sort test classes alphabetically and then return a space-separated string
-  const sortedClasses = Array.from(testClasses).sort((a, b) => a.localeCompare(b));
-  return sortedClasses.join(' ');
+  const unvalidatedClasses: string[] = Array.from(testClasses);
+  let validatedClasses: string = '';
+  const result =
+    unvalidatedClasses.length > 0
+      ? await validateClassPaths(unvalidatedClasses, sfdxConfigFile)
+      : { validatedClasses: new Set(), warnings: [] };
+  let sortedClasses: string[] = [];
+  if (result.validatedClasses.size > 0) {
+    sortedClasses = Array.from(result.validatedClasses) as string[];
+    sortedClasses = sortedClasses.sort((a, b) => a.localeCompare(b));
+    validatedClasses = sortedClasses.join(' ');
+  }
+
+  return { validatedClasses, warnings: result.warnings };
 }
