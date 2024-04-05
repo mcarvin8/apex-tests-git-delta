@@ -1,10 +1,10 @@
 'use strict';
 
-import * as fs from 'node:fs';
+import * as promises from 'node:fs/promises';
 import { execSync } from 'node:child_process';
 
 export async function createTemporaryCommit(message: string, filePath: string, content: string): Promise<string> {
-  await fs.promises.writeFile(filePath, content);
+  await promises.writeFile(filePath, content);
 
   // Stage the file
   execSync(`git add "${filePath}"`);
