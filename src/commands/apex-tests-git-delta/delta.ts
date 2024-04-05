@@ -1,5 +1,7 @@
 'use strict';
 
+import * as fs from 'node:fs';
+
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { TO_DEFAULT_VALUE } from '../../constants/gitConstants.js';
@@ -36,6 +38,12 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       exists: true,
       default: 'regex.txt',
     }),
+    'output': Flags.file({
+      summary: messages.getMessage('flags.output.summary'),
+      required: true,
+      exists: false,
+      default: 'runTests.txt',
+    }),
   };
 
   public async run(): Promise<TestDeltaResult> {
@@ -43,9 +51,11 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const toGitRef = flags['to'];
     const fromGitRef = flags['from'];
     const regExFile = flags['regular-expression'];
+    const output = flags['output'];
 
     const deltaTests = extractTestClasses(fromGitRef, toGitRef, regExFile);
     this.log(deltaTests);
+    fs.writeFileSync(output, deltaTests);
 
     return { tests: deltaTests };
   }

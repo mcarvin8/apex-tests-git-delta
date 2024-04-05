@@ -8,7 +8,7 @@ Given 2 git commits, this plugin will parse all of the commit messages between t
 
 # examples
 
-- `sf apex-tests-git-delta delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt"`
+- `sf apex-tests-git-delta delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt" --output "runTests.txt"`
 
 # flags.from.summary
 
@@ -21,3 +21,7 @@ Git commit SHA to where the commit message log is done.
 # flags.regular-expression.summary
 
 The text file containing the Apex Tests regular expression to search for.
+
+# flags.output.summary
+
+The text file to save the delta test classes to.

@@ -22,17 +22,19 @@ chore: add sandbox refresh class Apex::PrepareMySandboxTest::Apex`
 fix: fix quoting issues Apex::QuoteControllerTest::Apex`
 ```
 
-The 3 commit messages above will be parsed and the plugin will return the following space-separated string, sorted alphabetically:
+The 3 commit messages above will be parsed to retrieve all test classes found using the regular expression. Test classes can be separated by commas, spaces, or both in the commit message. This plugin will separate all tests by a single space and sort them alphabetically when creating the final output.
 
 ```
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
-You could then pass the plugin's output to the `sf project deploy` command:
+This plugin will also save its output to a text file, `runTests.txt` by default unless you provide a different file path via the `--output` flag.
+
+You could then save the contents of this text file to a variable and use that variable in the `sf project deploy` command:
 
 ```
-testclasses=$(sf apex-tests-git-delta delta --from "sha_hash" --to "sha_hash")
-
+sf apex-tests-git-delta delta --from "c7603c25581afe7c443c57e687f2d6abd654ea77" --to "HEAD" --output "runTests.txt"
+testclasses=$(<runTests.txt)
 sf project deploy start -x manifest/package.xml -l RunSpecifiedTests -t $testclasses
 ```
 
@@ -62,12 +64,13 @@ Recommend running this command in your project's root directory.
 
 ```
 USAGE
-  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> [--json]
+  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> --output <value> [--json]
 
 FLAGS
   -f, --from=<value> Git commit SHA from where the commit message log is done. This SHA's commit message will be included in the results.
   -t, --to=<value> [default: HEAD] Git commit SHA to where the commit message log is done.
   -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
+  --output=<value> [default: runTests.txt] The text file to save the delta test classes to.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -76,5 +79,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range, including the '--from' commit, and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt"
+    $ sf apex-tests-git-delta delta --from "abcdef" --to "ghifb" --regular-expression "regex.txt" --output "runTests.txt"
 ```
