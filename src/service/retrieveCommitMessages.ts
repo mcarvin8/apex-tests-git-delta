@@ -1,6 +1,6 @@
 'use strict';
 import { readFileSync } from 'node:fs';
-import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
+import { simpleGit, SimpleGit, SimpleGitOptions, DefaultLogFields, LogResult } from 'simple-git';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
@@ -14,7 +14,10 @@ export async function retrieveCommitMessages(
     trimmed: false,
   };
   const git: SimpleGit = simpleGit(options);
-  const commitMessages = await git.raw('log', '--format=%s', `${fromCommit}..${toCommit}`);
+  const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
+
+  // Filter only entries that match the DefaultLogFields type
+  const commitMessages: string[] = (result.all as DefaultLogFields[]).map((commit) => commit.message);
 
   let regex: RegExp;
   let regexPattern = '';
@@ -26,12 +29,14 @@ export async function retrieveCommitMessages(
   }
 
   const matchedMessages: string[] = [];
-  let match;
-  while ((match = regex.exec(commitMessages)) !== null) {
-    if (match[1]) {
-      matchedMessages.push(match[1]);
+  commitMessages.forEach((message) => {
+    let match;
+    while ((match = regex.exec(message)) !== null) {
+      if (match[1]) {
+        matchedMessages.push(match[1]);
+      }
     }
-  }
+  });
 
   return matchedMessages;
 }
