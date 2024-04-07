@@ -9,7 +9,7 @@ export async function extractTestClasses(
   sfdxConfigFile: string
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
-  const matchedMessages = retrieveCommitMessages(fromRef, toRef, regex);
+  const matchedMessages = await retrieveCommitMessages(fromRef, toRef, regex);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces

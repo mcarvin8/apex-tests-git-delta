@@ -1,7 +1,7 @@
 'use strict';
 
 import * as fs from 'node:fs';
-import { execSync } from 'node:child_process';
+import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
 
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
@@ -20,36 +20,48 @@ describe('confirm warnings are generated when files cannot be found in a package
 
   before(async () => {
     process.chdir(tempDir);
+    const options: Partial<SimpleGitOptions> = {
+      baseDir: process.cwd(),
+      binary: 'git',
+      maxConcurrentProcesses: 6,
+      trimmed: false,
+    };
+    const git: SimpleGit = simpleGit(options);
     fs.mkdirSync('force-app/main/default/classes', { recursive: true });
     fs.mkdirSync('packaged/classes', { recursive: true });
-    execSync('git init', { cwd: tempDir });
-    execSync('git branch -m main');
+    await git.init();
     fs.writeFileSync(regExFile, regExFileContents);
     fs.writeFileSync(sfdxConfigFile, sfdxConfigJsonString);
-    let userName = '';
-    let userEmail = '';
+    let userName;
+    let userEmail;
 
     try {
-      userName = execSync('git config --global user.name', { encoding: 'utf-8' }).trim();
-      userEmail = execSync('git config --global user.email', { encoding: 'utf-8' }).trim();
+      userName = await git.getConfig('user.name');
+      userEmail = await git.getConfig('user.email');
     } catch (error) {
       // Ignore errors if the git config values are not set
     }
-
-    if (userName === '' && userEmail === '') {
-      execSync('git config --global user.name "CI Bot"');
-      execSync('git config --global user.email "90224411+mcarvin8@users.noreply.github.com"');
+    if (!userName?.value && !userEmail?.value) {
+      await git.addConfig('user.name', 'CI Bot', false, 'global');
+      await git.addConfig('user.email', '90224411+mcarvin8@users.noreply.github.com', false, 'global');
     }
     fromSha = await createTemporaryCommit(
       'chore: initial commit with Apex::TestClass00::Apex',
       'SandboxTest.cls',
-      'dummy 1'
+      'dummy 1',
+      git
     );
-    await createTemporaryCommit('chore: initial commit with Apex::SandboxTest::Apex', 'TestClass3.cls', 'dummy 11');
+    await createTemporaryCommit(
+      'chore: initial commit with Apex::SandboxTest::Apex',
+      'TestClass3.cls',
+      'dummy 11',
+      git
+    );
     toSha = await createTemporaryCommit(
       'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
       'TestClass4.cls',
-      'dummy 2'
+      'dummy 2',
+      git
     );
   });
 

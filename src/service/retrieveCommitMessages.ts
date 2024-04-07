@@ -1,20 +1,25 @@
 'use strict';
-import { execSync } from 'node:child_process';
-import * as fs from 'node:fs';
+import { readFileSync } from 'node:fs';
+import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
 
-export function retrieveCommitMessages(fromCommit: string, toCommit: string, regexFilePath: string): string[] {
-  const gitLogCommand = `git log --format=%s ${fromCommit}..${toCommit}`;
-  let commitMessages: string;
-  try {
-    commitMessages = execSync(gitLogCommand, { encoding: 'utf-8' });
-  } catch (err) {
-    throw Error('The git diff failed to run due to the above error.');
-  }
+export async function retrieveCommitMessages(
+  fromCommit: string,
+  toCommit: string,
+  regexFilePath: string
+): Promise<string[]> {
+  const options: Partial<SimpleGitOptions> = {
+    baseDir: process.cwd(),
+    binary: 'git',
+    maxConcurrentProcesses: 6,
+    trimmed: false,
+  };
+  const git: SimpleGit = simpleGit(options);
+  const commitMessages = await git.raw('log', '--format=%s', `${fromCommit}..${toCommit}`);
 
   let regex: RegExp;
   let regexPattern = '';
   try {
-    regexPattern = fs.readFileSync(regexFilePath, 'utf-8').trim();
+    regexPattern = readFileSync(regexFilePath, 'utf-8').trim();
     regex = new RegExp(regexPattern, 'g');
   } catch (err) {
     throw Error(`The regular expression in '${regexFilePath}' is invalid.`);

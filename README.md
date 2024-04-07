@@ -4,7 +4,7 @@
 
 The `apex-tests-git-delta` is a simple Salesforce CLI plugin to take 2 commit SHAs in a Salesforce Git repository and return the delta Apex tests to run against when executing a delta deployment.
 
-This plugin requires Git Bash to be installed in your environment.
+This plugin requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
 
 The tests are determined by looking at all commit messages in the commit range and extracting them with a regular expression defined in a text file.
 
@@ -42,7 +42,7 @@ sf project deploy start -x manifest/package.xml -l RunSpecifiedTests -t $testcla
 
 ## Why another plugin to determine delta tests?
 
-The [SFDX Git Delta ](https://github.com/scolladon/sfdx-git-delta) is an amazing tool that generates packages and directories for delta deployments. It could also be used to generate a comma-separated list of added/modified Apex classes, which could be used to run only the tests which were modified.
+The [SFDX Git Delta](https://github.com/scolladon/sfdx-git-delta) is an amazing tool that generates packages and directories for delta deployments. It could also be used to generate a comma-separated list of added/modified Apex classes, which could be used to run only the tests which were modified.
 
 However, depending on your testing strategy and other dependencies, running tests against only the Apex classes which changed may not be enough. You may need to declare additional Apex Tests to run against which will not be modified in this commit range.
 

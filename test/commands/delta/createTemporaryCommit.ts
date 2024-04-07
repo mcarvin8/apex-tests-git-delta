@@ -1,19 +1,24 @@
 'use strict';
 
 import * as promises from 'node:fs/promises';
-import { execSync } from 'node:child_process';
+import { SimpleGit } from 'simple-git';
 
-export async function createTemporaryCommit(message: string, filePath: string, content: string): Promise<string> {
+export async function createTemporaryCommit(
+  message: string,
+  filePath: string,
+  content: string,
+  git: SimpleGit
+): Promise<string> {
   await promises.writeFile(filePath, content);
 
   // Stage the file
-  execSync(`git add "${filePath}"`);
+  await git.add(filePath);
 
   // Commit with the provided message
-  execSync(`git commit -m "${message}"`);
+  await git.commit(message);
 
   // Return the commit hash of the newly created commit
-  const commitHash = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
+  const commitHash = (await git.revparse('HEAD')).trim();
 
   return commitHash;
 }
