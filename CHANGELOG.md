@@ -1,3 +1,9 @@
+## [1.0.6](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.5...v1.0.6) (2024-04-07)
+
+### Bug Fixes
+
+- use simple-git for git commands ([f1e50ce](https://github.com/mcarvin8/apex-tests-git-delta/commit/f1e50cecef920288dc4b588b222e01b0352dfdc6))
+
 ## [1.0.5](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.4...v1.0.5) (2024-04-05)
 
 ### Bug Fixes
