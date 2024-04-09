@@ -1,4 +1,5 @@
 'use strict';
+
 import { readFileSync } from 'node:fs';
 import { simpleGit, SimpleGit, SimpleGitOptions, DefaultLogFields, LogResult } from 'simple-git';
 

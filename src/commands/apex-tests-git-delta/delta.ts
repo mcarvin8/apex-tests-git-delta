@@ -1,6 +1,6 @@
 'use strict';
 
-import * as fs from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
@@ -64,7 +64,7 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const result = await extractTestClasses(fromGitRef, toGitRef, regExFile, sfdxConfigFile);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
-    fs.writeFileSync(output, tests);
+    await writeFile(output, tests);
     if (warnings.length > 0) {
       warnings.forEach((warning) => {
         this.warn(warning);

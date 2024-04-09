@@ -1,6 +1,6 @@
 'use strict';
 
-import * as promises from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { SimpleGit } from 'simple-git';
 
 export async function createTemporaryCommit(
@@ -9,7 +9,7 @@ export async function createTemporaryCommit(
   content: string,
   git: SimpleGit
 ): Promise<string> {
-  await promises.writeFile(filePath, content);
+  await writeFile(filePath, content);
 
   // Stage the file
   await git.add(filePath);

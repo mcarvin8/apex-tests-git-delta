@@ -1,6 +1,7 @@
 'use strict';
 
-import * as fs from 'node:fs';
+import { mkdtempSync } from 'node:fs';
+import { mkdir, writeFile, rm } from 'node:fs/promises';
 import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
 
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
@@ -16,7 +17,7 @@ describe('confirm warnings are generated when files cannot be found in a package
   let fromSha: string;
   let toSha: string;
   const originalDir = process.cwd();
-  const tempDir = fs.mkdtempSync('../git-temp-');
+  const tempDir = mkdtempSync('../git-temp-');
 
   before(async () => {
     process.chdir(tempDir);
@@ -27,11 +28,11 @@ describe('confirm warnings are generated when files cannot be found in a package
       trimmed: false,
     };
     const git: SimpleGit = simpleGit(options);
-    fs.mkdirSync('force-app/main/default/classes', { recursive: true });
-    fs.mkdirSync('packaged/classes', { recursive: true });
+    await mkdir('force-app/main/default/classes', { recursive: true });
+    await mkdir('packaged/classes', { recursive: true });
     await git.init();
-    fs.writeFileSync(regExFile, regExFileContents);
-    fs.writeFileSync(sfdxConfigFile, sfdxConfigJsonString);
+    await writeFile(regExFile, regExFileContents);
+    await writeFile(sfdxConfigFile, sfdxConfigJsonString);
     let userName;
     let userEmail;
 
@@ -73,9 +74,9 @@ describe('confirm warnings are generated when files cannot be found in a package
     $$.restore();
   });
 
-  after(() => {
+  after(async () => {
     process.chdir(originalDir);
-    fs.rmdirSync(tempDir, { recursive: true });
+    await rm(tempDir, { recursive: true });
   });
 
   it('confirm warnings are generated and no delta tests are in the log output.', async () => {

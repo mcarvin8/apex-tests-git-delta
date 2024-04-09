@@ -1,4 +1,5 @@
 'use strict';
+
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
 import { validateClassPaths } from './validateClassPaths.js';
 

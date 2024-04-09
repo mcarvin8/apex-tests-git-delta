@@ -1,8 +1,8 @@
 'use strict';
 /* eslint-disable no-await-in-loop */
 
-import * as promises from 'node:fs/promises';
-import * as path from 'node:path';
+import { readdir, stat } from 'node:fs/promises';
+import { join } from 'node:path';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 
@@ -33,10 +33,10 @@ export async function validateClassPaths(
 }
 
 async function searchRecursively(fileName: string, dxDirectory: string): Promise<string | undefined> {
-  const files = await promises.readdir(dxDirectory);
+  const files = await readdir(dxDirectory);
   for (const file of files) {
-    const filePath = path.join(dxDirectory, file);
-    const stats = await promises.stat(filePath);
+    const filePath = join(dxDirectory, file);
+    const stats = await stat(filePath);
     if (stats.isDirectory()) {
       const result = await searchRecursively(fileName, filePath);
       if (result) {
