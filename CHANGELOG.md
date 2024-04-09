@@ -1,3 +1,9 @@
+## [1.0.8](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.7...v1.0.8) (2024-04-09)
+
+### Bug Fixes
+
+- refactor imports and ensure async/promises are used ([ed43851](https://github.com/mcarvin8/apex-tests-git-delta/commit/ed43851909b53105432a528db70a9b1749b42569))
+
 ## [1.0.7](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.6...v1.0.7) (2024-04-07)
 
 ### Bug Fixes
