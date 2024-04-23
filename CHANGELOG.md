@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.8...v1.0.9) (2024-04-23)
+
+### Bug Fixes
+
+- fix path resolution from non-root directories ([5e32938](https://github.com/mcarvin8/apex-tests-git-delta/commit/5e32938c05e5ad45ee5f6785b80e31381a6d7450))
+- validate classes against the `--to` commit tree ([b454657](https://github.com/mcarvin8/apex-tests-git-delta/commit/b454657a8c72078cd5c388be7ab5393d215ecf14))
+
 ## [1.0.8](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.7...v1.0.8) (2024-04-09)
 
 ### Bug Fixes
