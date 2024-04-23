@@ -2,7 +2,7 @@
 
 [![NPM](https://img.shields.io/npm/v/apex-tests-git-delta.svg?label=apex-tests-git-delta)](https://www.npmjs.com/package/apex-tests-git-delta) [![Downloads/week](https://img.shields.io/npm/dw/apex-tests-git-delta.svg)](https://npmjs.org/package/apex-tests-git-delta) [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
 
-The `apex-tests-git-delta` is a simple Salesforce CLI plugin to take 2 commit SHAs in a Salesforce Git repository and return the delta Apex tests to run against when executing a delta deployment.
+The `apex-tests-git-delta` is a Salesforce CLI plugin to take 2 commit SHAs in a Salesforce DX git repository and return the delta Apex tests to run against when executing a delta deployment.
 
 This plugin requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
 
@@ -17,9 +17,9 @@ For example, if the user creates a file named `regex.txt` in their repository wi
 Commit messages that follow the above regular expression can look like:
 
 ```
-fix: required updates to account trigger and opportunity trigger handler Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex`
-chore: add sandbox refresh class Apex::PrepareMySandboxTest::Apex`
-fix: fix quoting issues Apex::QuoteControllerTest::Apex`
+fix: required updates to account trigger and opportunity trigger handler Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex
+chore: add sandbox refresh class Apex::PrepareMySandboxTest::Apex
+fix: fix quoting issues Apex::QuoteControllerTest::Apex
 ```
 
 The 3 commit messages above will be parsed to retrieve all test classes found using the regular expression. Test classes can be separated by commas, spaces, or both in the commit message. This plugin will separate all tests by a single space and sort them alphabetically when creating the final output.
@@ -60,19 +60,20 @@ The `apex-tests-git-delta` has 1 command:
 
 - `sf apex-tests-git-delta delta`
 
-Recommend running this command in your project's root directory.
+This command needs to be ran somewhere inside your Salesforce DX git repository, whether it's the root folder (recommended) or a subfolder.
+
+This command will determine the root folder of the repo and look for the `sfdx-project.json` file in the root folder.
 
 ## `sf apex-tests-git-delta delta`
 
 ```
 USAGE
-  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> -c <value> --output <value> [--json]
+  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> --output <value> [--json]
 
 FLAGS
   -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
   -t, --to=<value> [default: HEAD] Commit SHA to where the commit message log is done.
   -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
-  -c, --sfdx-configuration=<value> [default: sfdx-project.json] Path to your project's Salesforce DX configuration file.
   --output=<value> [default: runTests.txt] The text file to save the delta test classes to.
 
 GLOBAL FLAGS
@@ -82,5 +83,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "regex.txt" --sfdx-configuration "sfdx-project.json" --output "runTests.txt"
+    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "regex.txt" --output "runTests.txt"
 ```

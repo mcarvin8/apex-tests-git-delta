@@ -8,8 +8,7 @@ import { validateClassPaths } from './validateClassPaths.js';
 export async function extractTestClasses(
   fromRef: string,
   toRef: string,
-  regex: string,
-  sfdxConfigFile: string
+  regex: string
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const options: Partial<SimpleGitOptions> = {
     baseDir: process.cwd(),
@@ -39,7 +38,7 @@ export async function extractTestClasses(
   let validatedClasses: string = '';
   const result =
     unvalidatedClasses.length > 0
-      ? await validateClassPaths(unvalidatedClasses, sfdxConfigFile, toRef, git)
+      ? await validateClassPaths(unvalidatedClasses, toRef, git)
       : { validatedClasses: new Set(), warnings: [] };
   let sortedClasses: string[] = [];
   if (result.validatedClasses.size > 0) {

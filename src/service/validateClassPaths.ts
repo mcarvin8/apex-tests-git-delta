@@ -7,11 +7,10 @@ import { getPackageDirectories } from './getPackageDirectories.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
-  dxConfigFile: string,
   toCommitHash: string,
   git: SimpleGit
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
-  const { repoRoot, packageDirectories } = await getPackageDirectories(dxConfigFile);
+  const { repoRoot, packageDirectories } = await getPackageDirectories(git);
   await git.cwd(repoRoot);
   const warnings: string[] = [];
 

@@ -44,13 +44,6 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       exists: false,
       default: 'runTests.txt',
     }),
-    'sfdx-configuration': Flags.file({
-      summary: messages.getMessage('flags.sfdx-configuration.summary'),
-      char: 'c',
-      required: true,
-      exists: true,
-      default: 'sfdx-project.json',
-    }),
   };
 
   public async run(): Promise<TestDeltaResult> {
@@ -59,9 +52,8 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const fromGitRef = flags['from'];
     const regExFile = flags['regular-expression'];
     const output = flags['output'];
-    const sfdxConfigFile = flags['sfdx-configuration'];
 
-    const result = await extractTestClasses(fromGitRef, toGitRef, regExFile, sfdxConfigFile);
+    const result = await extractTestClasses(fromGitRef, toGitRef, regExFile);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
     await writeFile(output, tests);
