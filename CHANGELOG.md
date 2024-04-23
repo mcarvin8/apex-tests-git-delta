@@ -1,3 +1,9 @@
+## [1.0.10](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.9...v1.0.10) (2024-04-23)
+
+### Bug Fixes
+
+- remove `--sfdx-configuration` flag and find `sfdx-project.json` dynamically ([010ee34](https://github.com/mcarvin8/apex-tests-git-delta/commit/010ee34fa97c6f3c36ebb0ab1c740610de9bd7eb))
+
 ## [1.0.9](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.8...v1.0.9) (2024-04-23)
 
 ### Bug Fixes
