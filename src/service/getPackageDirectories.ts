@@ -3,18 +3,23 @@
 
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
 
 interface SfdxProject {
   packageDirectories: Array<{ path: string }>;
 }
 
-export async function getPackageDirectories(dxConfigFile: string): Promise<string[]> {
-  if (!existsSync(dxConfigFile)) {
+export async function getPackageDirectories(
+  dxConfigFile: string
+): Promise<{ repoRoot: string; packageDirectories: string[] }> {
+  const dxConfigFilePath = resolve(dxConfigFile);
+  if (!existsSync(dxConfigFilePath)) {
     throw Error(`Salesforce DX Config File does not exist in this path: ${dxConfigFile}`);
   }
 
-  const sfdxProjectRaw: string = await readFile(dxConfigFile, 'utf-8');
+  const sfdxProjectRaw: string = await readFile(dxConfigFilePath, 'utf-8');
   const sfdxProject: SfdxProject = JSON.parse(sfdxProjectRaw) as SfdxProject;
-  const packageDirectories = sfdxProject.packageDirectories.map((directory) => directory.path);
-  return packageDirectories;
+  const repoRoot = dirname(dxConfigFilePath);
+  const packageDirectories = sfdxProject.packageDirectories.map((directory) => resolve(repoRoot, directory.path));
+  return { repoRoot, packageDirectories };
 }

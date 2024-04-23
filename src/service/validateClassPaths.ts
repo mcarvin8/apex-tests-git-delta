@@ -11,7 +11,8 @@ export async function validateClassPaths(
   toCommitHash: string,
   git: SimpleGit
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
-  const packageDirectories = await getPackageDirectories(dxConfigFile);
+  const { repoRoot, packageDirectories } = await getPackageDirectories(dxConfigFile);
+  await git.cwd(repoRoot);
   const warnings: string[] = [];
 
   const validatedClasses: Set<string> = new Set();
