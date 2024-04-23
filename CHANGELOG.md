@@ -1,3 +1,9 @@
+## [1.0.11](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.10...v1.0.11) (2024-04-23)
+
+### Bug Fixes
+
+- remove duplicate root folder variable ([977fb92](https://github.com/mcarvin8/apex-tests-git-delta/commit/977fb9282dca5d1a0d7a0b816fef2c1bf9073b02))
+
 ## [1.0.10](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.9...v1.0.10) (2024-04-23)
 
 ### Bug Fixes
