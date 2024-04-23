@@ -1,20 +1,14 @@
 'use strict';
 
 import { readFileSync } from 'node:fs';
-import { simpleGit, SimpleGit, SimpleGitOptions, DefaultLogFields, LogResult } from 'simple-git';
+import { SimpleGit, DefaultLogFields, LogResult } from 'simple-git';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
   toCommit: string,
-  regexFilePath: string
+  regexFilePath: string,
+  git: SimpleGit
 ): Promise<string[]> {
-  const options: Partial<SimpleGitOptions> = {
-    baseDir: process.cwd(),
-    binary: 'git',
-    maxConcurrentProcesses: 6,
-    trimmed: false,
-  };
-  const git: SimpleGit = simpleGit(options);
   const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
 
   // Filter only entries that match the DefaultLogFields type

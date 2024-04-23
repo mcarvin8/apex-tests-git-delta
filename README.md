@@ -38,7 +38,7 @@ testclasses=$(<runTests.txt)
 sf project deploy start -x manifest/package.xml -l RunSpecifiedTests -t $testclasses
 ```
 
-**NOTE:** The test classes will only be added to the output if they are found in one of your package directories as listed in the `sfdx-project.json`. If the test class name was not found in any package directory, a warning will be printed to the terminal. The plugin will not fail if no test classes are included in the final output. The output and text file will simply be empty if no delta test classes were found in any commit message or no test classes were validated against a package directory.
+**NOTE:** The test classes will only be added to the output if they are found in one of your package directories as listed in the `sfdx-project.json` in the `--to` commit's file-tree. If the test class name was not found in any package directory, a warning will be printed to the terminal. The plugin will not fail if no test classes are included in the final output. The output and text file will simply be empty if no delta test classes were found in any commit message or no test classes were validated against a package directory.
 
 ## Why another plugin to determine delta tests?
 

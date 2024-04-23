@@ -1,5 +1,7 @@
 'use strict';
 
+import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
+
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
 import { validateClassPaths } from './validateClassPaths.js';
 
@@ -9,8 +11,16 @@ export async function extractTestClasses(
   regex: string,
   sfdxConfigFile: string
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
+  const options: Partial<SimpleGitOptions> = {
+    baseDir: process.cwd(),
+    binary: 'git',
+    maxConcurrentProcesses: 6,
+    trimmed: true,
+  };
+  const git: SimpleGit = simpleGit(options);
+
   const testClasses: Set<string> = new Set();
-  const matchedMessages = await retrieveCommitMessages(fromRef, toRef, regex);
+  const matchedMessages = await retrieveCommitMessages(fromRef, toRef, regex, git);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces
@@ -29,7 +39,7 @@ export async function extractTestClasses(
   let validatedClasses: string = '';
   const result =
     unvalidatedClasses.length > 0
-      ? await validateClassPaths(unvalidatedClasses, sfdxConfigFile)
+      ? await validateClassPaths(unvalidatedClasses, sfdxConfigFile, toRef, git)
       : { validatedClasses: new Set(), warnings: [] };
   let sortedClasses: string[] = [];
   if (result.validatedClasses.size > 0) {

@@ -1,14 +1,15 @@
 'use strict';
 /* eslint-disable no-await-in-loop */
 
-import { readdir, stat } from 'node:fs/promises';
-import { join } from 'node:path';
+import { SimpleGit } from 'simple-git';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
-  dxConfigFile: string
+  dxConfigFile: string,
+  toCommitHash: string,
+  git: SimpleGit
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
   const packageDirectories = await getPackageDirectories(dxConfigFile);
   const warnings: string[] = [];
@@ -17,8 +18,8 @@ export async function validateClassPaths(
   for (const unvalidatedClass of unvalidatedClasses) {
     let validated: boolean = false;
     for (const directory of packageDirectories) {
-      const relativeFilePath = await searchRecursively(`${unvalidatedClass}.cls`, directory);
-      if (relativeFilePath !== undefined) {
+      const fileExists = await fileExistsInCommit(`${unvalidatedClass}.cls`, toCommitHash, directory, git);
+      if (fileExists) {
         validatedClasses.add(unvalidatedClass);
         validated = true;
         break;
@@ -26,25 +27,22 @@ export async function validateClassPaths(
     }
     if (!validated)
       warnings.push(
-        `The class ${unvalidatedClass} was not found in any package directory and will not be added to the delta test classes.`
+        `The class ${unvalidatedClass} was not found in any package directory found in commit ${toCommitHash} and will not be added to the delta test classes.`
       );
   }
   return { validatedClasses, warnings };
 }
 
-async function searchRecursively(fileName: string, dxDirectory: string): Promise<string | undefined> {
-  const files = await readdir(dxDirectory);
-  for (const file of files) {
-    const filePath = join(dxDirectory, file);
-    const stats = await stat(filePath);
-    if (stats.isDirectory()) {
-      const result = await searchRecursively(fileName, filePath);
-      if (result) {
-        return result;
-      }
-    } else if (file === fileName) {
-      return filePath;
-    }
+async function fileExistsInCommit(
+  filePath: string,
+  commitHash: string,
+  directory: string,
+  git: SimpleGit
+): Promise<boolean> {
+  try {
+    const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
+    return files.some((file) => file.endsWith(filePath));
+  } catch (error) {
+    return false;
   }
-  return undefined;
 }
