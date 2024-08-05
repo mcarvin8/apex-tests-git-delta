@@ -1,3 +1,10 @@
+<!-- markdownlint-disable MD024 MD025 -->
+<!-- markdown-link-check-disable -->
+
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
 ## [1.0.11](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.10...v1.0.11) (2024-04-23)
 
 ### Bug Fixes
