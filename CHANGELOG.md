@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.11...v1.1.0) (2024-08-06)
+
+
+### Features
+
+* add isomorphic-git ([a3a8327](https://github.com/mcarvin8/apex-tests-git-delta/commit/a3a8327927dadb89f0538b964f8a285e89d2e797))
+
 ## [1.0.11](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.0.10...v1.0.11) (2024-04-23)
 
 ### Bug Fixes
