@@ -1,24 +1,26 @@
 'use strict';
 /* eslint-disable no-await-in-loop */
 
-import { SimpleGit } from 'simple-git';
+import { promises as fsPromises, readFile, stat, readdir } from 'node:fs';
+import git from 'isomorphic-git';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
-  toCommitHash: string,
-  git: SimpleGit
+  toCommitHash: string
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
-  const { repoRoot, packageDirectories } = await getPackageDirectories(git);
-  await git.cwd(repoRoot);
+  const { repoRoot, packageDirectories } = await getPackageDirectories();
+  process.chdir(repoRoot);
+  const fs = { promises: fsPromises, readFile, stat, readdir };
+  const repoFiles = await git.listFiles({ fs, dir: repoRoot, ref: toCommitHash });
   const warnings: string[] = [];
 
   const validatedClasses: Set<string> = new Set();
   for (const unvalidatedClass of unvalidatedClasses) {
     let validated: boolean = false;
-    for (const directory of packageDirectories) {
-      const fileExists = await fileExistsInCommit(`${unvalidatedClass}.cls`, toCommitHash, directory, git);
+    for (const packageDirectory of packageDirectories) {
+      const fileExists = fileExistsInCommit(`${unvalidatedClass}.cls`, repoFiles, packageDirectory);
       if (fileExists) {
         validatedClasses.add(unvalidatedClass);
         validated = true;
@@ -33,15 +35,10 @@ export async function validateClassPaths(
   return { validatedClasses, warnings };
 }
 
-async function fileExistsInCommit(
-  filePath: string,
-  commitHash: string,
-  directory: string,
-  git: SimpleGit
-): Promise<boolean> {
+function fileExistsInCommit(filePath: string, repoFiles: string[], packageDirectory: string): boolean {
   try {
-    const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
-    return files.some((file) => file.endsWith(filePath));
+    const filteredFiles = repoFiles.filter((file) => file.startsWith(packageDirectory));
+    return filteredFiles.some((file) => file.endsWith(filePath));
   } catch (error) {
     return false;
   }

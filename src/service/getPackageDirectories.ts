@@ -4,16 +4,12 @@
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { SimpleGit } from 'simple-git';
 
-interface SfdxProject {
-  packageDirectories: Array<{ path: string }>;
-}
+import { SfdxProject } from './types.js';
+import { getRepoRoot } from './getRepoRoot.js';
 
-export async function getPackageDirectories(
-  git: SimpleGit
-): Promise<{ repoRoot: string; packageDirectories: string[] }> {
-  const repoRoot = (await git.revparse('--show-toplevel')).trim();
+export async function getPackageDirectories(): Promise<{ repoRoot: string; packageDirectories: string[] }> {
+  const repoRoot = await getRepoRoot();
   const dxConfigFilePath = resolve(repoRoot, 'sfdx-project.json');
   if (!existsSync(dxConfigFilePath)) {
     throw Error(`Cannot find sfdx-project.json in the root folder: ${repoRoot}`);
@@ -21,6 +17,6 @@ export async function getPackageDirectories(
 
   const sfdxProjectRaw: string = await readFile(dxConfigFilePath, 'utf-8');
   const sfdxProject: SfdxProject = JSON.parse(sfdxProjectRaw) as SfdxProject;
-  const packageDirectories = sfdxProject.packageDirectories.map((directory) => resolve(repoRoot, directory.path));
+  const packageDirectories = sfdxProject.packageDirectories.map((directory) => directory.path);
   return { repoRoot, packageDirectories };
 }
