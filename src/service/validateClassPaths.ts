@@ -8,10 +8,10 @@ import { getPackageDirectories } from './getPackageDirectories.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
-  toCommitHash: string
+  toCommitHash: string,
+  repoRoot: string
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
-  const { repoRoot, packageDirectories } = await getPackageDirectories();
-  process.chdir(repoRoot);
+  const packageDirectories = await getPackageDirectories(repoRoot);
   const fs = { promises: fsPromises, readFile, stat, readdir };
   const repoFiles = await git.listFiles({ fs, dir: repoRoot, ref: toCommitHash });
   const warnings: string[] = [];
