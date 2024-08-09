@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
-import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString, GitConfig } from './testConstants.js';
+import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 describe('return the delta tests between git commits', () => {
   const $$ = new TestContext();
@@ -28,42 +28,7 @@ describe('return the delta tests between git commits', () => {
     await git.init({ fs, dir: tempDir });
     await writeFile(regExFile, regExFileContents);
     await writeFile(sfdxConfigFile, sfdxConfigJsonString);
-    let userName: string | undefined;
-    let userEmail: string | undefined;
 
-    try {
-      const userNameConfig = (await git.getConfig({
-        fs,
-        dir: tempDir,
-        path: 'user.name',
-      })) as GitConfig | undefined; // Explicitly typing the result
-
-      const userEmailConfig = (await git.getConfig({
-        fs,
-        dir: tempDir,
-        path: 'user.email',
-      })) as GitConfig | undefined; // Explicitly typing the result
-
-      userName = userNameConfig?.value;
-      userEmail = userEmailConfig?.value;
-    } catch (error) {
-      // Ignore errors if the git config values are not set
-    }
-
-    if (!userName && !userEmail) {
-      await git.setConfig({
-        fs,
-        dir: tempDir,
-        path: 'user.name',
-        value: 'Mr. Test',
-      });
-      await git.setConfig({
-        fs,
-        dir: tempDir,
-        path: 'user.email',
-        value: '90224411+mcarvin8@users.noreply.github.com',
-      });
-    }
     fromSha = await createTemporaryCommit(
       'chore: initial commit with Apex::TestClass00::Apex',
       'force-app/main/default/classes/SandboxTest.cls',
