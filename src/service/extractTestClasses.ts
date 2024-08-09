@@ -9,7 +9,7 @@ export async function extractTestClasses(
   regex: string
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
-  const matchedMessages = await retrieveCommitMessages(fromRef, toRef, regex);
+  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef, regex);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces
@@ -28,7 +28,7 @@ export async function extractTestClasses(
   let validatedClasses: string = '';
   const result =
     unvalidatedClasses.length > 0
-      ? await validateClassPaths(unvalidatedClasses, toRef)
+      ? await validateClassPaths(unvalidatedClasses, toRef, repoRoot)
       : { validatedClasses: new Set(), warnings: [] };
   let sortedClasses: string[] = [];
   if (result.validatedClasses.size > 0) {

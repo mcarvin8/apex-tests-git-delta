@@ -1,34 +1,53 @@
 'use strict';
 
-import { readFileSync } from 'node:fs';
-import { simpleGit, SimpleGit, SimpleGitOptions, DefaultLogFields, LogResult } from 'simple-git';
+import { promises as fsPromises, readFile, stat, readdir } from 'node:fs';
+import git from 'isomorphic-git';
+
+import { getRepoRoot } from './getRepoRoot.js';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
   toCommit: string,
   regexFilePath: string
-): Promise<string[]> {
-  const options: Partial<SimpleGitOptions> = {
-    baseDir: process.cwd(),
-    binary: 'git',
-    maxConcurrentProcesses: 6,
-    trimmed: true,
-  };
-  const git: SimpleGit = simpleGit(options);
-  const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
+): Promise<{ repoRoot: string; matchedMessages: string[] }> {
+  const repoRoot = await getRepoRoot();
+  process.chdir(repoRoot);
+  const fs = { promises: fsPromises, readFile, stat, readdir };
 
-  // Filter only entries that match the DefaultLogFields type
-  const commitMessages: string[] = (result.all as DefaultLogFields[]).map((commit) => commit.message);
+  // Retrieve the commit logs between the specified commits
+  const commits = await git.log({
+    fs,
+    dir: repoRoot,
+    ref: toCommit,
+  });
 
+  const commitMessages: string[] = [];
+  let collectMessages = false;
+
+  for (const commit of commits) {
+    if (commit.oid === toCommit) {
+      collectMessages = true;
+    }
+
+    if (collectMessages) {
+      commitMessages.push(commit.commit.message);
+    }
+
+    if (commit.oid === fromCommit) {
+      break;
+    }
+  }
+
+  // Read and compile the regex from the specified file
   let regex: RegExp;
-  let regexPattern = '';
+  const regexPattern: string = (await fsPromises.readFile(regexFilePath, 'utf-8')).trim();
   try {
-    regexPattern = readFileSync(regexFilePath, 'utf-8').trim();
     regex = new RegExp(regexPattern, 'g');
   } catch (err) {
     throw Error(`The regular expression in '${regexFilePath}' is invalid.`);
   }
 
+  // Filter messages that match the regex
   const matchedMessages: string[] = [];
   commitMessages.forEach((message) => {
     let match;
@@ -39,5 +58,5 @@ export async function retrieveCommitMessages(
     }
   });
 
-  return matchedMessages;
+  return { repoRoot, matchedMessages };
 }
