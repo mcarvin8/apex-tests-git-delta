@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.2...v1.1.3) (2024-08-09)
+
+
+### Bug Fixes
+
+* fix logic to not include `--from` commit ([8b18f32](https://github.com/mcarvin8/apex-tests-git-delta/commit/8b18f32e91c5bc0c76c79879f025af6da3308bf4))
+
 ## [1.1.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.1...v1.1.2) (2024-08-09)
 
 
