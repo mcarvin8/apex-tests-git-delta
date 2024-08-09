@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.1...v1.1.2) (2024-08-09)
+
+
+### Bug Fixes
+
+* update message to indicate from sha will be included in results ([1e4e69d](https://github.com/mcarvin8/apex-tests-git-delta/commit/1e4e69d9e31c102b2f1b0829a449f13180fcbc5e))
+
 ## [1.1.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.0...v1.1.1) (2024-08-09)
 
 
