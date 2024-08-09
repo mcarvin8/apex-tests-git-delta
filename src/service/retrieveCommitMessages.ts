@@ -30,11 +30,11 @@ export async function retrieveCommitMessages(
     }
 
     if (collectMessages) {
+      // If the commit is the `fromCommit`, break the loop before adding it
+      if (commit.oid === fromCommit) {
+        break;
+      }
       commitMessages.push(commit.commit.message);
-    }
-
-    if (commit.oid === fromCommit) {
-      break;
     }
   }
 
