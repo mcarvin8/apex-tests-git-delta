@@ -4,8 +4,6 @@
 
 The `apex-tests-git-delta` is a Salesforce CLI plugin to take 2 commit SHAs in a Salesforce DX git repository and return the delta Apex tests to run against when executing a delta deployment.
 
-This plugin requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
-
 The tests are determined by looking at all commit messages in the commit range and extracting them with a regular expression defined in a text file.
 
 For example, if the user creates a file named `regex.txt` in their repository with the below regular expression, the plugin will extract all test classes that are found with this expression and return a space-separated string with unique test classes.
