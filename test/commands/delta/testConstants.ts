@@ -10,6 +10,3 @@ const sfdxConfigFileContents = {
   sourceApiVersion: '58.0',
 };
 export const sfdxConfigJsonString = JSON.stringify(sfdxConfigFileContents, null, 2);
-export interface GitConfig {
-  value: string;
-}
