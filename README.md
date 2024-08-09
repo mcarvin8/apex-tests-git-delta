@@ -69,7 +69,7 @@ USAGE
   $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> --output <value> [--json]
 
 FLAGS
-  -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
+  -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will be included in the results.
   -t, --to=<value> [default: HEAD] Commit SHA to where the commit message log is done.
   -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
   --output=<value> [default: runTests.txt] The text file to save the delta test classes to.

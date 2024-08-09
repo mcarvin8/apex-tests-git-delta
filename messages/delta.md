@@ -12,7 +12,7 @@ Given 2 git commits, this plugin will parse all of the commit messages between t
 
 # flags.from.summary
 
-Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
+Commit SHA from where the commit message log is done. This SHA's commit message will be included in the results.
 
 # flags.to.summary
 
