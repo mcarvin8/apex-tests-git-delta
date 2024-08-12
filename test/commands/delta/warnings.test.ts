@@ -1,33 +1,24 @@
 'use strict';
 
-import { promises as fsPromises, readFile, stat, readdir, mkdtempSync } from 'node:fs';
-import { mkdir, writeFile, rm } from 'node:fs/promises';
-import git from 'isomorphic-git';
+import { rm } from 'node:fs/promises';
 
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
-import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
+import { setupTestRepo } from './setupTestRepo.js';
 
 describe('confirm warnings are generated when files cannot be found in a package directory.', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
   let fromSha: string;
   let toSha: string;
+  let tempDir: string;
   const originalDir = process.cwd();
-  const tempDir = mkdtempSync('../git-temp-');
-  const fs = { promises: fsPromises, readFile, stat, readdir };
 
   before(async () => {
-    process.chdir(tempDir);
-
-    await mkdir('force-app/main/default/classes', { recursive: true });
-    await mkdir('packaged/classes', { recursive: true });
-    await git.init({ fs, dir: tempDir });
-    await writeFile(regExFile, regExFileContents);
-    await writeFile(sfdxConfigFile, sfdxConfigJsonString);
+    tempDir = await setupTestRepo();
 
     fromSha = await createTemporaryCommit(
       'chore: initial commit with Apex::TestClass00::Apex',
