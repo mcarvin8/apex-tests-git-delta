@@ -4,9 +4,11 @@
 
 The `apex-tests-git-delta` is a Salesforce CLI plugin to take 2 commit SHAs in a Salesforce DX git repository and return the delta Apex tests to run against when executing a delta deployment.
 
-The tests are determined by looking at all commit messages in the commit range and extracting them with a regular expression defined in a text file.
+The tests are determined by looking at all commit messages in the commit range and extracting them with a regular expression defined in a config file.
 
-For example, if the user creates a file named `regex.txt` in their repository with the below regular expression, the plugin will extract all test classes that are found with this expression and return a space-separated string with unique test classes.
+You must add a config file named `.apextestsgitdeltarc` in the root folder of your repository with your regular expression.
+
+For example, your `.apextestsgitdeltarc` file can contain the regular expression:
 
 ```
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
@@ -33,7 +35,7 @@ You could then save the contents of this text file to a variable and use that va
 ```
 sf apex-tests-git-delta delta --from "c7603c25581afe7c443c57e687f2d6abd654ea77" --to "HEAD" --output "runTests.txt"
 testclasses=$(<runTests.txt)
-sf project deploy start -x manifest/package.xml -l RunSpecifiedTests -t $testclasses
+sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $testclasses
 ```
 
 **NOTE:** The test classes will only be added to the output if they are found in one of your package directories as listed in the `sfdx-project.json` in the `--to` commit's file-tree. If the test class name was not found in any package directory, a warning will be printed to the terminal. The plugin will not fail if no test classes are included in the final output. The output and text file will simply be empty if no delta test classes were found in any commit message or no test classes were validated against a package directory.
@@ -66,12 +68,11 @@ This command will determine the root folder of the repo and look for the `sfdx-p
 
 ```
 USAGE
-  $ sf apex-tests-git-delta delta -f <value> -t <value> -e <value> --output <value> [--json]
+  $ sf apex-tests-git-delta delta -f <value> -t <value> --output <value> [--json]
 
 FLAGS
   -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
   -t, --to=<value> [default: HEAD] Commit SHA to where the commit message log is done.
-  -e, --regular-expression=<value> [default: regex.txt] The text file containing the Apex Tests regular expression to search for.
   --output=<value> [default: runTests.txt] The text file to save the delta test classes to.
 
 GLOBAL FLAGS
@@ -81,5 +82,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --regular-expression "regex.txt" --output "runTests.txt"
+    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --output "runTests.txt"
 ```

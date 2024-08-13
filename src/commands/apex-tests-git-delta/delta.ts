@@ -31,13 +31,6 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       summary: messages.getMessage('flags.from.summary'),
       required: true,
     }),
-    'regular-expression': Flags.file({
-      char: 'e',
-      summary: messages.getMessage('flags.regular-expression.summary'),
-      required: true,
-      exists: true,
-      default: 'regex.txt',
-    }),
     output: Flags.file({
       summary: messages.getMessage('flags.output.summary'),
       required: true,
@@ -50,10 +43,9 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const { flags } = await this.parse(ApexTestDelta);
     const toGitRef = flags['to'];
     const fromGitRef = flags['from'];
-    const regExFile = flags['regular-expression'];
     const output = flags['output'];
 
-    const result = await extractTestClasses(fromGitRef, toGitRef, regExFile);
+    const result = await extractTestClasses(fromGitRef, toGitRef);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
     await writeFile(output, tests);
