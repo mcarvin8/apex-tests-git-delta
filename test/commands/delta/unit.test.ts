@@ -12,14 +12,13 @@ import { setupTestRepo } from './setupTestRepo.js';
 describe('return the delta tests between git commits', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
-  let fromSha: string;
   let tempDir: string;
   const originalDir = process.cwd();
 
   before(async () => {
     tempDir = await setupTestRepo();
 
-    fromSha = await createTemporaryCommit(
+    await createTemporaryCommit(
       'chore: initial commit with Apex::TestClass00::Apex',
       'force-app/main/default/classes/SandboxTest.cls',
       'dummy 1'
@@ -49,8 +48,8 @@ describe('return the delta tests between git commits', () => {
     await rm(tempDir, { recursive: true });
   });
 
-  it('scan the temporary commits and return the delta test class string without any warnings.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', 'HEAD']);
+  it('log the commits using relative refs and return the delta test class string without any warnings.', async () => {
+    await ApexTestDelta.run(['--from', 'HEAD~2', '--to', 'HEAD']);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)

@@ -14,8 +14,8 @@ export async function retrieveCommitMessages(
   process.chdir(repoRoot);
   const fs = { promises: fsPromises, readFile, stat, readdir };
 
-  const resolvedToCommit = await git.resolveRef({ fs, dir: repoRoot, ref: toCommit });
-  const resolvedFromCommit = await git.resolveRef({ fs, dir: repoRoot, ref: fromCommit });
+  const resolvedToCommit = await resolveRef(toCommit, repoRoot);
+  const resolvedFromCommit = await resolveRef(fromCommit, repoRoot);
 
   //  Retrieve the commit logs between the specified commits
   const commits = await git.log({
@@ -64,4 +64,17 @@ export async function retrieveCommitMessages(
   });
 
   return { repoRoot, matchedMessages };
+}
+
+async function resolveRef(ref: string, repoRoot: string): Promise<string> {
+  const fs = { promises: fsPromises, readFile, stat, readdir };
+  const re = /^HEAD([~^])(\d+)$/;
+  const match = re.exec(ref);
+  if (match) {
+    const count = parseInt(match[1], 10);
+    const commits = await git.log({ fs, dir: repoRoot, depth: count + 1 });
+    return commits.pop()?.oid ?? '';
+  }
+
+  return git.resolveRef({ fs, dir: repoRoot, ref });
 }
