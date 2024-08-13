@@ -14,31 +14,33 @@ export async function retrieveCommitMessages(
   process.chdir(repoRoot);
   const fs = { promises: fsPromises, readFile, stat, readdir };
 
-  // Retrieve the commit logs between the specified commits
+  const resolvedToCommit = await git.resolveRef({ fs, dir: repoRoot, ref: toCommit });
+  const resolvedFromCommit = await git.resolveRef({ fs, dir: repoRoot, ref: fromCommit });
+
+  //  Retrieve the commit logs between the specified commits
   const commits = await git.log({
     fs,
     dir: repoRoot,
-    ref: toCommit,
+    ref: resolvedToCommit,
   });
 
   const commitMessages: string[] = [];
   let collectMessages = false;
 
   for (const commit of commits) {
-    if (commit.oid === toCommit) {
+    if (commit.oid === resolvedToCommit) {
       collectMessages = true;
     }
 
     if (collectMessages) {
-      // If the commit is the `fromCommit`, break the loop before adding it
-      if (commit.oid === fromCommit) {
+      if (commit.oid === resolvedFromCommit) {
         break;
       }
       commitMessages.push(commit.commit.message);
     }
   }
 
-  // Read and compile the regex from the specified file
+  //  Read and compile the regex from the specified file
   let regex: RegExp;
   const regexFilePath = resolve(repoRoot, '.apextestsgitdeltarc');
   try {
@@ -50,7 +52,7 @@ export async function retrieveCommitMessages(
     );
   }
 
-  // Filter messages that match the regex
+  //  Filter messages that match the regex
   const matchedMessages: string[] = [];
   commitMessages.forEach((message) => {
     let match;

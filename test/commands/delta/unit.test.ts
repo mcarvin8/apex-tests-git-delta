@@ -13,7 +13,6 @@ describe('return the delta tests between git commits', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
   let fromSha: string;
-  let toSha: string;
   let tempDir: string;
   const originalDir = process.cwd();
 
@@ -30,7 +29,7 @@ describe('return the delta tests between git commits', () => {
       'force-app/main/default/classes/TestClass3.cls',
       'dummy 11'
     );
-    toSha = await createTemporaryCommit(
+    await createTemporaryCommit(
       'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
       'packaged/classes/TestClass4.cls',
       'dummy 2'
@@ -51,7 +50,7 @@ describe('return the delta tests between git commits', () => {
   });
 
   it('scan the temporary commits and return the delta test class string without any warnings.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
+    await ApexTestDelta.run(['--from', fromSha, '--to', 'HEAD']);
     const output = sfCommandStubs.log
       .getCalls()
       .flatMap((c) => c.args)
