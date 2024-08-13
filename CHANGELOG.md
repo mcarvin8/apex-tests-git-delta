@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.2.1...v1.2.2) (2024-08-13)
+
+
+### Bug Fixes
+
+* resolve additional relative refs like `HEAD~1` ([05da139](https://github.com/mcarvin8/apex-tests-git-delta/commit/05da1397c2de1b5709af84731ab527a35826ce49))
+
 ## [1.2.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.2.0...v1.2.1) (2024-08-13)
 
 
