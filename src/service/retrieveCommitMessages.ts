@@ -1,14 +1,14 @@
 'use strict';
 
 import { promises as fsPromises, readFile, stat, readdir } from 'node:fs';
+import { resolve } from 'node:path';
 import git from 'isomorphic-git';
 
 import { getRepoRoot } from './getRepoRoot.js';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
-  toCommit: string,
-  regexFilePath: string
+  toCommit: string
 ): Promise<{ repoRoot: string; matchedMessages: string[] }> {
   const repoRoot = await getRepoRoot();
   process.chdir(repoRoot);
@@ -40,11 +40,14 @@ export async function retrieveCommitMessages(
 
   // Read and compile the regex from the specified file
   let regex: RegExp;
-  const regexPattern: string = (await fsPromises.readFile(regexFilePath, 'utf-8')).trim();
+  const regexFilePath = resolve(repoRoot, '.apextestsgitdeltarc');
   try {
+    const regexPattern: string = (await fsPromises.readFile(regexFilePath, 'utf-8')).trim();
     regex = new RegExp(regexPattern, 'g');
   } catch (err) {
-    throw Error(`The regular expression in '${regexFilePath}' is invalid.`);
+    throw Error(
+      `The regular expression in '${regexFilePath}' is invalid or the file wasn't found in the repo root folder.`
+    );
   }
 
   // Filter messages that match the regex

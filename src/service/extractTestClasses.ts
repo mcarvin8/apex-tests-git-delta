@@ -5,11 +5,10 @@ import { validateClassPaths } from './validateClassPaths.js';
 
 export async function extractTestClasses(
   fromRef: string,
-  toRef: string,
-  regex: string
+  toRef: string
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
-  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef, regex);
+  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces
