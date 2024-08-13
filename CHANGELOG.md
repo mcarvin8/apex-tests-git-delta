@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.3...v1.2.0) (2024-08-13)
+
+
+### Features
+
+* define a standard config file for the regular expression ([ea6d9e9](https://github.com/mcarvin8/apex-tests-git-delta/commit/ea6d9e973d7440cd316b6b283650fa4367d28b56))
+
 ## [1.1.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.1.2...v1.1.3) (2024-08-09)
 
 
