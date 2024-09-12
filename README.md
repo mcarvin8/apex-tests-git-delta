@@ -28,14 +28,11 @@ The 3 commit messages above will be parsed to retrieve all test classes found us
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
-This plugin will also save its output to a text file, `runTests.txt` by default unless you provide a different file path via the `--output` flag.
+The command's output is designed to be used with the Salesforce CLI (`sf`) deployment command. So when you want to deploy or validate Apex metadata, you can wrap this command with the deploy command to dynamically build the list of specified tests:
 
-You could then save the contents of this text file to a variable and use that variable in the `sf project deploy` command:
 
 ```
-sf apex-tests-git-delta delta --from "c7603c25581afe7c443c57e687f2d6abd654ea77" --to "HEAD" --output "runTests.txt"
-testclasses=$(<runTests.txt)
-sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $testclasses
+sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD")
 ```
 
 **NOTE:** The test classes will only be added to the output if they are found in one of your package directories as listed in the `sfdx-project.json` in the `--to` commit's file-tree. If the test class name was not found in any package directory, a warning will be printed to the terminal. The plugin will not fail if no test classes are included in the final output. The output and text file will simply be empty if no delta test classes were found in any commit message or no test classes were validated against a package directory.
@@ -68,12 +65,11 @@ This command will determine the root folder of the repo and look for the `sfdx-p
 
 ```
 USAGE
-  $ sf apex-tests-git-delta delta -f <value> -t <value> --output <value> [--json]
+  $ sf apex-tests-git-delta delta -f <value> -t <value> [--json]
 
 FLAGS
   -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
   -t, --to=<value> [default: HEAD] Commit SHA to where the commit message log is done.
-  --output=<value> [default: runTests.txt] The text file to save the delta test classes to.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -82,5 +78,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "c7603c255" --to "HEAD" --output "runTests.txt"
+    $ sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD"
 ```

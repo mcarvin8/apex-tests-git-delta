@@ -1,7 +1,5 @@
 'use strict';
 
-import { writeFile } from 'node:fs/promises';
-
 import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
 import { extractTestClasses } from '../../service/extractTestClasses.js';
@@ -31,24 +29,16 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       summary: messages.getMessage('flags.from.summary'),
       required: true,
     }),
-    output: Flags.file({
-      summary: messages.getMessage('flags.output.summary'),
-      required: true,
-      exists: false,
-      default: 'runTests.txt',
-    }),
   };
 
   public async run(): Promise<TestDeltaResult> {
     const { flags } = await this.parse(ApexTestDelta);
     const toGitRef = flags['to'];
     const fromGitRef = flags['from'];
-    const output = flags['output'];
 
     const result = await extractTestClasses(fromGitRef, toGitRef);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
-    await writeFile(output, tests);
     if (warnings.length > 0) {
       warnings.forEach((warning) => {
         this.warn(warning);
