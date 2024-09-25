@@ -14,22 +14,22 @@ For example, your `.apextestsgitdeltarc` file can contain the regular expression
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
 ```
 
-Commit messages that follow the above regular expression can look like:
+Commit messages that follow the above regular expression can look like below. The tests in the commit message expression can either be the local tests themselves or a Test Suite, if you have test suites retrieved into your repository. For example, if you have a test suite file named `SampleSuite.testSuite`, you should provide `SampleSuite` in the commit message epxression.
 
 ```
 fix: required updates to account trigger and opportunity trigger handler Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex
 chore: add sandbox refresh class Apex::PrepareMySandboxTest::Apex
 fix: fix quoting issues Apex::QuoteControllerTest::Apex
+build: use a test suite Apex::SampleSuite::Apex
 ```
 
-The 3 commit messages above will be parsed to retrieve all test classes found using the regular expression. Test classes can be separated by commas, spaces, or both in the commit message. This plugin will separate all tests by a single space and sort them alphabetically when creating the final output.
+The 3 commit messages above will be parsed to retrieve all test classes/suites found using the regular expression. Test classes/suites can be separated by commas, spaces, or both in the commit message. This plugin will extract & separate all tests by a single space and sort them alphabetically when creating the final output.
 
 ```
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
 The command's output is designed to be used with the Salesforce CLI (`sf`) deployment command. So when you want to deploy or validate Apex metadata, you can wrap this command with the deploy command to dynamically build the list of specified tests:
-
 
 ```
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD")

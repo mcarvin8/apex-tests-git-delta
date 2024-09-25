@@ -12,6 +12,7 @@ export async function setupTestRepo(): Promise<string> {
   const fs = { promises: fsPromises, readFile, stat, readdir };
 
   await mkdir('force-app/main/default/classes', { recursive: true });
+  await mkdir('force-app/main/default/testSuites', { recursive: true });
   await mkdir('packaged/classes', { recursive: true });
   await git.init({ fs, dir: tempDir });
   await writeFile(regExFile, regExFileContents);
