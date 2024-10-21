@@ -5,6 +5,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.3.0...v2.0.0) (2024-10-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* shorten command to atgd
+
+### Features
+
+* shorten command to atgd ([6974e36](https://github.com/mcarvin8/apex-tests-git-delta/commit/6974e369af5c1986d473228322de669c122274d6))
+
 ## [1.3.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.2.2...v1.3.0) (2024-09-12)
 
 
