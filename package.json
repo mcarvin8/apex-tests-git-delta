@@ -47,6 +47,11 @@
     "commands": "./lib/commands",
     "bin": "sf",
     "topicSeparator": " ",
+    "topics": {
+      "atgd": {
+        "description": "description for atgd"
+      }
+    },
     "devPlugins": [
       "@oclif/plugin-help"
     ],
@@ -58,7 +63,7 @@
     "clean": "sf-clean",
     "clean-all": "sf-clean all",
     "clean:lib": "shx rm -rf lib && shx rm -rf coverage && shx rm -rf .nyc_output && shx rm -f oclif.manifest.json oclif.lock",
-    "compile": "sf-compile",
+    "compile": "wireit",
     "docs": "sf-docs",
     "format": "sf-format",
     "lint": "wireit",

@@ -2,24 +2,22 @@
 
 import { rm } from 'node:fs/promises';
 
-import { TestContext } from '@salesforce/core/lib/testSetup.js';
+import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
-import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import ApexTestDelta from '../../../src/commands/atgd/delta.js';
+
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { setupTestRepo } from './setupTestRepo.js';
 
-describe('atgd unit test - empty string', () => {
-  const $$ = new TestContext();
-  let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
+describe('atgd empty string NUT', () => {
+  let session: TestSession;
   let fromSha: string;
   let toSha: string;
   let tempDir: string;
   const originalDir = process.cwd();
 
   before(async () => {
+    session = await TestSession.create({ devhubAuthStrategy: 'NONE' });
     tempDir = await setupTestRepo();
-
     fromSha = await createTemporaryCommit(
       'chore: initial commit',
       'force-app/main/default/classes/SandboxTest.cls',
@@ -29,30 +27,16 @@ describe('atgd unit test - empty string', () => {
     toSha = await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2');
   });
 
-  beforeEach(() => {
-    sfCommandStubs = stubSfCommandUx($$.SANDBOX);
-  });
-
-  afterEach(() => {
-    $$.restore();
-  });
-
   after(async () => {
+    await session?.clean();
     process.chdir(originalDir);
     await rm(tempDir, { recursive: true });
   });
 
-  it('return an empty test string with no warnings.', async () => {
-    await ApexTestDelta.run(['--from', fromSha, '--to', toSha]);
-    const output = sfCommandStubs.log
-      .getCalls()
-      .flatMap((c) => c.args)
-      .join('\n');
-    expect(output).to.include('');
-    const warnings = sfCommandStubs.warn
-      .getCalls()
-      .flatMap((c) => c.args)
-      .join('\n');
-    expect(warnings).to.include('');
+  it('runs delta command and returns no tests.', async () => {
+    const command = `atgd delta --from "${fromSha}" --to "${toSha}"`;
+    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
+
+    expect(output.replace('\n', '')).to.equal('');
   });
 });

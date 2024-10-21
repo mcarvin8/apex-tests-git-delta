@@ -30,9 +30,8 @@ AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest Quo
 
 The command's output is designed to be used with the Salesforce CLI (`sf`) deployment command. So when you want to deploy or validate Apex metadata, you can wrap this command with the deploy command to dynamically build the list of specified tests:
 
-
 ```
-sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD")
+sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
 **NOTE:** The test classes will only be added to the output if they are found in one of your package directories as listed in the `sfdx-project.json` in the `--to` commit's file-tree. If the test class name was not found in any package directory, a warning will be printed to the terminal. The plugin will not fail if no test classes are included in the final output. The output and text file will simply be empty if no delta test classes were found in any commit message or no test classes were validated against a package directory.
@@ -55,17 +54,17 @@ sf plugins install apex-tests-git-delta@x.y.z
 
 The `apex-tests-git-delta` has 1 command:
 
-- `sf apex-tests-git-delta delta`
+- `sf atgd delta`
 
 This command needs to be ran somewhere inside your Salesforce DX git repository, whether it's the root folder (recommended) or a subfolder.
 
 This command will determine the root folder of the repo and look for the `sfdx-project.json` file in the root folder.
 
-## `sf apex-tests-git-delta delta`
+## `sf atgd delta`
 
 ```
 USAGE
-  $ sf apex-tests-git-delta delta -f <value> -t <value> [--json]
+  $ sf atgd delta -f <value> -t <value> [--json]
 
 FLAGS
   -f, --from=<value> Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.
@@ -78,5 +77,5 @@ DESCRIPTION
   Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
 
 EXAMPLES
-    $ sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD"
+    $ sf atgd delta --from "HEAD~1" --to "HEAD"
 ```
