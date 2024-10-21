@@ -8,7 +8,7 @@ Given 2 git commits, this plugin will parse all of the commit messages between t
 
 # examples
 
-- `sf apex-tests-git-delta delta --from "HEAD~1" --to "HEAD"`
+- `sf atgd delta --from "HEAD~1" --to "HEAD"`
 
 # flags.from.summary
 

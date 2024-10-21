@@ -48,8 +48,8 @@
     "bin": "sf",
     "topicSeparator": " ",
     "topics": {
-      "apex-tests-git-delta": {
-        "description": "description for apex-tests-git-delta"
+      "atgd": {
+        "description": "description for atgd"
       }
     },
     "devPlugins": [

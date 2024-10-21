@@ -5,11 +5,11 @@ import { rm } from 'node:fs/promises';
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { stubSfCommandUx } from '@salesforce/sf-plugins-core';
-import ApexTestDelta from '../../../src/commands/apex-tests-git-delta/delta.js';
+import ApexTestDelta from '../../../src/commands/atgd/delta.js';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { setupTestRepo } from './setupTestRepo.js';
 
-describe('scan commit messages without the regex and return an empty string.', () => {
+describe('atgd unit test - empty string', () => {
   const $$ = new TestContext();
   let sfCommandStubs: ReturnType<typeof stubSfCommandUx>;
   let fromSha: string;

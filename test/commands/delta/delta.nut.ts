@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { setupTestRepo } from './setupTestRepo.js';
 
-describe('apex-tests-git-delta NUTs', () => {
+describe('atgd NUTs', () => {
   let session: TestSession;
   let tempDir: string;
   const originalDir = process.cwd();
@@ -40,7 +40,7 @@ describe('apex-tests-git-delta NUTs', () => {
   });
 
   it('runs delta command and returns the tests.', async () => {
-    const command = 'apex-tests-git-delta delta --from "HEAD~2" --to "HEAD"';
+    const command = 'atgd delta --from "HEAD~2" --to "HEAD"';
     const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
 
     expect(output.replace('\n', '')).to.equal('SandboxTest TestClass3 TestClass4');

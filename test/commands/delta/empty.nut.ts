@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { createTemporaryCommit } from './createTemporaryCommit.js';
 import { setupTestRepo } from './setupTestRepo.js';
 
-describe('apex-tests-git-delta empty string NUT', () => {
+describe('atgd empty string NUT', () => {
   let session: TestSession;
   let fromSha: string;
   let toSha: string;
@@ -34,7 +34,7 @@ describe('apex-tests-git-delta empty string NUT', () => {
   });
 
   it('runs delta command and returns no tests.', async () => {
-    const command = `apex-tests-git-delta delta --from "${fromSha}" --to "${toSha}"`;
+    const command = `atgd delta --from "${fromSha}" --to "${toSha}"`;
     const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
 
     expect(output.replace('\n', '')).to.equal('');
