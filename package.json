@@ -1,7 +1,7 @@
 {
   "name": "apex-tests-git-delta",
   "description": "Determine the Apex Tests to run when executing a Salesforce delta deployment.",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "dependencies": {
     "@oclif/core": "^3.18.1",
     "@salesforce/core": "^6.4.7",
