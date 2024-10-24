@@ -44,7 +44,7 @@ However, depending on your testing strategy and other dependencies, running test
 
 This plugin will allow developers to control which tests are executed for each commit based on their testing strategies and dependencies.
 
-You can easily intergrate this plugin into your existing workflows that use the sfdx-git-delta plugin by using the same SHA arguments. The tests specificed by this plugin can be used to deploy the delta package created by sfdx-git-delta.
+You can easily intergrate this plugin into your existing workflows that use the sfdx-git-delta plugin by using the same `--from` and `--to` SHA arguments. The tests specified by this plugin can be used to deploy the delta package created by sfdx-git-delta.
 
 ## Install
 
