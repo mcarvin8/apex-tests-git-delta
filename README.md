@@ -35,14 +35,14 @@ sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd
 ```
 
 > Note:
->	- Only test classes found in package directories (as listed in sfdx-project.json in the --to commit) will be included.
+>	- Only test classes found in package directories (as listed in `sfdx-project.json` in the `--to` commit) will be included.
 >	- If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
 
 ## Why This Plugin?
 
-[SFDX Git Delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
+[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
 
-This plugin lets you define which tests to run for each commit, ensuring better coverage. It seamlessly integrates with sfdx-git-delta using the same `--from` and `--to` SHA arguments.
+This plugin lets you define which tests to run for each commit, ensuring better coverage. It seamlessly integrates with `sfdx-git-delta` using the same `--from` and `--to` SHA arguments.
 
 ## Install
 
