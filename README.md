@@ -70,7 +70,7 @@ GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
+  Parse commit messages over a range and return the Apex tests to deploy against.
 
 EXAMPLES
     $ sf atgd delta --from "HEAD~1" --to "HEAD"
