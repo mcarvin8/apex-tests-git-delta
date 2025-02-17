@@ -2,6 +2,19 @@
 
 [![NPM](https://img.shields.io/npm/v/apex-tests-git-delta.svg?label=apex-tests-git-delta)](https://www.npmjs.com/package/apex-tests-git-delta) [![Downloads/week](https://img.shields.io/npm/dw/apex-tests-git-delta.svg)](https://npmjs.org/package/apex-tests-git-delta) [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+- [Usage](#usage)
+- [Why This Plugin](#why-this-plugin)
+- [Install](#install)
+- [What This Fixes](#what-this-fixes)
+- [Command](#command)
+  - [`sf atgd delta`](#sf-atgd-delta)
+- [Issues](#issues)
+- [License](#license)
+</details>
+
 A Salesforce CLI plugin to determine Apex tests to run when deploying incremental changes.
 
 ## Usage
@@ -38,7 +51,7 @@ sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd
 >	- Only test classes found in package directories (as listed in `sfdx-project.json` in the `--to` commit) will be included.
 >	- If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
 
-## Why This Plugin?
+## Why This Plugin
 
 [sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
 
