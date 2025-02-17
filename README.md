@@ -5,6 +5,7 @@
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
+
 - [Usage](#usage)
 - [Why This Plugin](#why-this-plugin)
 - [Install](#install)
@@ -88,3 +89,11 @@ DESCRIPTION
 EXAMPLES
     $ sf atgd delta --from "HEAD~1" --to "HEAD"
 ```
+
+## Issues
+
+If you encounter any issues, please create an issue in the [issue tracker](https://github.com/mcarvin8/apex-tests-git-delta/issues). Please also create issues to suggest any new features.
+
+## License
+
+This project is licensed under the MIT license. Please see the [LICENSE](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md) file for details.
