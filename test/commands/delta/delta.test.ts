@@ -48,7 +48,7 @@ describe('atgd unit test', () => {
     await rm(tempDir, { recursive: true });
   });
 
-  it('log the commits using relative refs and return the delta test class string without any warnings.', async () => {
+  it('return tests without any warnings.', async () => {
     await ApexTestDelta.run(['--from', 'HEAD~2', '--to', 'HEAD']);
     const output = sfCommandStubs.log
       .getCalls()
@@ -60,5 +60,37 @@ describe('atgd unit test', () => {
       .flatMap((c) => c.args)
       .join('\n');
     expect(warnings).to.include('');
+  });
+  it('return no tests without warnings.', async () => {
+    await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2');
+    await ApexTestDelta.run(['--from', 'HEAD~1']);
+    const output = sfCommandStubs.log
+      .getCalls()
+      .flatMap((c) => c.args)
+      .join('\n');
+    expect(output).to.include('');
+    const warnings = sfCommandStubs.warn
+      .getCalls()
+      .flatMap((c) => c.args)
+      .join('\n');
+    expect(warnings).to.include('');
+  });
+  it('return no test with warnings.', async () => {
+    await createTemporaryCommit('chore: adding new tests Apex::TestClass33::Apex', 'TestClass4.cls', 'dummy 2');
+    await ApexTestDelta.run(['--from', 'HEAD~1']);
+    const logOutput = sfCommandStubs.log
+      .getCalls()
+      .flatMap((c) => c.args)
+      .join('\n');
+    expect(logOutput).to.include('');
+  });
+  it('skip validation and return tests without warnings', async () => {
+    await createTemporaryCommit('chore: adding new tests Apex::TestClass33::Apex', 'TestClass4.cls', 'dummy 2');
+    await ApexTestDelta.run(['--from', 'HEAD~1', '--skip-test-validation']);
+    const logOutput = sfCommandStubs.log
+      .getCalls()
+      .flatMap((c) => c.args)
+      .join('\n');
+    expect(logOutput).to.include('TestClass33');
   });
 });

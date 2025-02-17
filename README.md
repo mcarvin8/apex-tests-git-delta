@@ -31,15 +31,15 @@ Example `.apextestsgitdeltarc` file:
 Example commit messages:
 
 ```
-fix: update triggers Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex  
-chore: add sandbox setup Apex::PrepareMySandboxTest::Apex  
-fix: resolve quoting issues Apex::QuoteControllerTest::Apex  
+fix: update triggers Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex
+chore: add sandbox setup Apex::PrepareMySandboxTest::Apex
+fix: resolve quoting issues Apex::QuoteControllerTest::Apex
 ```
 
 Test classes can be separated by commas, spaces, or both. The final output is a space-separated, alphabetically sorted list:
 
 ```
-AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest  
+AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
 These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce CLI deploy command:
@@ -48,9 +48,7 @@ These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
-> Note:
->	- Only test classes found in package directories (as listed in `sfdx-project.json` in the `--to` commit) will be included.
->	- If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
+> Note: - Only test classes found in package directories (as listed in `sfdx-project.json` in the `--to` commit) will be included. - If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
 
 ## Why This Plugin
 
@@ -72,13 +70,14 @@ sf plugins install apex-tests-git-delta@x.y.z
 
 ```
 USAGE
-  $ sf atgd delta -f <value> -t <value> [--json]
+  $ sf atgd delta -f <value> -t <value> -v [--json]
 
 FLAGS
-  -f, --from=<value>  Commit SHA from where the commit message log is done. 
-                      This SHA's commit message will not be included in the results.
-  -t, --to=<value>    Commit SHA to where the commit message log is done.
-                      [default: HEAD]
+  -f, --from=<value>          Commit SHA from where the commit message log is done.
+                              This SHA's commit message will not be included in the results.
+  -t, --to=<value>            Commit SHA to where the commit message log is done.
+                              [default: HEAD]
+  -v, --skip-test-validation  Skip validating that tests exist in the local package directories.
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -87,7 +86,13 @@ DESCRIPTION
   Parse commit messages over a range and return the Apex tests to deploy against.
 
 EXAMPLES
+  Get tests from the most recent commit, confirming they exist in the local package directories.
+
     $ sf atgd delta --from "HEAD~1" --to "HEAD"
+
+  Get tests from the most recent commit, skipping the local package directory validation.
+
+    $ sf atgd delta --from "HEAD~1" --to "HEAD" -v
 ```
 
 ## Alternative

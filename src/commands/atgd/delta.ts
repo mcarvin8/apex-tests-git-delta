@@ -29,14 +29,21 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       summary: messages.getMessage('flags.from.summary'),
       required: true,
     }),
+    'skip-test-validation': Flags.boolean({
+      char: 'v',
+      summary: messages.getMessage('flags.skip-test-validation.summary'),
+      required: true,
+      default: false,
+    }),
   };
 
   public async run(): Promise<TestDeltaResult> {
     const { flags } = await this.parse(ApexTestDelta);
     const toGitRef = flags['to'];
     const fromGitRef = flags['from'];
+    const validate = flags['skip-test-validation'];
 
-    const result = await extractTestClasses(fromGitRef, toGitRef);
+    const result = await extractTestClasses(fromGitRef, toGitRef, validate);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
     if (warnings.length > 0) {

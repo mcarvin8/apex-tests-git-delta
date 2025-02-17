@@ -5,7 +5,8 @@ import { validateClassPaths } from './validateClassPaths.js';
 
 export async function extractTestClasses(
   fromRef: string,
-  toRef: string
+  toRef: string,
+  skipValidate: boolean
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
   const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef);
@@ -23,13 +24,18 @@ export async function extractTestClasses(
     });
   });
 
-  const unvalidatedClasses: string[] = Array.from(testClasses);
-  let validatedClasses: string = '';
+  let sortedClasses: string[] = Array.from(testClasses).sort((a, b) => a.localeCompare(b));
+
+  if (skipValidate) {
+    return { validatedClasses: sortedClasses.join(' '), warnings: [] };
+  }
+
   const result =
-    unvalidatedClasses.length > 0
-      ? await validateClassPaths(unvalidatedClasses, toRef, repoRoot)
+    sortedClasses.length > 0
+      ? await validateClassPaths(sortedClasses, toRef, repoRoot)
       : { validatedClasses: new Set(), warnings: [] };
-  let sortedClasses: string[] = [];
+
+  let validatedClasses: string = '';
   if (result.validatedClasses.size > 0) {
     sortedClasses = Array.from(result.validatedClasses) as string[];
     sortedClasses = sortedClasses.sort((a, b) => a.localeCompare(b));
