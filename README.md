@@ -61,7 +61,7 @@ USAGE
   $ sf atgd delta -f <value> -t <value> [--json]
 
 FLAGS
-  -f, --from=<value> Commit SHA from where the commit message log is done. 
+  -f, --from=<value>  Commit SHA from where the commit message log is done. 
                       This SHA's commit message will not be included in the results.
   -t, --to=<value>    Commit SHA to where the commit message log is done.
                       [default: HEAD]
