@@ -9,7 +9,6 @@
 - [Usage](#usage)
 - [Why This Plugin](#why-this-plugin)
 - [Install](#install)
-- [What This Fixes](#what-this-fixes)
 - [Command](#command)
   - [`sf atgd delta`](#sf-atgd-delta)
 - [Alternative](#alternative)
