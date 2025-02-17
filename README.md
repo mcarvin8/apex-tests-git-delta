@@ -12,6 +12,7 @@
 - [What This Fixes](#what-this-fixes)
 - [Command](#command)
   - [`sf atgd delta`](#sf-atgd-delta)
+- [Alternative](#alternative)
 - [Issues](#issues)
 - [License](#license)
 </details>
@@ -89,6 +90,12 @@ DESCRIPTION
 EXAMPLES
     $ sf atgd delta --from "HEAD~1" --to "HEAD"
 ```
+
+## Alternative
+
+[apex-test-list](https://github.com/renatoliveira/apex-test-list) is another plugin that can be used to determine Apex tests for incremental deployments. This plugin uses test annotations defined directly inside the Apex files to determine specified tests to run.
+
+This plugin is a great tool for a more universal approach to determining specified tests to run when deploying to Salesforce orgs.
 
 ## Issues
 
