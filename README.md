@@ -8,7 +8,7 @@ A Salesforce CLI plugin to determine Apex tests to run when deploying incrementa
 
 This plugin extracts test class names from commit messages using a regular expression defined in `.apextestsgitdeltarc` at the root of your Salesforce DX project.
 
-Example .apextestsgitdeltarc file:
+Example `.apextestsgitdeltarc` file:
 
 ```
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
@@ -35,8 +35,8 @@ sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd
 ```
 
 > Note:
->	•	Only test classes found in package directories (as listed in sfdx-project.json in the --to commit) will be included.
->	•	If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
+>	- Only test classes found in package directories (as listed in sfdx-project.json in the --to commit) will be included.
+>	- If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
 
 ## Why This Plugin?
 
