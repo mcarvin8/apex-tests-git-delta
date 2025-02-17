@@ -28,7 +28,7 @@ Test classes can be separated by commas, spaces, or both. The final output is a 
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest  
 ```
 
-These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce CLI deploy command: du
+These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce CLI deploy command:
 
 ```
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
