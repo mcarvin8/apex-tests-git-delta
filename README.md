@@ -48,7 +48,9 @@ These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
-> Note: - Only test classes found in package directories (as listed in `sfdx-project.json` in the `--to` commit) will be included. - If no matching test classes are found, the output is empty, and a warning is printed, but the command does not fail.
+By default, only test classes found in package directories (as listed in `sfdx-project.json` on the `--to` commit) will be included in the output. You can supply the `-v`/`--skip-test-validation` flag to skip the validation and ensure the output includes all tests found in the commit message as-is.
+
+If no test classes are found in the commit messages, the output is empty, and a warning is printed, but the command does not fail.
 
 ## Why This Plugin
 
@@ -78,6 +80,7 @@ FLAGS
   -t, --to=<value>            Commit SHA to where the commit message log is done.
                               [default: HEAD]
   -v, --skip-test-validation  Skip validating that tests exist in the local package directories.
+                              [default: false]
 
 GLOBAL FLAGS
   --json  Format output as json.
