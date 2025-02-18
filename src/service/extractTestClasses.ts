@@ -2,6 +2,7 @@
 
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
 import { validateClassPaths } from './validateClassPaths.js';
+import { gitAdapter } from './gitAdapter.js';
 
 export async function extractTestClasses(
   fromRef: string,
@@ -9,7 +10,8 @@ export async function extractTestClasses(
   skipValidate: boolean
 ): Promise<{ validatedClasses: string; warnings: string[] }> {
   const testClasses: Set<string> = new Set();
-  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef);
+  const git = gitAdapter();
+  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef, git);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces
@@ -32,7 +34,7 @@ export async function extractTestClasses(
 
   const result =
     sortedClasses.length > 0
-      ? await validateClassPaths(sortedClasses, toRef, repoRoot)
+      ? await validateClassPaths(sortedClasses, toRef, repoRoot, git)
       : { validatedClasses: new Set(), warnings: [] };
 
   let validatedClasses: string = '';
