@@ -5,6 +5,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v2.0.0...v3.0.0) (2025-02-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* switch back to simple-git
+
+### Features
+
+* add skip validate flag ([88e3e6c](https://github.com/mcarvin8/apex-tests-git-delta/commit/88e3e6c0f3b775c68257531e05061ea24654f83e))
+* switch back to simple-git ([5a9393f](https://github.com/mcarvin8/apex-tests-git-delta/commit/5a9393feaf0ebc3cd1e091b3d1dc68f77ef12183))
+
+
+### Bug Fixes
+
+* upgrade all dependencies ([52d9f91](https://github.com/mcarvin8/apex-tests-git-delta/commit/52d9f9161f405451522f51a4f18cec80453aa12c))
+
 ## [2.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v1.3.0...v2.0.0) (2024-10-21)
 
 
