@@ -17,3 +17,7 @@ Commit SHA from where the commit message log is done. This SHA's commit message 
 # flags.to.summary
 
 Commit SHA to where the commit message log is done.
+
+# flags.skip-test-validation.summary
+
+Skip validating that tests exist in the local package directories.

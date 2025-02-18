@@ -1,26 +1,24 @@
 'use strict';
 /* eslint-disable no-await-in-loop */
 
-import { promises as fsPromises, readFile, stat, readdir } from 'node:fs';
-import git from 'isomorphic-git';
+import { SimpleGit } from 'simple-git';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
   toCommitHash: string,
-  repoRoot: string
+  repoRoot: string,
+  git: SimpleGit
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
   const packageDirectories = await getPackageDirectories(repoRoot);
-  const fs = { promises: fsPromises, readFile, stat, readdir };
-  const repoFiles = await git.listFiles({ fs, dir: repoRoot, ref: toCommitHash });
   const warnings: string[] = [];
 
   const validatedClasses: Set<string> = new Set();
   for (const unvalidatedClass of unvalidatedClasses) {
     let validated: boolean = false;
     for (const packageDirectory of packageDirectories) {
-      const fileExists = fileExistsInCommit(`${unvalidatedClass}.cls`, repoFiles, packageDirectory);
+      const fileExists = await fileExistsInCommit(`${unvalidatedClass}.cls`, toCommitHash, packageDirectory, git);
       if (fileExists) {
         validatedClasses.add(unvalidatedClass);
         validated = true;
@@ -34,11 +32,15 @@ export async function validateClassPaths(
   }
   return { validatedClasses, warnings };
 }
-
-function fileExistsInCommit(filePath: string, repoFiles: string[], packageDirectory: string): boolean {
+async function fileExistsInCommit(
+  filePath: string,
+  commitHash: string,
+  directory: string,
+  git: SimpleGit
+): Promise<boolean> {
   try {
-    const filteredFiles = repoFiles.filter((file) => file.startsWith(packageDirectory));
-    return filteredFiles.some((file) => file.endsWith(filePath));
+    const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
+    return files.some((file) => file.endsWith(filePath));
   } catch (error) {
     return false;
   }

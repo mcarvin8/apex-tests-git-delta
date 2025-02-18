@@ -1,50 +1,28 @@
 'use strict';
 
-import { promises as fsPromises, readFile, stat, readdir } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import git from 'isomorphic-git';
+import { DefaultLogFields, LogResult, SimpleGit } from 'simple-git';
 
 import { getRepoRoot } from './getRepoRoot.js';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
-  toCommit: string
+  toCommit: string,
+  git: SimpleGit
 ): Promise<{ repoRoot: string; matchedMessages: string[] }> {
-  const repoRoot = await getRepoRoot();
+  const repoRoot = await getRepoRoot(git);
   process.chdir(repoRoot);
-  const fs = { promises: fsPromises, readFile, stat, readdir };
+  const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
 
-  const resolvedToCommit = await resolveRef(toCommit, repoRoot);
-  const resolvedFromCommit = await resolveRef(fromCommit, repoRoot);
-
-  //  Retrieve the commit logs between the specified commits
-  const commits = await git.log({
-    fs,
-    dir: repoRoot,
-    ref: resolvedToCommit,
-  });
-
-  const commitMessages: string[] = [];
-  let collectMessages = false;
-
-  for (const commit of commits) {
-    if (commit.oid === resolvedToCommit) {
-      collectMessages = true;
-    }
-
-    if (collectMessages) {
-      if (commit.oid === resolvedFromCommit) {
-        break;
-      }
-      commitMessages.push(commit.commit.message);
-    }
-  }
+  // Filter only entries that match the DefaultLogFields type
+  const commitMessages: string[] = (result.all as DefaultLogFields[]).map((commit) => commit.message);
 
   //  Read and compile the regex from the specified file
   let regex: RegExp;
   const regexFilePath = resolve(repoRoot, '.apextestsgitdeltarc');
   try {
-    const regexPattern: string = (await fsPromises.readFile(regexFilePath, 'utf-8')).trim();
+    const regexPattern: string = (await readFile(regexFilePath, 'utf-8')).trim();
     regex = new RegExp(regexPattern, 'g');
   } catch (err) {
     throw Error(
@@ -64,17 +42,4 @@ export async function retrieveCommitMessages(
   });
 
   return { repoRoot, matchedMessages };
-}
-
-async function resolveRef(ref: string, repoRoot: string): Promise<string> {
-  const fs = { promises: fsPromises, readFile, stat, readdir };
-  const re = /^HEAD([~^])(\d+)$/;
-  const match = re.exec(ref);
-  if (match) {
-    const count = parseInt(match[1], 10);
-    const commits = await git.log({ fs, dir: repoRoot, depth: count + 1 });
-    return commits.pop()?.oid ?? '';
-  }
-
-  return git.resolveRef({ fs, dir: repoRoot, ref });
 }

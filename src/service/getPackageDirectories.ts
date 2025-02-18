@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable no-await-in-loop */
 
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
