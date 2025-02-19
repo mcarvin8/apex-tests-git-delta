@@ -1,10 +1,10 @@
 # summary
 
-Returns all of the Apex Tests defined in the commit messages between 2 git commits.
+Determine Apex tests by parsing commit messages.
 
 # description
 
-Given 2 git commits, this plugin will parse all of the commit messages between this range and return the delta Apex test class string. This can be used to execute delta deployments.
+Determine Apex tests for incremental deployments by parsing commit messages between 2 commits.
 
 # examples
 
