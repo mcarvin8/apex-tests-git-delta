@@ -65,7 +65,7 @@ This plugin lets you define which tests to run for each commit, ensuring better 
 sf plugins install apex-tests-git-delta@x.y.z
 ```
 
-# System Dependencies
+## System Dependencies
 
 Requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
 
