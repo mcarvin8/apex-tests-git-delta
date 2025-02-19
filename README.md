@@ -17,7 +17,7 @@
 - [License](#license)
 </details>
 
-A Salesforce CLI plugin to determine Apex tests to run when deploying incremental changes.
+A Salesforce CLI plugin to determine Apex tests for incremental deployments using git commit messages.
 
 ## Usage
 
