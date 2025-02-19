@@ -37,7 +37,7 @@ chore: add sandbox setup Apex::PrepareMySandboxTest::Apex
 fix: resolve quoting issues Apex::QuoteControllerTest::Apex
 ```
 
-Test classes can be separated by commas, spaces, or both. The final output is a space-separated, alphabetically sorted list:
+Test classes can be separated by commas, spaces, or both in the commit messages. The final output is a space-separated, alphabetically sorted list:
 
 ```
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
