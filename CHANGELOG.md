@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.1...v3.0.2) (2025-02-23)
+
+
+### Bug Fixes
+
+* **deps:** bump @oclif/core from 4.2.7 to 4.2.8 ([9168202](https://github.com/mcarvin8/apex-tests-git-delta/commit/916820280a01366ea76d89d7e6128b5799cd89ae))
+
 ## [3.0.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.0...v3.0.1) (2025-02-22)
 
 
