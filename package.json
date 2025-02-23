@@ -1,7 +1,7 @@
 {
   "name": "apex-tests-git-delta",
   "description": "Determine Apex tests for incremental Salesforce deployments using git commit messages.",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "dependencies": {
     "@oclif/core": "^4.2.7",
     "@salesforce/core": "^8.8.2",
