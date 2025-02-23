@@ -7,53 +7,61 @@
   <summary>Table of Contents</summary>
 
 - [Usage](#usage)
-- [Why This Plugin](#why-this-plugin)
+- [Why This Plugin?](#why-this-plugin?)
 - [Install](#install)
 - [System Dependencies](#system-dependencies)
 - [Command](#command)
   - [`sf atgd delta`](#sf-atgd-delta)
-- [Alternative](#alternative)
+- [Alternatives](#alternatives)
 - [Issues](#issues)
 - [License](#license)
 </details>
 
-A Salesforce CLI plugin to determine Apex tests for incremental deployments using git commit messages.
+A **Salesforce CLI plugin** that extracts Apex test class names from **git commit messages**, enabling **incremental test execution** during deployments.
+
+This plugin helps you:
+
+✅ Automate test selection based on commit history  
+✅ Ensure critical tests run before deployment  
+✅ Seamlessly integrate with `sfdx-git-delta`
 
 ## Usage
 
-This plugin extracts test class names from commit messages using a regular expression defined in `.apextestsgitdeltarc` at the root of your Salesforce DX project.
+### Create a config file
 
-Example `.apextestsgitdeltarc` file:
+Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root**:
 
-```
+```regex
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
 ```
 
-Example commit messages:
+### Use the format in commit messages
 
-```
+```bash
 fix: update triggers Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex
 chore: add sandbox setup Apex::PrepareMySandboxTest::Apex
 fix: resolve quoting issues Apex::QuoteControllerTest::Apex
 ```
 
-Test classes can be separated by commas, spaces, or both in the commit messages. The final output is a space-separated, alphabetically sorted list:
+### Run the command to extract tests
 
+```bash
+sf atgd delta --from "HEAD~1" --to "HEAD"
 ```
+
+✅ **Output (alphabetically sorted, space-separated test classes):**
+
+```bash
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
-These tests can then be used with the `RunSpecifiedTests` flag of the Salesforce CLI deploy command:
+### Use the output in a deployment command
 
-```
+```bash
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
-By default, only test classes found in package directories (as listed in `sfdx-project.json` on the `--to` commit) will be included in the output. You can supply the `-v`/`--skip-test-validation` flag to skip the validation and ensure the output includes all tests found in the commit message as-is.
-
-If no test classes are found in the commit messages, the output is empty, and a warning is printed, but the command does not fail.
-
-## Why This Plugin
+## Why This Plugin?
 
 [sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
 
@@ -103,15 +111,17 @@ EXAMPLES
     $ sf atgd delta --from "HEAD~1" --to "HEAD" -v
 ```
 
-## Alternative
+## Alternatives
 
-[apex-test-list](https://github.com/renatoliveira/apex-test-list) is another plugin that can be used to determine Apex tests for incremental deployments. This plugin uses test annotations defined directly inside the Apex files to determine specified tests to run.
-
-This plugin is a great tool for a more universal approach to determining specified tests to run when deploying to Salesforce orgs.
+| Plugin                                                                | Approach                                       | When to Use                          |
+| --------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
+| **apex-tests-git-delta**                                              | Extracts test classes from **commit messages** | You manually tag tests per commit    |
+| **[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta)**     | Run modified Apex classes                      | You deploy modified Apex classes     |
+| **[apex-test-list](https://github.com/renatoliveira/apex-test-list)** | Uses test annotations in Apex files            | Tests are predefined in Apex classes |
 
 ## Issues
 
-If you encounter any issues, please create an issue in the [issue tracker](https://github.com/mcarvin8/apex-tests-git-delta/issues). Please also create issues to suggest any new features.
+If you find a bug or have a feature request, please [open an issue](https://github.com/mcarvin8/apex-tests-git-delta/issues). Before reporting, please check **existing issues** to avoid duplicates.
 
 ## License
 
