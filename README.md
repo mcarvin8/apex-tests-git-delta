@@ -7,7 +7,11 @@
   <summary>Table of Contents</summary>
 
 - [Usage](#usage)
-- [Why This Plugin?](#why-this-plugin?)
+  - [Create a config file](#create-a-config-file)
+  - [Use the format in commit messages](#use-the-format-in-commit-message)
+  - [Run the command to extract tests](#run-the-command-to-extract-tests)
+  - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
+- [Why This Plugin](#why-this-plugin)
 - [Install](#install)
 - [System Dependencies](#system-dependencies)
 - [Command](#command)
@@ -61,7 +65,7 @@ AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest Quo
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
-## Why This Plugin?
+## Why This Plugin
 
 [sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
 
