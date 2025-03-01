@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.2...v3.0.3) (2025-03-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/core from 8.8.3 to 8.8.4 ([b59ccda](https://github.com/mcarvin8/apex-tests-git-delta/commit/b59ccda12859f4fd9bc07a7139b64b0b820d8ca3))
+
 ## [3.0.2](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.1...v3.0.2) (2025-02-23)
 
 
