@@ -33,7 +33,7 @@ This plugin helps you:
 
 ### Create a config file
 
-Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root**:
+Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root** with the regular expression:
 
 ```regex
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
