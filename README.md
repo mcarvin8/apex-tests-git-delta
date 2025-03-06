@@ -6,14 +6,14 @@
 <details>
   <summary>Table of Contents</summary>
 
+- [Install](#install)
+- [System Dependencies](#system-dependencies)
 - [Usage](#usage)
   - [Create a config file](#create-a-config-file)
   - [Use the format in commit messages](#use-the-format-in-commit-message)
   - [Run the command to extract tests](#run-the-command-to-extract-tests)
   - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
 - [Why This Plugin](#why-this-plugin)
-- [Install](#install)
-- [System Dependencies](#system-dependencies)
 - [Command](#command)
   - [`sf atgd delta`](#sf-atgd-delta)
 - [Alternatives](#alternatives)
@@ -28,6 +28,16 @@ This plugin helps you:
 ✅ Automate test selection based on commit history  
 ✅ Ensure critical tests run before deployment  
 ✅ Seamlessly integrate with `sfdx-git-delta`
+
+## Install
+
+```bash
+sf plugins install apex-tests-git-delta@x.y.z
+```
+
+## System Dependencies
+
+Requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
 
 ## Usage
 
@@ -70,16 +80,6 @@ sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd
 [sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
 
 This plugin lets you define which tests to run for each commit, ensuring better coverage. It seamlessly integrates with `sfdx-git-delta` using the same `--from` and `--to` SHA arguments.
-
-## Install
-
-```bash
-sf plugins install apex-tests-git-delta@x.y.z
-```
-
-## System Dependencies
-
-Requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
 
 ## Command
 
