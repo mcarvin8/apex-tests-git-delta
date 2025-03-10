@@ -117,15 +117,15 @@ EXAMPLES
 
 ## Alternatives
 
-| Plugin                                                                | Approach                                       | When to Use                          |
-| --------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------ |
-| **apex-tests-git-delta**                                              | Extracts test classes from **commit messages** | You manually tag tests per commit    |
-| **[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta)**     | Run modified Apex classes                      | You deploy modified Apex classes     |
-| **[apex-test-list](https://github.com/renatoliveira/apex-test-list)** | Uses test annotations in Apex files            | Tests are predefined in Apex classes |
+| Plugin                                                                | Approach                                       |
+| --------------------------------------------------------------------- | ---------------------------------------------- |
+| **apex-tests-git-delta**                                              | Extracts test classes from **commit messages** |
+| **[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta)**     | Run modified Apex classes                      |
+| **[apex-test-list](https://github.com/renatoliveira/apex-test-list)** | Uses test annotations in Apex files            |
 
 ## Issues
 
-If you find a bug or have a feature request, please [open an issue](https://github.com/mcarvin8/apex-tests-git-delta/issues). Before reporting, please check **existing issues** to avoid duplicates.
+If you encounter any issues or would like to suggest features, please create an [issue](https://github.com/mcarvin8/apex-tests-git-delta/issues).
 
 ## License
 
