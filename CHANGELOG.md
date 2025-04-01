@@ -5,6 +5,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.4](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.3...v3.0.4) (2025-04-01)
+
+
+### Bug Fixes
+
+* **deps:** bump @oclif/core from 4.2.8 to 4.2.10 ([60d1311](https://github.com/mcarvin8/apex-tests-git-delta/commit/60d131153fe0ba57aac221b7161ed00a4b65d154))
+* **deps:** bump @salesforce/core from 8.8.4 to 8.8.7 ([77d8fac](https://github.com/mcarvin8/apex-tests-git-delta/commit/77d8facb64c828014f5a01232395207a8409e9a6))
+* **deps:** bump @salesforce/sf-plugins-core from 12.1.4 to 12.2.1 ([0d88c75](https://github.com/mcarvin8/apex-tests-git-delta/commit/0d88c7527475be05f94b6141c1181735df89f4b4))
+
 ## [3.0.3](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.2...v3.0.3) (2025-03-01)
 
 
