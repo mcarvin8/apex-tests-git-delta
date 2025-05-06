@@ -2460,9 +2460,9 @@
     undici-types "~6.20.0"
 
 "@types/node@18", "@types/node@^18.19.41":
-  version "18.19.78"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.78.tgz#29f5e7b947840c7aa9050ecac920fe6b1c7646a0"
-  integrity sha512-m1ilZCTwKLkk9rruBJXFeYN0Bc5SbjirwYX/Td3MqPfioYbgun3IvK/m8dQxMCnrPGZPg1kvXjp3SIekCN/ynw==
+  version "18.19.96"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.19.96.tgz#34b4ecfe4fe864f4e59994d2108cd1659ba37683"
+  integrity sha512-PzBvgsZ7YdFs/Kng1BSW8IGv68/SPcOxYYhT7luxD7QyzIhFS1xPTpfK3K9eHBa7hVwlW+z8nN0mOd515yaduQ==
   dependencies:
     undici-types "~5.26.4"
 
