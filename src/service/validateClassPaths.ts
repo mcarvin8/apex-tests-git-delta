@@ -38,10 +38,6 @@ async function fileExistsInCommit(
   directory: string,
   git: SimpleGit
 ): Promise<boolean> {
-  try {
-    const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
-    return files.some((file) => file.endsWith(filePath));
-  } catch (error) {
-    return false;
-  }
+  const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
+  return files.some((file) => file.endsWith(filePath));
 }
