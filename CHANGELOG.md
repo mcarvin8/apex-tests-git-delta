@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.6](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.5...v3.0.6) (2025-06-15)
+
+
+### Bug Fixes
+
+* switch to jest for coverage ([#62](https://github.com/mcarvin8/apex-tests-git-delta/issues/62)) ([0f80354](https://github.com/mcarvin8/apex-tests-git-delta/commit/0f803549a211a14e6f43be874f8e127a2d094ad4))
+
 ## [3.0.5](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.4...v3.0.5) (2025-06-01)
 
 
