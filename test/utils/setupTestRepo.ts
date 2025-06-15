@@ -3,7 +3,7 @@
 import { mkdtempSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-import { gitAdapter } from '../../../src/service/gitAdapter.js';
+import { gitAdapter } from '../../src/service/gitAdapter.js';
 import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 export async function setupTestRepo(): Promise<string> {
