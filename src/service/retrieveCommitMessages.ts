@@ -35,9 +35,7 @@ export async function retrieveCommitMessages(
   commitMessages.forEach((message) => {
     let match;
     while ((match = regex.exec(message)) !== null) {
-      if (match[1]) {
-        matchedMessages.push(match[1]);
-      }
+      matchedMessages.push(match[1]);
     }
   });
 
