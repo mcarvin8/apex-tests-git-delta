@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
 [![Maintainability](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/maintainability.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
 [![Code Coverage](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/test_coverage.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
+[![Known Vulnerabilities](https://snyk.io//test/github/mcarvin8/apex-tests-git-delta/badge.svg?targetFile=package.json)](https://snyk.io//test/github/mcarvin8/apex-tests-git-delta?targetFile=package.json)
 
 <!-- TABLE OF CONTENTS -->
 <details>
