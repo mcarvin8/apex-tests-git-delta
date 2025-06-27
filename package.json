@@ -6,7 +6,7 @@
     "@oclif/core": "^4.2.7",
     "@salesforce/core": "^8.8.2",
     "@salesforce/sf-plugins-core": "^12.1.4",
-    "simple-git": "^3.27.0"
+    "simple-git": "^3.28.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.7.1",
