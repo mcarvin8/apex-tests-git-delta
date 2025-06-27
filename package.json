@@ -3,7 +3,7 @@
   "description": "Determine Apex tests for incremental Salesforce deployments using git commit messages.",
   "version": "3.0.6",
   "dependencies": {
-    "@oclif/core": "^4.2.7",
+    "@oclif/core": "^4.3.1",
     "@salesforce/core": "^8.8.2",
     "@salesforce/sf-plugins-core": "^12.1.4",
     "simple-git": "^3.27.0"
