@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.7](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.6...v3.0.7) (2025-06-27)
+
+
+### Bug Fixes
+
+* upgrade simple-git from 3.27.0 to 3.28.0 ([0e589db](https://github.com/mcarvin8/apex-tests-git-delta/commit/0e589dbc2f38481817dead293dfbfaff3acbd36a))
+
 ## [3.0.6](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.5...v3.0.6) (2025-06-15)
 
 
