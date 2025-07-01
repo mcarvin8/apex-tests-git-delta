@@ -14,7 +14,7 @@
     "@oclif/plugin-command-snapshot": "^5.0.2",
     "@salesforce/cli-plugins-testkit": "^5.3.39",
     "@salesforce/dev-scripts": "^10.2.11",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/node": "18",
     "eslint-plugin-sf-plugin": "^1.17.2",
     "husky": "^9.0.6",
