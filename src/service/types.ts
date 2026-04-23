@@ -7,4 +7,5 @@ export type SfdxProject = {
 export type TestDeltaResult = {
   tests: string;
   warnings: string[];
+  suites: string[];
 };
