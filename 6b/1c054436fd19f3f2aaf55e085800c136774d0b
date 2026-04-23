@@ -1,0 +1,25 @@
+test/units/invalidRegex.test.ts
+  88d311ac817ed27f 39
+test/utils/setupTestRepo.ts
+  88d311ac817ed27f 21-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2",
+  "base_commit_sha": "6b1c054436fd19f3f2aaf55e085800c136774d0b",
+  "prompts": {
+    "88d311ac817ed27f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "02139b41-96be-4ac5-a686-0c294244c8c3",
+        "model": "auto-high"
+      },
+      "human_author": "Matt Carvin",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 14,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}
