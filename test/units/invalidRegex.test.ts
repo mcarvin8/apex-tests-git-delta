@@ -2,7 +2,7 @@
 
 import { rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 import { extractTestClasses } from '../../src/service/extractTestClasses.js';
 import { gitAdapter } from '../../src/service/gitAdapter.js';
@@ -22,13 +22,13 @@ describe('atgd unit test', () => {
       'chore: commit with Apex::::Apex',
       'force-app/main/default/classes/SandboxTest.cls',
       'dummy 1',
-      git
+      git,
     );
     await createTemporaryCommit(
       'chore: 2nd commit with Apex::::Apex',
       'force-app/main/default/classes/TestClass3.cls',
       'dummy 11',
-      git
+      git,
     );
     regExFilePath = resolve(regExFile);
     await rm(regExFilePath);
@@ -41,7 +41,7 @@ describe('atgd unit test', () => {
 
   it('return tests without any warnings.', async () => {
     await expect(extractTestClasses('HEAD~1', 'HEAD', false)).rejects.toThrow(
-      `The regular expression in '${regExFilePath}' is invalid or the file wasn't found in the repo root folder.`
+      `The regular expression in '${regExFilePath}' is invalid or the file wasn't found in the repo root folder.`,
     );
   });
 });

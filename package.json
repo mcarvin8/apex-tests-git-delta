@@ -9,25 +9,25 @@
     "simple-git": "^3.28.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.7.1",
     "@commitlint/config-conventional": "^19.7.1",
     "@oclif/plugin-command-snapshot": "^5.0.2",
     "@salesforce/cli-plugins-testkit": "^5.3.39",
-    "@salesforce/dev-scripts": "^10.2.11",
-    "@types/jest": "^30.0.0",
-    "@types/node": "18",
-    "eslint-plugin-sf-plugin": "^1.17.2",
+    "@salesforce/dev-config": "^4.3.3",
+    "@salesforce/prettier-config": "^0.0.4",
+    "@types/node": "20",
+    "@vitest/coverage-v8": "^4.1.5",
+    "eslint-config-salesforce-typescript": "^4.0.1",
+    "eslint-plugin-sf-plugin": "^1.20.33",
     "husky": "^9.0.6",
-    "jest": "^30.0.0",
     "oclif": "^4.3.4",
     "shx": "0.4.0",
-    "ts-jest": "^29.4.0",
-    "ts-jest-mock-import-meta": "^1.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.5",
+    "wireit": "^0.14.12"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "files": [
     "/lib",
@@ -63,20 +63,16 @@
     "flexibleTaxonomy": true
   },
   "scripts": {
-    "command-docs": "oclif readme",
-    "build": "tsc -b",
-    "clean": "sf-clean",
-    "clean-all": "sf-clean all",
+    "build": "wireit",
     "clean:lib": "shx rm -rf lib && shx rm -rf coverage && shx rm -rf .nyc_output && shx rm -f oclif.manifest.json oclif.lock",
     "compile": "wireit",
-    "docs": "sf-docs",
-    "format": "sf-format",
+    "format": "wireit",
     "lint": "wireit",
     "postpack": "shx rm -f oclif.manifest.json oclif.lock",
-    "prepack": "sf-prepack",
+    "prepack": "wireit",
     "prepare": "husky install",
     "test": "wireit",
-    "test:nuts": "oclif manifest && jest --testMatch \"**/*.nut.ts\"",
+    "test:nuts": "oclif manifest && vitest run --config ./vitest.nut.config.ts",
     "test:only": "wireit",
     "version": "oclif readme"
   },
@@ -125,6 +121,21 @@
       ],
       "output": []
     },
+    "prepack": {
+      "command": "oclif manifest && oclif readme",
+      "files": [
+        "src/commands/atgd/delta.ts",
+        "messages/delta.md",
+        "README.md"
+      ],
+      "dependencies": [
+        "build"
+      ],
+      "output": [
+        "README.md"
+      ],
+      "clean": false
+    },
     "test:compile": {
       "command": "tsc -p \"./test\" --pretty",
       "files": [
@@ -141,7 +152,7 @@
       ]
     },
     "test:only": {
-      "command": "jest --coverage",
+      "command": "vitest run --coverage",
       "env": {
         "FORCE_COLOR": "2"
       },
@@ -149,9 +160,8 @@
         "test/**/*.ts",
         "src/**/*.ts",
         "**/tsconfig.json",
-        ".mocha*",
-        "!*.nut.ts",
-        ".nycrc"
+        "vitest.config.ts",
+        "!*.nut.ts"
       ],
       "output": []
     },

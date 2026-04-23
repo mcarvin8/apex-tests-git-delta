@@ -4,26 +4,27 @@
 [![Downloads/week](https://img.shields.io/npm/dw/apex-tests-git-delta.svg)](https://npmjs.org/package/apex-tests-git-delta)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
 [![Maintainability](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/maintainability.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
-[![Code Coverage](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/test_coverage.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
+[![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
 
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
 
-- [Install](#install)
-- [System Dependencies](#system-dependencies)
-- [Usage](#usage)
-  - [Create a config file](#create-a-config-file)
-  - [Use the format in commit messages](#use-the-format-in-commit-message)
-  - [Run the command to extract tests](#run-the-command-to-extract-tests)
-  - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
-- [Why This Plugin?](#why-this-plugin)
-- [Command](#command)
+- [`apex-tests-git-delta`](#apex-tests-git-delta)
+  - [Install](#install)
+  - [System Dependencies](#system-dependencies)
+  - [Usage](#usage)
+    - [Create a config file](#create-a-config-file)
+    - [Use the format in commit messages](#use-the-format-in-commit-messages)
+    - [Run the command to extract tests](#run-the-command-to-extract-tests)
+    - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
+  - [Why This Plugin?](#why-this-plugin)
+  - [Command](#command)
   - [`sf atgd delta`](#sf-atgd-delta)
-- [Alternatives](#alternatives)
-- [Issues](#issues)
-- [License](#license)
-</details>
+  - [Alternatives](#alternatives)
+  - [Issues](#issues)
+  - [License](#license)
+  </details>
 
 A **Salesforce CLI plugin** that extracts Apex test class names from **git commit messages**, enabling **incremental test execution** during deployments.
 

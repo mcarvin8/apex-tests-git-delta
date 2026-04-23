@@ -1,7 +1,7 @@
 'use strict';
 
 import { rm } from 'node:fs/promises';
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 
@@ -22,19 +22,19 @@ describe('atgd NUTs', () => {
       'chore: commit with Apex::TestClass00::Apex',
       'force-app/main/default/classes/SandboxTest.cls',
       'dummy 1',
-      git
+      git,
     );
     await createTemporaryCommit(
       'chore: 2nd commit with Apex::SandboxTest::Apex',
       'force-app/main/default/classes/TestClass3.cls',
       'dummy 11',
-      git
+      git,
     );
     await createTemporaryCommit(
       'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
       'packaged/classes/TestClass4.cls',
       'dummy 2',
-      git
+      git,
     );
     await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2222', git);
     await createTemporaryCommit('chore: adding new tests Apex::TestClass33::Apex', 'TestClass4.cls', 'dummy 22', git);
@@ -44,7 +44,7 @@ describe('atgd NUTs', () => {
   afterAll(async () => {
     await session?.clean();
     process.chdir(originalDir);
-    await rm(tempDir, { recursive: true });
+    await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 
   it('return tests without any warnings.', async () => {
