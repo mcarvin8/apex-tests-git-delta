@@ -36,7 +36,7 @@ describe('atgd unit test', () => {
 
   afterAll(async () => {
     process.chdir(originalDir);
-    await rm(tempDir, { recursive: true });
+    await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 
   it('return tests without any warnings.', async () => {

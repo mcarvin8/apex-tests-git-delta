@@ -17,19 +17,10 @@ export async function setupTestRepo(): Promise<string> {
   await git.init();
   await writeFile(regExFile, regExFileContents);
   await writeFile(sfdxConfigFile, sfdxConfigJsonString);
-  let userName;
-  let userEmail;
 
-  try {
-    userName = await git.getConfig('user.name');
-    userEmail = await git.getConfig('user.email');
-  } catch (error) {
-    // Ignore errors if the git config values are not set
-  }
-
-  if (!userName?.value && !userEmail?.value) {
-    await git.addConfig('user.name', 'CI Bot', false, 'global');
-    await git.addConfig('user.email', '90224411+mcarvin8@users.noreply.github.com', false, 'global');
-  }
+  await git.addConfig('user.name', 'CI Bot', false, 'local');
+  await git.addConfig('user.email', '90224411+mcarvin8@users.noreply.github.com', false, 'local');
+  await git.addConfig('commit.gpgsign', 'false', false, 'local');
+  await git.addConfig('tag.gpgsign', 'false', false, 'local');
   return tempDir;
 }
