@@ -243,6 +243,61 @@ describe('atgd test suite wildcards and namespaces', () => {
     );
     expect(result.suites).toEqual(['AllSuite']);
   });
+
+  it('returns multiple resolved suites in sorted order', async () => {
+    // HEAD~5 -> HEAD~2 spans the Suite::WildcardSuite::Suite and Suite::NoMatchSuite::Suite
+    // commits, forcing resolveTestSuites to sort more than one entry.
+    const result = await extractTestClasses('HEAD~5', 'HEAD~2', false);
+    expect(result.suites).toEqual(['NoMatchSuite', 'WildcardSuite']);
+  });
+});
+
+describe('atgd test suite blank entries', () => {
+  let tempDir: string;
+  const originalDir = process.cwd();
+
+  beforeAll(async () => {
+    tempDir = await setupTestRepo();
+    const git = gitAdapter();
+    await writeFile(
+      regExFile,
+      ['[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]', '[Ss][Uu][Ii][Tt][Ee]::(.*?)::[Ss][Uu][Ii][Tt][Ee]'].join('\n'),
+    );
+    await mkdir('force-app/main/default/testSuites', { recursive: true });
+
+    await createTemporaryCommit(
+      'chore: add BlankTest',
+      'force-app/main/default/classes/BlankTest.cls',
+      'public with sharing class BlankTest {}',
+      git,
+    );
+    // Suite mixes a real entry with blank/whitespace-only <testClassName> elements to
+    // exercise the early-continue branch when an entry trims to an empty string.
+    await createTemporaryCommit(
+      'chore: add BlankSuite',
+      'force-app/main/default/testSuites/BlankSuite.testSuite-meta.xml',
+      suiteXml(['BlankTest', '', '   ']),
+      git,
+    );
+    await createTemporaryCommit(
+      'chore: run Suite::BlankSuite::Suite',
+      'force-app/main/default/classes/BlankTest.cls',
+      'public with sharing class BlankTest { /* v2 */ }',
+      git,
+    );
+  });
+
+  afterAll(async () => {
+    process.chdir(originalDir);
+    await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  });
+
+  it('ignores blank testClassName entries without warning', async () => {
+    const result = await extractTestClasses('HEAD~1', 'HEAD', false);
+    expect(result.validatedClasses).toEqual('BlankTest');
+    expect(result.suites).toEqual(['BlankSuite']);
+    expect(result.warnings).toEqual([]);
+  });
 });
 
 describe('atgd backward-compatible single-line rc', () => {
