@@ -48,11 +48,17 @@ Requires [git](https://git-scm.com/downloads) to be installed and that it can be
 
 ### Create a config file
 
-Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root** with the regular expression:
+Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root**. The file accepts up to two non-empty lines:
+
+- **Line 1 (required):** regular expression used to capture individual Apex test class names.
+- **Line 2 (optional):** regular expression used to capture [Apex Test Suite](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm) names. When provided, each matched suite name is looked up at the `--to` commit as `<suiteName>.testSuite-meta.xml` inside one of your `sfdx-project.json` package directories, and the `<testClassName>` entries are merged into the output.
 
 ```regex
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
+[Ss][Uu][Ii][Tt][Ee]::(.*?)::[Ss][Uu][Ii][Tt][Ee]
 ```
+
+If line 2 is omitted or blank, suite parsing is disabled (fully backward compatible).
 
 ### Use the format in commit messages
 
@@ -60,7 +66,22 @@ Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root** with
 fix: update triggers Apex::AccountTriggerHandlerTest OpportunityTriggerHandlerTest::Apex
 chore: add sandbox setup Apex::PrepareMySandboxTest::Apex
 fix: resolve quoting issues Apex::QuoteControllerTest::Apex
+chore: regression pass Suite::AccountRegressionSuite::Suite
 ```
+
+#### Apex Test Suite wildcards
+
+The plugin understands the same `<testClassName>` wildcard conventions [documented by Salesforce for ApexTestSuite metadata](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm):
+
+| `<testClassName>` entry          | Resolution at `--to`                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| `LocalTestClass`                 | Literal local class. Validated like any class name from a commit message.       |
+| `A*Class`, `*Test`, `Foo_*`      | Local wildcard. Expanded against all `.cls` files in your package directories.  |
+| `*`                              | Expands to every local Apex class at `--to`.                                    |
+| `Namespace1.NamespacedTestClass` | Managed-package test. Passed through to the output as-is (not validated).       |
+| `Namespace1.*`                   | Managed-package wildcard. Passed through as-is; Salesforce resolves at runtime. |
+
+Wildcard patterns that match nothing locally produce a warning and contribute no tests.
 
 ### Run the command to extract tests
 

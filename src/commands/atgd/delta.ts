@@ -39,12 +39,16 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     const result = await extractTestClasses(flags['from'], flags['to'], flags['skip-test-validation']);
     const tests = result.validatedClasses;
     const warnings = result.warnings;
+    const suites = result.suites;
     if (warnings.length > 0) {
       warnings.forEach((warning) => {
         this.warn(warning);
       });
     }
+    if (suites.length > 0) {
+      this.log(`Resolved test suites: ${suites.join(' ')}`);
+    }
     this.log(tests);
-    return { tests, warnings };
+    return { tests, warnings, suites };
   }
 }

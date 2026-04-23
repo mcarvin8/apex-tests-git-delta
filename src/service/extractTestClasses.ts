@@ -1,17 +1,18 @@
 'use strict';
 
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
+import { resolveTestSuites } from './resolveTestSuites.js';
 import { validateClassPaths } from './validateClassPaths.js';
 import { gitAdapter } from './gitAdapter.js';
 
 export async function extractTestClasses(
   fromRef: string,
   toRef: string,
-  skipValidate: boolean
-): Promise<{ validatedClasses: string; warnings: string[] }> {
-  const testClasses: Set<string> = new Set();
+  skipValidate: boolean,
+): Promise<{ validatedClasses: string; warnings: string[]; suites: string[] }> {
+  const localTestClasses: Set<string> = new Set();
   const git = gitAdapter();
-  const { repoRoot, matchedMessages } = await retrieveCommitMessages(fromRef, toRef, git);
+  const { repoRoot, matchedMessages, matchedSuites } = await retrieveCommitMessages(fromRef, toRef, git);
 
   matchedMessages.forEach((message: string) => {
     // Split the commit message by commas or spaces
@@ -21,28 +22,41 @@ export async function extractTestClasses(
       // Remove leading/trailing whitespaces and add non-empty strings to the set
       const trimmedClass = testClass.trim();
       if (trimmedClass !== '') {
-        testClasses.add(trimmedClass);
+        localTestClasses.add(trimmedClass);
       }
     });
   });
 
-  let sortedClasses: string[] = Array.from(testClasses).sort((a, b) => a.localeCompare(b));
+  const suiteResult = await resolveTestSuites(matchedSuites, toRef, repoRoot, git);
+  suiteResult.localClasses.forEach((className) => localTestClasses.add(className));
+
+  const sortedLocal = Array.from(localTestClasses).sort((a, b) => a.localeCompare(b));
 
   if (skipValidate) {
-    return { validatedClasses: sortedClasses.join(' '), warnings: [] };
+    const combined = mergeAndSort(sortedLocal, suiteResult.namespacedClasses);
+    return {
+      validatedClasses: combined,
+      warnings: suiteResult.warnings,
+      suites: suiteResult.resolvedSuites,
+    };
   }
 
-  const result =
-    sortedClasses.length > 0
-      ? await validateClassPaths(sortedClasses, toRef, repoRoot, git)
-      : { validatedClasses: new Set(), warnings: [] };
+  const validation =
+    sortedLocal.length > 0
+      ? await validateClassPaths(sortedLocal, toRef, repoRoot, git)
+      : { validatedClasses: new Set<string>(), warnings: [] as string[] };
 
-  let validatedClasses: string = '';
-  if (result.validatedClasses.size > 0) {
-    sortedClasses = Array.from(result.validatedClasses) as string[];
-    sortedClasses = sortedClasses.sort((a, b) => a.localeCompare(b));
-    validatedClasses = sortedClasses.join(' ');
-  }
+  const combined = mergeAndSort(Array.from(validation.validatedClasses), suiteResult.namespacedClasses);
+  return {
+    validatedClasses: combined,
+    warnings: [...suiteResult.warnings, ...validation.warnings],
+    suites: suiteResult.resolvedSuites,
+  };
+}
 
-  return { validatedClasses, warnings: result.warnings };
+function mergeAndSort(localClasses: string[], namespacedClasses: Set<string>): string {
+  const merged = new Set<string>([...localClasses, ...namespacedClasses]);
+  return Array.from(merged)
+    .sort((a, b) => a.localeCompare(b))
+    .join(' ');
 }

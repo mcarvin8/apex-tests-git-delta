@@ -6,6 +6,7 @@
     "@oclif/core": "^4.2.7",
     "@salesforce/core": "^8.8.2",
     "@salesforce/sf-plugins-core": "^12.1.4",
+    "fast-xml-parser": "^5.7.1",
     "simple-git": "^3.28.0"
   },
   "devDependencies": {
