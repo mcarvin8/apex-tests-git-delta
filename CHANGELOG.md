@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.7...v3.1.0) (2026-04-23)
+
+
+### Features
+
+* resolve Apex Test Suites from commit messages ([6583ab2](https://github.com/mcarvin8/apex-tests-git-delta/commit/6583ab26f2da28ba8503be1d338513db204e1938))
+
 ## [3.0.7](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.6...v3.0.7) (2025-06-27)
 
 
