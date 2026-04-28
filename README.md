@@ -10,7 +10,6 @@
 <details>
   <summary>Table of Contents</summary>
 
-- [`apex-tests-git-delta`](#apex-tests-git-delta)
   - [Install](#install)
   - [System Dependencies](#system-dependencies)
   - [Usage](#usage)
@@ -20,7 +19,7 @@
     - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
   - [Why This Plugin?](#why-this-plugin)
   - [Command](#command)
-  - [`sf atgd delta`](#sf-atgd-delta)
+    - [`sf atgd delta`](#sf-atgd-delta)
   - [Alternatives](#alternatives)
   - [Issues](#issues)
   - [License](#license)
@@ -155,4 +154,4 @@ If you encounter any issues or would like to suggest features, please create an 
 
 ## License
 
-This project is licensed under the MIT license. Please see the [LICENSE](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md) file for details.
+[MIT](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
