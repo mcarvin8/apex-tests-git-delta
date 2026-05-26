@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.1.0...v3.1.1) (2026-05-26)
+
+
+### Bug Fixes
+
+* **deps:** pin direct dependencies to exact versions ([#92](https://github.com/mcarvin8/apex-tests-git-delta/issues/92)) ([e4aa406](https://github.com/mcarvin8/apex-tests-git-delta/commit/e4aa4061a93dec122e861d04dc0dbcf47112cf6d))
+
 ## [3.1.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.0.7...v3.1.0) (2026-04-23)
 
 
