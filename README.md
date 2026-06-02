@@ -1,4 +1,4 @@
-# `apex-tests-git-delta`
+# apex-tests-git-delta
 
 [![NPM](https://img.shields.io/npm/v/apex-tests-git-delta.svg?label=apex-tests-git-delta)](https://www.npmjs.com/package/apex-tests-git-delta)
 [![Downloads/week](https://img.shields.io/npm/dw/apex-tests-git-delta.svg)](https://npmjs.org/package/apex-tests-git-delta)
@@ -7,58 +7,47 @@
 [![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmcarvin8%2Fapex-tests-git-delta%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mcarvin8/apex-tests-git-delta/main)
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
+A Salesforce CLI plugin that extracts Apex test class names from git commit messages for incremental test execution during deployments.
 
+- [Why This Plugin?](#why-this-plugin)
 - [Install](#install)
-- [System Dependencies](#system-dependencies)
 - [Usage](#usage)
   - [Create a config file](#create-a-config-file)
   - [Use the format in commit messages](#use-the-format-in-commit-messages)
   - [Run the command to extract tests](#run-the-command-to-extract-tests)
   - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
-- [Why This Plugin?](#why-this-plugin)
-- [Command](#command)
-  - [`sf atgd delta`](#sf-atgd-delta)
+- [`sf atgd delta`](#sf-atgd-delta)
 - [Alternatives](#alternatives)
 - [Issues](#issues)
 - [License](#license)
-</details>
 
-A **Salesforce CLI plugin** that extracts Apex test class names from **git commit messages**, enabling **incremental test execution** during deployments.
+## Why This Plugin?
 
-This plugin helps you:
-
-✅ Automate test selection based on commit history  
-✅ Ensure critical tests run before deployment  
-✅ Seamlessly integrate with `sfdx-git-delta`
+[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) identifies changed Apex classes but running only those modified tests may not cover all required tests. This plugin lets you declare which tests belong to each commit directly in the commit message, giving you explicit control over test selection. It uses the same `--from` / `--to` SHA arguments as `sfdx-git-delta`, so the two tools compose naturally.
 
 ## Install
 
 ```bash
-sf plugins install apex-tests-git-delta@x.y.z
+sf plugins install apex-tests-git-delta
 ```
 
-## System Dependencies
-
-Requires [git](https://git-scm.com/downloads) to be installed and that it can be called using the command `git`.
+Requires [git](https://git-scm.com/downloads) installed and available on `PATH`.
 
 ## Usage
 
 ### Create a config file
 
-Create a `.apextestsgitdeltarc` file in your **Salesforce DX project root**. The file accepts up to two non-empty lines:
+Create a `.apextestsgitdeltarc` file in your Salesforce DX project root. The file accepts up to two non-empty lines:
 
-- **Line 1 (required):** regular expression used to capture individual Apex test class names.
-- **Line 2 (optional):** regular expression used to capture [Apex Test Suite](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm) names. When provided, each matched suite name is looked up at the `--to` commit as `<suiteName>.testSuite-meta.xml` inside one of your `sfdx-project.json` package directories, and the `<testClassName>` entries are merged into the output.
+- **Line 1 (required):** regular expression to capture individual Apex test class names.
+- **Line 2 (optional):** regular expression to capture [Apex Test Suite](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm) names. Each matched suite name is resolved at the `--to` commit as `<suiteName>.testSuite-meta.xml` inside your `sfdx-project.json` package directories, and its `<testClassName>` entries are merged into the output.
 
-```regex
+```
 [Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]
 [Ss][Uu][Ii][Tt][Ee]::(.*?)::[Ss][Uu][Ii][Tt][Ee]
 ```
 
-If line 2 is omitted or blank, suite parsing is disabled (fully backward compatible).
+Omitting line 2 disables suite parsing and is fully backward compatible.
 
 ### Use the format in commit messages
 
@@ -71,14 +60,14 @@ chore: regression pass Suite::AccountRegressionSuite::Suite
 
 #### Apex Test Suite wildcards
 
-The plugin understands the same `<testClassName>` wildcard conventions [documented by Salesforce for ApexTestSuite metadata](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm):
+The plugin supports the same `<testClassName>` wildcard conventions [documented by Salesforce for ApexTestSuite metadata](https://developer.salesforce.com/docs/atlas.en-us.api_meta.meta/api_meta/meta_apextestsuite.htm):
 
 | `<testClassName>` entry          | Resolution at `--to`                                                            |
 | -------------------------------- | ------------------------------------------------------------------------------- |
 | `LocalTestClass`                 | Literal local class. Validated like any class name from a commit message.       |
 | `A*Class`, `*Test`, `Foo_*`      | Local wildcard. Expanded against all `.cls` files in your package directories.  |
 | `*`                              | Expands to every local Apex class at `--to`.                                    |
-| `Namespace1.NamespacedTestClass` | Managed-package test. Passed through to the output as-is (not validated).       |
+| `Namespace1.NamespacedTestClass` | Managed-package test. Passed through as-is (not validated).                     |
 | `Namespace1.*`                   | Managed-package wildcard. Passed through as-is; Salesforce resolves at runtime. |
 
 Wildcard patterns that match nothing locally produce a warning and contribute no tests.
@@ -89,9 +78,9 @@ Wildcard patterns that match nothing locally produce a warning and contribute no
 sf atgd delta --from "HEAD~1" --to "HEAD"
 ```
 
-✅ **Output (alphabetically sorted, space-separated test classes):**
+Output is alphabetically sorted and space-separated:
 
-```bash
+```
 AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest QuoteControllerTest
 ```
 
@@ -100,16 +89,6 @@ AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest Quo
 ```bash
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
-
-## Why This Plugin?
-
-[sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) is great for identifying changed Apex classes, but running only those modified tests may not be enough. Other dependencies or testing strategies may require additional tests.
-
-This plugin lets you define which tests to run for each commit, ensuring better coverage. It seamlessly integrates with `sfdx-git-delta` using the same `--from` and `--to` SHA arguments.
-
-## Command
-
-- `sf atgd delta`
 
 ## `sf atgd delta`
 
@@ -151,7 +130,7 @@ EXAMPLES
 
 ## Issues
 
-If you encounter any issues or would like to suggest features, please create an [issue](https://github.com/mcarvin8/apex-tests-git-delta/issues).
+Report bugs or suggest features by creating an [issue](https://github.com/mcarvin8/apex-tests-git-delta/issues).
 
 ## License
 
