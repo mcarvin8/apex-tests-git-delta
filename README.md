@@ -5,25 +5,26 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
 [![Maintainability](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/maintainability.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
 [![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmcarvin8%2Fapex-tests-git-delta%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mcarvin8/apex-tests-git-delta/main)
 
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
 
-  - [Install](#install)
-  - [System Dependencies](#system-dependencies)
-  - [Usage](#usage)
-    - [Create a config file](#create-a-config-file)
-    - [Use the format in commit messages](#use-the-format-in-commit-messages)
-    - [Run the command to extract tests](#run-the-command-to-extract-tests)
-    - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
-  - [Why This Plugin?](#why-this-plugin)
-  - [Command](#command)
-    - [`sf atgd delta`](#sf-atgd-delta)
-  - [Alternatives](#alternatives)
-  - [Issues](#issues)
-  - [License](#license)
-  </details>
+- [Install](#install)
+- [System Dependencies](#system-dependencies)
+- [Usage](#usage)
+  - [Create a config file](#create-a-config-file)
+  - [Use the format in commit messages](#use-the-format-in-commit-messages)
+  - [Run the command to extract tests](#run-the-command-to-extract-tests)
+  - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
+- [Why This Plugin?](#why-this-plugin)
+- [Command](#command)
+  - [`sf atgd delta`](#sf-atgd-delta)
+- [Alternatives](#alternatives)
+- [Issues](#issues)
+- [License](#license)
+</details>
 
 A **Salesforce CLI plugin** that extracts Apex test class names from **git commit messages**, enabling **incremental test execution** during deployments.
 
