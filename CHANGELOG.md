@@ -5,6 +5,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.1.1...v3.2.0) (2026-06-02)
+
+
+### Features
+
+* **mutation:** add Stryker mutation testing ([bd3ebbc](https://github.com/mcarvin8/apex-tests-git-delta/commit/bd3ebbc96cfe2caefac135428a599156fa9610c1))
+* **mutation:** add Stryker mutation testing configuration ([4e64855](https://github.com/mcarvin8/apex-tests-git-delta/commit/4e64855678e7fa342821bf5a5366b4c8d7c9c4fb))
+
+
+### Bug Fixes
+
+* **mutation:** lower timeout to prevent infinite-loop mutant OOM crash ([f19adef](https://github.com/mcarvin8/apex-tests-git-delta/commit/f19adef5f7df9db6af3faf79a937f82ce5fbb584))
+* **test:** remove process.chdir() dependency for Stryker compatibility ([5497af4](https://github.com/mcarvin8/apex-tests-git-delta/commit/5497af4f7d6bf57493e99b37509195a250ee9b1b))
+
 ## [3.1.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.1.0...v3.1.1) (2026-05-26)
 
 
