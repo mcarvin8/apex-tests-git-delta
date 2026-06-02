@@ -4,41 +4,57 @@ import { rm } from 'node:fs/promises';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
+import { SimpleGit } from 'simple-git';
 
-import { gitAdapter } from '../../../src/service/gitAdapter.js';
 import { createTemporaryCommit } from '../../utils/createTemporaryCommit.js';
 import { setupTestRepo } from '../../utils/setupTestRepo.js';
 
 describe('atgd NUTs', () => {
   let session: TestSession;
   let tempDir: string;
+  let git: SimpleGit;
   const originalDir = process.cwd();
 
   beforeAll(async () => {
     session = await TestSession.create({ devhubAuthStrategy: 'NONE' });
-    tempDir = await setupTestRepo();
-    const git = gitAdapter();
+    ({ tempDir, git } = await setupTestRepo());
+    process.chdir(tempDir);
     await createTemporaryCommit(
       'chore: commit with Apex::TestClass00::Apex',
       'force-app/main/default/classes/SandboxTest.cls',
       'dummy 1',
       git,
+      tempDir,
     );
     await createTemporaryCommit(
       'chore: 2nd commit with Apex::SandboxTest::Apex',
       'force-app/main/default/classes/TestClass3.cls',
       'dummy 11',
       git,
+      tempDir,
     );
     await createTemporaryCommit(
       'chore: adding new tests Apex::TestClass3 TestClass4::Apex',
       'packaged/classes/TestClass4.cls',
       'dummy 2',
       git,
+      tempDir,
     );
-    await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2222', git);
-    await createTemporaryCommit('chore: adding new tests Apex::TestClass33::Apex', 'TestClass4.cls', 'dummy 22', git);
-    await createTemporaryCommit('chore: adding new tests Apex::TestClass33::Apex', 'TestClass4.cls', 'dummy 2', git);
+    await createTemporaryCommit('chore: add some tests', 'packaged/classes/TestClass4.cls', 'dummy 2222', git, tempDir);
+    await createTemporaryCommit(
+      'chore: adding new tests Apex::TestClass33::Apex',
+      'TestClass4.cls',
+      'dummy 22',
+      git,
+      tempDir,
+    );
+    await createTemporaryCommit(
+      'chore: adding new tests Apex::TestClass33::Apex',
+      'TestClass4.cls',
+      'dummy 2',
+      git,
+      tempDir,
+    );
   });
 
   afterAll(async () => {
