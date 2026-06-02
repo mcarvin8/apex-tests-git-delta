@@ -20,8 +20,8 @@
     "version": "main",
     "reportType": "full"
   },
-  "timeoutMS": 600000,
-  "timeoutFactor": 2,
+  "timeoutMS": 5000,
+  "timeoutFactor": 1.5,
   "concurrency": 4,
   "tempDirName": ".stryker-tmp",
   "cleanTempDir": true,
