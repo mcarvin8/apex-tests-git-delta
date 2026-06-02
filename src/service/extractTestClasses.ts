@@ -9,9 +9,10 @@ export async function extractTestClasses(
   fromRef: string,
   toRef: string,
   skipValidate: boolean,
+  baseDir?: string,
 ): Promise<{ validatedClasses: string; warnings: string[]; suites: string[] }> {
   const localTestClasses: Set<string> = new Set();
-  const git = gitAdapter();
+  const git = gitAdapter(baseDir);
   const { repoRoot, matchedMessages, matchedSuites } = await retrieveCommitMessages(fromRef, toRef, git);
 
   matchedMessages.forEach((message: string) => {

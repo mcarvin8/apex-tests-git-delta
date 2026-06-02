@@ -1,8 +1,8 @@
 import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git';
 
-export function gitAdapter(): SimpleGit {
+export function gitAdapter(baseDir?: string): SimpleGit {
   const options: Partial<SimpleGitOptions> = {
-    baseDir: process.cwd(),
+    baseDir: baseDir ?? process.cwd(),
     binary: 'git',
     maxConcurrentProcesses: 6,
     trimmed: true,

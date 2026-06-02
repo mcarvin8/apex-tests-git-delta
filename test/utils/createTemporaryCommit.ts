@@ -1,15 +1,17 @@
 'use strict';
 
 import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { SimpleGit } from 'simple-git';
 
 export async function createTemporaryCommit(
   message: string,
   filePath: string,
   content: string,
-  git: SimpleGit
+  git: SimpleGit,
+  baseDir: string,
 ): Promise<string> {
-  await writeFile(filePath, content);
+  await writeFile(join(baseDir, filePath), content);
   // Stage the file
   await git.add(filePath);
 

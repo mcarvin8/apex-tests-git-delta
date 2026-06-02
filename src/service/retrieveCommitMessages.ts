@@ -12,7 +12,6 @@ export async function retrieveCommitMessages(
   git: SimpleGit,
 ): Promise<{ repoRoot: string; matchedMessages: string[]; matchedSuites: string[] }> {
   const repoRoot = await getRepoRoot(git);
-  process.chdir(repoRoot);
   const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
 
   // Filter only entries that match the DefaultLogFields type
