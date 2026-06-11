@@ -1,15 +1,16 @@
 'use strict';
 /* eslint-disable no-await-in-loop */
 
-import { SimpleGit } from 'simple-git';
+import type { Repository } from '@scolladon/tsgit';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
+import { listFilesAtCommit } from './gitAdapter.js';
 
 export async function validateClassPaths(
   unvalidatedClasses: string[],
   toCommitHash: string,
   repoRoot: string,
-  git: SimpleGit
+  repo: Repository,
 ): Promise<{ validatedClasses: Set<string>; warnings: string[] }> {
   const packageDirectories = await getPackageDirectories(repoRoot);
   const warnings: string[] = [];
@@ -18,7 +19,7 @@ export async function validateClassPaths(
   for (const unvalidatedClass of unvalidatedClasses) {
     let validated: boolean = false;
     for (const packageDirectory of packageDirectories) {
-      const fileExists = await fileExistsInCommit(`${unvalidatedClass}.cls`, toCommitHash, packageDirectory, git);
+      const fileExists = await fileExistsInCommit(`${unvalidatedClass}.cls`, toCommitHash, packageDirectory, repo);
       if (fileExists) {
         validatedClasses.add(unvalidatedClass);
         validated = true;
@@ -27,17 +28,18 @@ export async function validateClassPaths(
     }
     if (!validated)
       warnings.push(
-        `The class ${unvalidatedClass} was not found in any package directory found in commit ${toCommitHash} and will not be added to the delta test classes.`
+        `The class ${unvalidatedClass} was not found in any package directory found in commit ${toCommitHash} and will not be added to the delta test classes.`,
       );
   }
   return { validatedClasses, warnings };
 }
+
 async function fileExistsInCommit(
   filePath: string,
   commitHash: string,
   directory: string,
-  git: SimpleGit
+  repo: Repository,
 ): Promise<boolean> {
-  const files = (await git.raw('ls-tree', '--name-only', '-r', commitHash, directory)).trim().split('\n');
+  const files = await listFilesAtCommit(repo, commitHash, directory);
   return files.some((file) => file.endsWith(filePath));
 }

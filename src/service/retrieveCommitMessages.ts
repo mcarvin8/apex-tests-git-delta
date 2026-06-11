@@ -2,20 +2,20 @@
 
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { DefaultLogFields, LogResult, SimpleGit } from 'simple-git';
+import type { Repository } from '@scolladon/tsgit';
 
 import { getRepoRoot } from './getRepoRoot.js';
 
 export async function retrieveCommitMessages(
   fromCommit: string,
   toCommit: string,
-  git: SimpleGit,
+  repo: Repository,
 ): Promise<{ repoRoot: string; matchedMessages: string[]; matchedSuites: string[] }> {
-  const repoRoot = await getRepoRoot(git);
-  const result: LogResult<string | DefaultLogFields> = await git.log({ from: fromCommit, to: toCommit, format: '%s' });
-
-  // Filter only entries that match the DefaultLogFields type
-  const commitMessages: string[] = (result.all as DefaultLogFields[]).map((commit) => commit.message);
+  const repoRoot = getRepoRoot(repo);
+  const fromOid = await repo.revParse(fromCommit);
+  const toOid = await repo.revParse(toCommit);
+  const entries = await repo.log({ from: String(toOid), excluding: [String(fromOid)] });
+  const commitMessages: string[] = entries.map((entry) => entry.message.split('\n')[0]);
 
   //  Read and compile the regex(es) from the specified file
   //  Line 1 = class regex (required), Line 2 = suite regex (optional)
