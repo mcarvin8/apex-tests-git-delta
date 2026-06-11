@@ -3,7 +3,8 @@
 
 import { basename } from 'node:path';
 import type { Repository } from '@scolladon/tsgit';
-import { XMLParser } from 'fast-xml-parser';
+import { parse as txmlParse, simplify } from 'txml';
+import type { TNode } from 'txml';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 import { listFilesAtCommit, readBlobAtCommitPath } from './gitAdapter.js';
@@ -31,7 +32,6 @@ export async function resolveTestSuites(
   }
 
   const packageDirectories = await getPackageDirectories(repoRoot);
-  const parser = new XMLParser({ isArray: (name) => name === 'testClassName' });
   const uniqueSuites = Array.from(new Set(suiteNames));
   const localClassInventory = await listLocalClasses(packageDirectories, toCommitHash, repo);
 
@@ -44,7 +44,7 @@ export async function resolveTestSuites(
       continue;
     }
 
-    const entries = await parseSuiteEntries(matchedPath, toCommitHash, repo, parser);
+    const entries = await parseSuiteEntries(matchedPath, toCommitHash, repo);
     if (entries === null) {
       warnings.push(
         `The test suite ${suiteName} file could not be read at commit ${toCommitHash} and will not contribute test classes.`,
@@ -83,13 +83,24 @@ async function parseSuiteEntries(
   matchedPath: string,
   toCommitHash: string,
   repo: Repository,
-  parser: XMLParser,
 ): Promise<string[] | null> {
   const blobContent = await readBlobAtCommitPath(repo, toCommitHash, matchedPath);
   if (!blobContent) return null;
+
   const xml = new TextDecoder().decode(blobContent);
-  const parsed = parser.parse(xml) as { ApexTestSuite?: { testClassName?: string[] } };
-  return parsed?.ApexTestSuite?.testClassName ?? [];
+  const parsed = simplify(txmlParse(xml) as TNode[]) as {
+    ApexTestSuite?: {
+      testClassName?: string | string[];
+    };
+  };
+
+  const entries = parsed?.ApexTestSuite?.testClassName;
+
+  if (!entries) {
+    return [];
+  }
+
+  return Array.isArray(entries) ? entries : [entries];
 }
 
 async function listLocalClasses(
