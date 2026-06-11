@@ -7,7 +7,7 @@
     "@salesforce/core": "8.8.2",
     "@salesforce/sf-plugins-core": "12.1.4",
     "@scolladon/tsgit": "2.0.1",
-    "fast-xml-parser": "5.7.1"
+    "txml": "6.0.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "19.7.1",
