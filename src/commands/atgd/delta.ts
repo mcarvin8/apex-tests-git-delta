@@ -31,6 +31,13 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       required: true,
       default: false,
     }),
+    format: Flags.option({
+      options: ['space', 'sf'] as const,
+    })({
+      char: 'o',
+      summary: messages.getMessage('flags.format.summary'),
+      default: 'space',
+    }),
   };
 
   public async run(): Promise<TestDeltaResult> {
@@ -48,7 +55,15 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
     if (suites.length > 0) {
       this.log(`Resolved test suites: ${suites.join(' ')}`);
     }
-    this.log(tests);
+    const output =
+      flags['format'] === 'sf'
+        ? tests
+            .split(' ')
+            .filter(Boolean)
+            .map((t) => `--tests ${t}`)
+            .join(' ')
+        : tests;
+    this.log(output);
     return { tests, warnings, suites };
   }
 }

@@ -87,4 +87,9 @@ describe('atgd NUTs', () => {
     const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
     expect(output.replace('\n', '')).toEqual('TestClass33');
   });
+  it('return tests in sf format', async () => {
+    const command = 'atgd delta --from "HEAD~5" --to "HEAD~3" --format sf';
+    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
+    expect(output.replace('\n', '')).toEqual('--tests SandboxTest --tests TestClass3 --tests TestClass4');
+  });
 });
