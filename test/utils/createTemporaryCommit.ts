@@ -2,24 +2,24 @@
 
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { SimpleGit } from 'simple-git';
+import type { Repository } from '@scolladon/tsgit';
 
 export async function createTemporaryCommit(
   message: string,
   filePath: string,
   content: string,
-  git: SimpleGit,
+  repo: Repository,
   baseDir: string,
 ): Promise<string> {
   await writeFile(join(baseDir, filePath), content);
   // Stage the file
-  await git.add(filePath);
+  await repo.add([filePath]);
 
   // Commit with the provided message
-  await git.commit(message);
+  await repo.commit({ message });
 
   // Return the commit hash of the newly created commit
-  const commitHash = (await git.revparse('HEAD')).trim();
+  const commitHash = String(await repo.revParse('HEAD'));
 
   return commitHash;
 }

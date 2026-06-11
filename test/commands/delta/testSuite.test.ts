@@ -3,7 +3,7 @@
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { SimpleGit } from 'simple-git';
+import type { Repository } from '@scolladon/tsgit';
 
 import { extractTestClasses } from '../../../src/service/extractTestClasses.js';
 import { createTemporaryCommit } from '../../utils/createTemporaryCommit.js';
@@ -21,10 +21,10 @@ const suiteXml = (classes: string[]): string =>
 
 describe('atgd test suite parsing', () => {
   let tempDir: string;
-  let git: SimpleGit;
+  let repo: Repository;
 
   beforeAll(async () => {
-    ({ tempDir, git } = await setupTestRepo());
+    ({ tempDir, repo } = await setupTestRepo());
 
     // Overwrite the rc file with a two-line version that also recognizes Suite::<name>::Suite markers.
     await writeFile(
@@ -38,21 +38,21 @@ describe('atgd test suite parsing', () => {
       'chore: seed Apex::SeedTest::Apex',
       'force-app/main/default/classes/SeedTest.cls',
       'public with sharing class SeedTest {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add suite members',
       'force-app/main/default/classes/AccountTest.cls',
       'public with sharing class AccountTest {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add second suite member',
       'force-app/main/default/classes/ContactTest.cls',
       'public with sharing class ContactTest {}',
-      git,
+      repo,
       tempDir,
     );
     // Commit the test suite metadata file.
@@ -60,7 +60,7 @@ describe('atgd test suite parsing', () => {
       'chore: add MyRegressionSuite',
       'force-app/main/default/testSuites/MyRegressionSuite.testSuite-meta.xml',
       suiteXml(['AccountTest', 'ContactTest']),
-      git,
+      repo,
       tempDir,
     );
     // Commit referencing the suite in the message.
@@ -68,7 +68,7 @@ describe('atgd test suite parsing', () => {
       'chore: regression pass Suite::MyRegressionSuite::Suite',
       'force-app/main/default/classes/ContactTest.cls',
       'public with sharing class ContactTest { /* v2 */ }',
-      git,
+      repo,
       tempDir,
     );
     // Commit referencing a missing suite plus a direct class.
@@ -76,7 +76,7 @@ describe('atgd test suite parsing', () => {
       'chore: misc Suite::NonExistentSuite::Suite Apex::SeedTest::Apex',
       'force-app/main/default/classes/SeedTest.cls',
       'public with sharing class SeedTest { /* v2 */ }',
-      git,
+      repo,
       tempDir,
     );
     // Commit an empty suite and reference it.
@@ -84,19 +84,20 @@ describe('atgd test suite parsing', () => {
       'chore: add empty suite',
       'force-app/main/default/testSuites/EmptySuite.testSuite-meta.xml',
       suiteXml([]),
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: run empty Suite::EmptySuite::Suite',
       'force-app/main/default/classes/SeedTest.cls',
       'public with sharing class SeedTest { /* v3 */ }',
-      git,
+      repo,
       tempDir,
     );
   });
 
   afterAll(async () => {
+    await repo.dispose();
     await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 
@@ -131,10 +132,10 @@ describe('atgd test suite parsing', () => {
 
 describe('atgd test suite wildcards and namespaces', () => {
   let tempDir: string;
-  let git: SimpleGit;
+  let repo: Repository;
 
   beforeAll(async () => {
-    ({ tempDir, git } = await setupTestRepo());
+    ({ tempDir, repo } = await setupTestRepo());
     await writeFile(
       join(tempDir, regExFile),
       ['[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]', '[Ss][Uu][Ii][Tt][Ee]::(.*?)::[Ss][Uu][Ii][Tt][Ee]'].join('\n'),
@@ -146,35 +147,35 @@ describe('atgd test suite wildcards and namespaces', () => {
       'chore: add AClass',
       'force-app/main/default/classes/AClass.cls',
       'public with sharing class AClass {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add AnotherClass',
       'force-app/main/default/classes/AnotherClass.cls',
       'public with sharing class AnotherClass {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add AwesomeClass',
       'force-app/main/default/classes/AwesomeClass.cls',
       'public with sharing class AwesomeClass {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add LocalTestClass',
       'force-app/main/default/classes/LocalTestClass.cls',
       'public with sharing class LocalTestClass {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: add Unrelated',
       'force-app/main/default/classes/Unrelated.cls',
       'public with sharing class Unrelated {}',
-      git,
+      repo,
       tempDir,
     );
     // The wildcard suite mirrors the API doc example.
@@ -182,14 +183,14 @@ describe('atgd test suite wildcards and namespaces', () => {
       'chore: add WildcardSuite',
       'force-app/main/default/testSuites/WildcardSuite.testSuite-meta.xml',
       suiteXml(['LocalTestClass', 'A*Class', 'Namespace1.NamespacedTestClass', 'Namespace1.*']),
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: run Suite::WildcardSuite::Suite',
       'force-app/main/default/classes/AClass.cls',
       'public with sharing class AClass { /* v2 */ }',
-      git,
+      repo,
       tempDir,
     );
     // A second suite using a pattern that doesn't match anything to exercise the no-match warning.
@@ -197,14 +198,14 @@ describe('atgd test suite wildcards and namespaces', () => {
       'chore: add NoMatchSuite',
       'force-app/main/default/testSuites/NoMatchSuite.testSuite-meta.xml',
       suiteXml(['Zzz*Nope']),
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: run Suite::NoMatchSuite::Suite',
       'force-app/main/default/classes/AClass.cls',
       'public with sharing class AClass { /* v3 */ }',
-      git,
+      repo,
       tempDir,
     );
     // A suite using pure '*' to grab every local class.
@@ -212,19 +213,20 @@ describe('atgd test suite wildcards and namespaces', () => {
       'chore: add AllSuite',
       'force-app/main/default/testSuites/AllSuite.testSuite-meta.xml',
       suiteXml(['*']),
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: run Suite::AllSuite::Suite',
       'force-app/main/default/classes/AClass.cls',
       'public with sharing class AClass { /* v4 */ }',
-      git,
+      repo,
       tempDir,
     );
   });
 
   afterAll(async () => {
+    await repo.dispose();
     await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 
@@ -270,10 +272,10 @@ describe('atgd test suite wildcards and namespaces', () => {
 
 describe('atgd test suite blank entries', () => {
   let tempDir: string;
-  let git: SimpleGit;
+  let repo: Repository;
 
   beforeAll(async () => {
-    ({ tempDir, git } = await setupTestRepo());
+    ({ tempDir, repo } = await setupTestRepo());
     await writeFile(
       join(tempDir, regExFile),
       ['[Aa][Pp][Ee][Xx]::(.*?)::[Aa][Pp][Ee][Xx]', '[Ss][Uu][Ii][Tt][Ee]::(.*?)::[Ss][Uu][Ii][Tt][Ee]'].join('\n'),
@@ -284,7 +286,7 @@ describe('atgd test suite blank entries', () => {
       'chore: add BlankTest',
       'force-app/main/default/classes/BlankTest.cls',
       'public with sharing class BlankTest {}',
-      git,
+      repo,
       tempDir,
     );
     // Suite mixes a real entry with blank/whitespace-only <testClassName> elements to
@@ -293,19 +295,20 @@ describe('atgd test suite blank entries', () => {
       'chore: add BlankSuite',
       'force-app/main/default/testSuites/BlankSuite.testSuite-meta.xml',
       suiteXml(['BlankTest', '', '   ']),
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: run Suite::BlankSuite::Suite',
       'force-app/main/default/classes/BlankTest.cls',
       'public with sharing class BlankTest { /* v2 */ }',
-      git,
+      repo,
       tempDir,
     );
   });
 
   afterAll(async () => {
+    await repo.dispose();
     await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 
@@ -319,27 +322,28 @@ describe('atgd test suite blank entries', () => {
 
 describe('atgd backward-compatible single-line rc', () => {
   let tempDir: string;
-  let git: SimpleGit;
+  let repo: Repository;
 
   beforeAll(async () => {
-    ({ tempDir, git } = await setupTestRepo());
+    ({ tempDir, repo } = await setupTestRepo());
     await createTemporaryCommit(
       'chore: initial',
       'force-app/main/default/classes/InitialTest.cls',
       'public with sharing class InitialTest {}',
-      git,
+      repo,
       tempDir,
     );
     await createTemporaryCommit(
       'chore: only classes Apex::LonelyTest::Apex',
       'force-app/main/default/classes/LonelyTest.cls',
       'public with sharing class LonelyTest {}',
-      git,
+      repo,
       tempDir,
     );
   });
 
   afterAll(async () => {
+    await repo.dispose();
     await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   });
 

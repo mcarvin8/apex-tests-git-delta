@@ -31,7 +31,7 @@ A Salesforce CLI plugin that extracts Apex test class names from git commit mess
 sf plugins install apex-tests-git-delta
 ```
 
-Requires [git](https://git-scm.com/downloads) installed and available on `PATH`.
+Requires Node.js `>=22.0.0`. No git CLI dependency — git operations are handled entirely in TypeScript.
 
 ## Usage
 

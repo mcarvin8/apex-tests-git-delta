@@ -3,24 +3,23 @@
 import { mkdtempSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
-import { SimpleGit } from 'simple-git';
+import { openRepository, type Repository } from '@scolladon/tsgit';
 
-import { gitAdapter } from '../../src/service/gitAdapter.js';
 import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
-export async function setupTestRepo(): Promise<{ tempDir: string; git: SimpleGit }> {
+export async function setupTestRepo(): Promise<{ tempDir: string; repo: Repository }> {
   const tempDir = mkdtempSync(resolve('..', 'git-temp-'));
-  const git = gitAdapter(tempDir);
+  const repo = await openRepository({ cwd: tempDir });
 
   await mkdir(join(tempDir, 'force-app/main/default/classes'), { recursive: true });
   await mkdir(join(tempDir, 'packaged/classes'), { recursive: true });
-  await git.init();
+  await repo.init();
   await writeFile(join(tempDir, regExFile), regExFileContents);
   await writeFile(join(tempDir, sfdxConfigFile), sfdxConfigJsonString);
 
-  await git.addConfig('user.name', 'CI Bot', false, 'local');
-  await git.addConfig('user.email', '90224411+mcarvin8@users.noreply.github.com', false, 'local');
-  await git.addConfig('commit.gpgsign', 'false', false, 'local');
-  await git.addConfig('tag.gpgsign', 'false', false, 'local');
-  return { tempDir, git };
+  await repo.config.set({ key: 'user.name', value: 'CI Bot', scope: 'local' });
+  await repo.config.set({ key: 'user.email', value: '90224411+mcarvin8@users.noreply.github.com', scope: 'local' });
+  await repo.config.set({ key: 'commit.gpgsign', value: 'false', scope: 'local' });
+  await repo.config.set({ key: 'tag.gpgsign', value: 'false', scope: 'local' });
+  return { tempDir, repo };
 }

@@ -2,12 +2,13 @@
 
 import { describe, it, expect } from 'vitest';
 
-import { gitAdapter } from '../../src/service/gitAdapter.js';
+import { openRepo } from '../../src/service/gitAdapter.js';
 
-describe('gitAdapter', () => {
+describe('openRepo', () => {
   it('defaults baseDir to process.cwd() when no argument provided', async () => {
-    const git = gitAdapter();
-    const root = await git.revparse('--show-toplevel');
+    const repo = await openRepo();
+    const root = repo.primitives.getRepoRoot();
     expect(root).toBeTruthy();
+    await repo.dispose();
   });
 });

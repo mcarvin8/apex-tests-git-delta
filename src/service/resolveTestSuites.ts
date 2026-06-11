@@ -2,10 +2,11 @@
 /* eslint-disable no-await-in-loop */
 
 import { basename } from 'node:path';
-import { SimpleGit } from 'simple-git';
+import type { Repository } from '@scolladon/tsgit';
 import { XMLParser } from 'fast-xml-parser';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
+import { listFilesAtCommit, readBlobAtCommitPath } from './gitAdapter.js';
 
 export type ResolvedTestSuites = {
   localClasses: Set<string>;
@@ -18,7 +19,7 @@ export async function resolveTestSuites(
   suiteNames: string[],
   toCommitHash: string,
   repoRoot: string,
-  git: SimpleGit,
+  repo: Repository,
 ): Promise<ResolvedTestSuites> {
   const localClasses: Set<string> = new Set();
   const namespacedClasses: Set<string> = new Set();
@@ -32,13 +33,13 @@ export async function resolveTestSuites(
   const packageDirectories = await getPackageDirectories(repoRoot);
   const parser = new XMLParser({ isArray: (name) => name === 'testClassName' });
   const uniqueSuites = Array.from(new Set(suiteNames));
-  const localClassInventory = await listLocalClasses(packageDirectories, toCommitHash, git);
+  const localClassInventory = await listLocalClasses(packageDirectories, toCommitHash, repo);
 
   for (const suiteName of uniqueSuites) {
     const suiteFile = `${suiteName}.testSuite-meta.xml`;
     let matchedPath: string | undefined;
     for (const packageDirectory of packageDirectories) {
-      const files = (await git.raw('ls-tree', '--name-only', '-r', toCommitHash, packageDirectory)).trim().split('\n');
+      const files = await listFilesAtCommit(repo, toCommitHash, packageDirectory);
       matchedPath = files.find((file) => file.endsWith(`/${suiteFile}`) || file === suiteFile);
       if (matchedPath) break;
     }
@@ -50,7 +51,14 @@ export async function resolveTestSuites(
       continue;
     }
 
-    const xml = await git.show([`${toCommitHash}:${matchedPath}`]);
+    const blobContent = await readBlobAtCommitPath(repo, toCommitHash, matchedPath);
+    if (!blobContent) {
+      warnings.push(
+        `The test suite ${suiteName} file could not be read at commit ${toCommitHash} and will not contribute test classes.`,
+      );
+      continue;
+    }
+    const xml = new TextDecoder().decode(blobContent);
     const parsed = parser.parse(xml) as { ApexTestSuite?: { testClassName?: string[] } };
     const entries = parsed?.ApexTestSuite?.testClassName ?? [];
     if (entries.length === 0) {
@@ -69,11 +77,11 @@ export async function resolveTestSuites(
 async function listLocalClasses(
   packageDirectories: string[],
   toCommitHash: string,
-  git: SimpleGit,
+  repo: Repository,
 ): Promise<Set<string>> {
   const classes: Set<string> = new Set();
   for (const directory of packageDirectories) {
-    const files = (await git.raw('ls-tree', '--name-only', '-r', toCommitHash, directory)).trim().split('\n');
+    const files = await listFilesAtCommit(repo, toCommitHash, directory);
     for (const file of files) {
       if (file.endsWith('.cls')) {
         classes.add(basename(file, '.cls'));
