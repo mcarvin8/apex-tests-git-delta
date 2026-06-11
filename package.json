@@ -74,7 +74,7 @@
     "lint": "wireit",
     "postpack": "shx rm -f oclif.manifest.json oclif.lock",
     "prepack": "wireit",
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "wireit",
     "test:compile": "wireit",
     "test:mutation": "stryker run",
