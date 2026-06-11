@@ -1,6 +1,6 @@
 'use strict';
 
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, realpathSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -9,7 +9,7 @@ import { openRepository, type Repository } from '@scolladon/tsgit';
 import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 export async function setupTestRepo(): Promise<{ tempDir: string; repo: Repository }> {
-  const tempDir = mkdtempSync(join(tmpdir(), 'git-temp-'));
+  const tempDir = realpathSync(mkdtempSync(join(tmpdir(), 'git-temp-')));
   const repo = await openRepository({ cwd: tempDir });
 
   await mkdir(join(tempDir, 'force-app/main/default/classes'), { recursive: true });
