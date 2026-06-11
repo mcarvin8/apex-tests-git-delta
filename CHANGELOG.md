@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.0.1...v4.1.0) (2026-06-11)
+
+
+### Features
+
+* add --format flag with space and sf output options ([#103](https://github.com/mcarvin8/apex-tests-git-delta/issues/103)) ([2e583be](https://github.com/mcarvin8/apex-tests-git-delta/commit/2e583be227a58f0d4b840d21a0420a1d439a3851))
+
 ## [4.0.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.0.0...v4.0.1) (2026-06-11)
 
 
