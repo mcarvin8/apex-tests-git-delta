@@ -17,6 +17,7 @@ A Salesforce CLI plugin that extracts Apex test class names from git commit mess
   - [Run the command to extract tests](#run-the-command-to-extract-tests)
   - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
 - [`sf atgd delta`](#sf-atgd-delta)
+- [Output Formats](#output-formats)
 - [Alternatives](#alternatives)
 - [Issues](#issues)
 - [License](#license)
@@ -86,15 +87,24 @@ AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest Quo
 
 ### Use the output in a deployment command
 
+Use the default `space` format with `-t` (which accepts a space-separated list):
+
 ```bash
 sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
+```
+
+Use the `sf` format to inline tests directly into commands that expect repeated `--tests` flags (e.g. `sf apex run test`):
+
+```bash
+sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)
+# expands to: sf apex run test --tests AccountTriggerHandlerTest --tests QuoteControllerTest ...
 ```
 
 ## `sf atgd delta`
 
 ```
 USAGE
-  $ sf atgd delta -f <value> -t <value> -v [--json]
+  $ sf atgd delta -f <value> -t <value> -v [-o space|sf] [--json]
 
 FLAGS
   -f, --from=<value>          Commit SHA from where the commit message log is done.
@@ -103,6 +113,8 @@ FLAGS
                               [default: HEAD]
   -v, --skip-test-validation  Skip validating that tests exist in the local package directories.
                               [default: false]
+  -o, --format=<option>       Output format for the test list.
+                              [default: space] <options: space|sf>
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -118,6 +130,23 @@ EXAMPLES
   Get tests from the most recent commit, skipping the local package directory validation.
 
     $ sf atgd delta --from "HEAD~1" --to "HEAD" -v
+
+  Get tests formatted for use with sf apex run test.
+
+    $ sf atgd delta --from "HEAD~1" --to "HEAD" --format sf
+```
+
+## Output Formats
+
+| Format            | Flag          | Output                                         | Use with                            |
+| ----------------- | ------------- | ---------------------------------------------- | ----------------------------------- |
+| `space` (default) | _(omit)_      | `ClassA ClassB ClassC`                         | `sf project deploy start -t $(...)` |
+| `sf`              | `--format sf` | `--tests ClassA --tests ClassB --tests ClassC` | `sf apex run test $(...)`           |
+
+The `sf` format lets you compose this plugin directly into Salesforce CLI commands without any shell post-processing:
+
+```bash
+sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)
 ```
 
 ## Alternatives
