@@ -5,6 +5,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.2.0...v4.0.0) (2026-06-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** minimum Node.js version raised to >=22.0.0 (required by tsgit). The git CLI is no longer a runtime dependency.
+
+### Features
+
+* **deps:** replace simple-git with @scolladon/tsgit ([#96](https://github.com/mcarvin8/apex-tests-git-delta/issues/96)) ([79ded57](https://github.com/mcarvin8/apex-tests-git-delta/commit/79ded5775879abd4b07171f05d0b9a8c34d4374f))
+
+
+### Bug Fixes
+
+* **deps:** increase @types/node to 22 ([#100](https://github.com/mcarvin8/apex-tests-git-delta/issues/100)) ([ebc360e](https://github.com/mcarvin8/apex-tests-git-delta/commit/ebc360ed379860b2ae7c54f794600dd3d5526f5c))
+
 ## [3.2.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.1.1...v3.2.0) (2026-06-02)
 
 
