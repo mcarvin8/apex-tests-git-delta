@@ -36,14 +36,7 @@ export async function resolveTestSuites(
   const localClassInventory = await listLocalClasses(packageDirectories, toCommitHash, repo);
 
   for (const suiteName of uniqueSuites) {
-    const suiteFile = `${suiteName}.testSuite-meta.xml`;
-    let matchedPath: string | undefined;
-    for (const packageDirectory of packageDirectories) {
-      const files = await listFilesAtCommit(repo, toCommitHash, packageDirectory);
-      matchedPath = files.find((file) => file.endsWith(`/${suiteFile}`) || file === suiteFile);
-      if (matchedPath) break;
-    }
-
+    const matchedPath = await findSuitePath(suiteName, packageDirectories, toCommitHash, repo);
     if (!matchedPath) {
       warnings.push(
         `The test suite ${suiteName} was not found in any package directory at commit ${toCommitHash} and will not contribute test classes.`,
@@ -51,16 +44,13 @@ export async function resolveTestSuites(
       continue;
     }
 
-    const blobContent = await readBlobAtCommitPath(repo, toCommitHash, matchedPath);
-    if (!blobContent) {
+    const entries = await parseSuiteEntries(matchedPath, toCommitHash, repo, parser);
+    if (entries === null) {
       warnings.push(
         `The test suite ${suiteName} file could not be read at commit ${toCommitHash} and will not contribute test classes.`,
       );
       continue;
     }
-    const xml = new TextDecoder().decode(blobContent);
-    const parsed = parser.parse(xml) as { ApexTestSuite?: { testClassName?: string[] } };
-    const entries = parsed?.ApexTestSuite?.testClassName ?? [];
     if (entries.length === 0) {
       warnings.push(`The test suite ${suiteName} at commit ${toCommitHash} has no testClassName entries.`);
       continue;
@@ -72,6 +62,34 @@ export async function resolveTestSuites(
 
   resolvedSuites.sort((a, b) => a.localeCompare(b));
   return { localClasses, namespacedClasses, resolvedSuites, warnings };
+}
+
+async function findSuitePath(
+  suiteName: string,
+  packageDirectories: string[],
+  toCommitHash: string,
+  repo: Repository,
+): Promise<string | undefined> {
+  const suiteFile = `${suiteName}.testSuite-meta.xml`;
+  for (const packageDirectory of packageDirectories) {
+    const files = await listFilesAtCommit(repo, toCommitHash, packageDirectory);
+    const match = files.find((file) => file.endsWith(`/${suiteFile}`) || file === suiteFile);
+    if (match) return match;
+  }
+  return undefined;
+}
+
+async function parseSuiteEntries(
+  matchedPath: string,
+  toCommitHash: string,
+  repo: Repository,
+  parser: XMLParser,
+): Promise<string[] | null> {
+  const blobContent = await readBlobAtCommitPath(repo, toCommitHash, matchedPath);
+  if (!blobContent) return null;
+  const xml = new TextDecoder().decode(blobContent);
+  const parsed = parser.parse(xml) as { ApexTestSuite?: { testClassName?: string[] } };
+  return parsed?.ApexTestSuite?.testClassName ?? [];
 }
 
 async function listLocalClasses(
