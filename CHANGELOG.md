@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.0.0...v4.0.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **deps:** replace fast-xml-parser with txml ([#101](https://github.com/mcarvin8/apex-tests-git-delta/issues/101)) ([d55f3cf](https://github.com/mcarvin8/apex-tests-git-delta/commit/d55f3cf85a7070dead560c3d100f107261a556e5))
+
 ## [4.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v3.2.0...v4.0.0) (2026-06-11)
 
 
