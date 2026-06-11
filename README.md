@@ -87,10 +87,10 @@ AccountTriggerHandlerTest OpportunityTriggerHandlerTest PrepareMySandboxTest Quo
 
 ### Use the output in a deployment command
 
-Use the default `space` format with `-t` (which accepts a space-separated list):
+Use the default `space` format with a single `--tests` flag (or `-t`) that you supply with the CLI command (which accepts a space-separated list):
 
 ```bash
-sf project deploy start -x package/package.xml -l RunSpecifiedTests -t $(sf atgd delta --from "HEAD~1" --to "HEAD")
+sf project deploy start -x package/package.xml -l RunSpecifiedTests --tests $(sf atgd delta --from "HEAD~1" --to "HEAD")
 ```
 
 Use the `sf` format to inline tests directly into commands that expect repeated `--tests` flags (e.g. `sf apex run test`):
