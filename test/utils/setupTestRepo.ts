@@ -2,13 +2,14 @@
 
 import { mkdtempSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { openRepository, type Repository } from '@scolladon/tsgit';
 
 import { regExFile, regExFileContents, sfdxConfigFile, sfdxConfigJsonString } from './testConstants.js';
 
 export async function setupTestRepo(): Promise<{ tempDir: string; repo: Repository }> {
-  const tempDir = mkdtempSync(resolve('..', 'git-temp-'));
+  const tempDir = mkdtempSync(join(tmpdir(), 'git-temp-'));
   const repo = await openRepository({ cwd: tempDir });
 
   await mkdir(join(tempDir, 'force-app/main/default/classes'), { recursive: true });
