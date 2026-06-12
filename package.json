@@ -10,6 +10,7 @@
     "txml": "6.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "19.7.1",
     "@commitlint/config-conventional": "19.7.1",
     "@oclif/plugin-command-snapshot": "5.0.2",
     "@salesforce/cli-plugins-testkit": "5.3.39",
