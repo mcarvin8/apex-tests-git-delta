@@ -163,4 +163,4 @@ Report bugs or suggest features by creating an [issue](https://github.com/mcarvi
 
 ## License
 
-[MIT](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
+[MIT](LICENSE.md)
