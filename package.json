@@ -12,7 +12,6 @@
   "devDependencies": {
     "@commitlint/cli": "19.7.1",
     "@commitlint/config-conventional": "19.7.1",
-    "@oclif/plugin-command-snapshot": "5.0.2",
     "@salesforce/cli-plugins-testkit": "5.3.39",
     "@salesforce/dev-config": "4.3.3",
     "@salesforce/prettier-config": "0.0.4",
@@ -108,12 +107,10 @@
       "clean": "if-file-deleted"
     },
     "format": {
-      "command": "prettier --write \"+(src|test|schemas)/**/*.+(ts|js|json)|command-snapshot.json\"",
+      "command": "prettier --write \"+(src|test)/**/*.+(ts|js|json)\"",
       "files": [
         "src/**/*.ts",
         "test/**/*.ts",
-        "schemas/**/*.json",
-        "command-snapshot.json",
         ".prettier*"
       ],
       "output": []
@@ -170,35 +167,6 @@
         "**/tsconfig.json",
         "vitest.config.ts",
         "!*.nut.ts"
-      ],
-      "output": []
-    },
-    "test:command-reference": {
-      "command": "\"./bin/dev\" commandreference:generate --erroronwarnings",
-      "files": [
-        "src/**/*.ts",
-        "messages/**",
-        "package.json"
-      ],
-      "output": [
-        "tmp/root"
-      ]
-    },
-    "test:deprecation-policy": {
-      "command": "\"./bin/dev\" snapshot:compare",
-      "files": [
-        "src/**/*.ts"
-      ],
-      "output": [],
-      "dependencies": [
-        "compile"
-      ]
-    },
-    "test:json-schema": {
-      "command": "\"./bin/dev\" schema:compare",
-      "files": [
-        "src/**/*.ts",
-        "schemas"
       ],
       "output": []
     }
