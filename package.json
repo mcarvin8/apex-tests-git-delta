@@ -1,6 +1,6 @@
 {
   "name": "apex-tests-git-delta",
-  "description": "Determine Apex tests for incremental Salesforce deployments using git commit messages.",
+  "description": "Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.",
   "version": "4.1.0",
   "dependencies": {
     "@oclif/core": "4.2.7",
@@ -40,16 +40,16 @@
     "/CHANGELOG.md"
   ],
   "keywords": [
-    "force",
     "salesforce",
-    "salesforcedx",
     "sf",
     "sf-plugin",
-    "sfdx",
-    "sfdx-plugin",
     "apex",
+    "apex-tests",
     "delta",
-    "tests"
+    "git",
+    "test-selection",
+    "ci",
+    "incremental"
   ],
   "license": "MIT",
   "oclif": {
