@@ -12,11 +12,7 @@ A Salesforce CLI plugin that extracts Apex test class names from git commit mess
 - [Why This Plugin?](#why-this-plugin)
 - [Install](#install)
 - [Usage](#usage)
-  - [Create a config file](#create-a-config-file)
-  - [Use the format in commit messages](#use-the-format-in-commit-messages)
-  - [Run the command to extract tests](#run-the-command-to-extract-tests)
-  - [Use the output in a deployment command](#use-the-output-in-a-deployment-command)
-- [`sf atgd delta`](#sf-atgd-delta)
+- [Command](#command)
 - [Output Formats](#output-formats)
 - [Alternatives](#alternatives)
 - [Issues](#issues)
@@ -100,7 +96,9 @@ sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)
 # expands to: sf apex run test --tests AccountTriggerHandlerTest --tests QuoteControllerTest ...
 ```
 
-## `sf atgd delta`
+## Command
+
+### `sf atgd delta`
 
 ```
 USAGE
