@@ -9,9 +9,3 @@ updates:
       prefix: 'feat(tsgit)'
     allow:
       - dependency-name: '@scolladon/tsgit'
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule:
-      interval: 'monthly'
-    commit-message:
-      prefix: 'build'
