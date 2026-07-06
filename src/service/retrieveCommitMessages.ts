@@ -31,9 +31,10 @@ export async function retrieveCommitMessages(
     if (lines[1]) {
       suiteRegex = new RegExp(lines[1], 'g');
     }
-  } catch (err) {
+  } catch (cause) {
     throw Error(
       `The regular expression in '${regexFilePath}' is invalid or the file wasn't found in the repo root folder.`,
+      { cause },
     );
   }
 

@@ -1,17 +1,17 @@
 'use strict';
 
-import { rm, mkdir } from 'node:fs/promises';
+import { mkdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { vi, describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { Repository } from '@scolladon/tsgit';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../src/service/gitAdapter.js', async (importOriginal) => {
   const mod = await importOriginal<typeof import('../../src/service/gitAdapter.js')>();
   return { ...mod, readBlobAtCommitPath: vi.fn(mod.readBlobAtCommitPath) };
 });
 
-import { resolveTestSuites } from '../../src/service/resolveTestSuites.js';
 import * as gitAdapter from '../../src/service/gitAdapter.js';
+import { resolveTestSuites } from '../../src/service/resolveTestSuites.js';
 import { createTemporaryCommit } from '../utils/createTemporaryCommit.js';
 import { setupTestRepo } from '../utils/setupTestRepo.js';
 

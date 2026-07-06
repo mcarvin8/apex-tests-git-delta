@@ -1,7 +1,7 @@
 'use strict';
 
-import { SfCommand, Flags } from '@salesforce/sf-plugins-core';
 import { Messages } from '@salesforce/core';
+import { Flags, SfCommand } from '@salesforce/sf-plugins-core';
 import { extractTestClasses } from '../../service/extractTestClasses.js';
 import { TestDeltaResult } from '../../service/types.js';
 

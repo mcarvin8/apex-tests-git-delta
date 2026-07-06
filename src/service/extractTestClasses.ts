@@ -1,9 +1,9 @@
 'use strict';
 
-import { retrieveCommitMessages } from './retrieveCommitMessages.js';
-import { resolveTestSuites } from './resolveTestSuites.js';
-import { validateClassPaths } from './validateClassPaths.js';
 import { openRepo } from './gitAdapter.js';
+import { resolveTestSuites } from './resolveTestSuites.js';
+import { retrieveCommitMessages } from './retrieveCommitMessages.js';
+import { validateClassPaths } from './validateClassPaths.js';
 
 export async function extractTestClasses(
   fromRef: string,

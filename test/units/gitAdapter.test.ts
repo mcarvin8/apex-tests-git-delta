@@ -1,8 +1,8 @@
 'use strict';
 
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { openRepo, listFilesAtCommit, readBlobAtCommitPath } from '../../src/service/gitAdapter.js';
+import { listFilesAtCommit, openRepo, readBlobAtCommitPath } from '../../src/service/gitAdapter.js';
 
 const NONEXISTENT_SHA = '0000000000000000000000000000000000000001';
 

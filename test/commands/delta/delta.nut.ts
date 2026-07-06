@@ -1,10 +1,9 @@
 'use strict';
 
 import { rm } from 'node:fs/promises';
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import type { Repository } from '@scolladon/tsgit';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { createTemporaryCommit } from '../../utils/createTemporaryCommit.js';
 import { setupTestRepo } from '../../utils/setupTestRepo.js';

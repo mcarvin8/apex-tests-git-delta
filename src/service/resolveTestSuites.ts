@@ -1,10 +1,9 @@
 'use strict';
-/* eslint-disable no-await-in-loop */
 
 import { basename } from 'node:path';
 import type { Repository } from '@scolladon/tsgit';
-import { parse as txmlParse, simplify } from 'txml';
 import type { TNode } from 'txml';
+import { simplify, parse as txmlParse } from 'txml';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 import { listFilesAtCommit, readBlobAtCommitPath } from './gitAdapter.js';

@@ -2,8 +2,8 @@
 
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { Repository } from '@scolladon/tsgit';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { extractTestClasses } from '../../../src/service/extractTestClasses.js';
 import { createTemporaryCommit } from '../../utils/createTemporaryCommit.js';
