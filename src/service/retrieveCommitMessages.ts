@@ -14,7 +14,7 @@ export async function retrieveCommitMessages(
   const repoRoot = getRepoRoot(repo);
   const fromOid = await repo.revParse(fromCommit);
   const toOid = await repo.revParse(toCommit);
-  const entries = await repo.log({ from: String(toOid), excluding: [String(fromOid)] });
+  const entries = await repo.log({ rev: String(toOid), excluding: [String(fromOid)] });
   const commitMessages: string[] = entries.map((entry) => entry.message.split('\n')[0]);
 
   //  Read and compile the regex(es) from the specified file
