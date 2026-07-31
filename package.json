@@ -6,7 +6,7 @@
     "@oclif/core": "4.2.7",
     "@salesforce/core": "8.8.2",
     "@salesforce/sf-plugins-core": "12.1.4",
-    "@scolladon/tsgit": "3.0.0",
+    "@scolladon/tsgit": "3.1.1",
     "txml": "6.0.0"
   },
   "devDependencies": {
