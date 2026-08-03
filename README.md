@@ -10,6 +10,7 @@
 Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.
 
 - [Why This Plugin?](#why-this-plugin)
+- [Requirements](#requirements)
 - [Install](#install)
 - [Usage](#usage)
 - [Command](#command)
@@ -22,13 +23,17 @@ Identify Apex test classes for incremental Salesforce deployments by parsing git
 
 [sfdx-git-delta](https://github.com/scolladon/sfdx-git-delta) identifies changed Apex classes but running only those modified tests may not cover all required tests. This plugin lets you declare which tests belong to each commit directly in the commit message, giving you explicit control over test selection. It uses the same `--from` / `--to` SHA arguments as `sfdx-git-delta`, so the two tools compose naturally.
 
+## Requirements
+
+- Salesforce CLI (`sf`)
+- Node.js **22.x or later**
+- No git binary required - git operations are handled entirely in TypeScript
+
 ## Install
 
 ```bash
 sf plugins install apex-tests-git-delta
 ```
-
-Requires Node.js `>=22.0.0`. No git CLI dependency — git operations are handled entirely in TypeScript.
 
 ## Usage
 
