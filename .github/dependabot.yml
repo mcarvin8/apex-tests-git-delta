@@ -7,5 +7,7 @@ updates:
     versioning-strategy: widen
     commit-message:
       prefix: 'feat(tsgit)'
+    cooldown:
+      default-days: 0
     allow:
       - dependency-name: '@scolladon/tsgit'
