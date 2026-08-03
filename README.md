@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmcarvin8%2Fapex-tests-git-delta%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mcarvin8/apex-tests-git-delta/main)
 
-A Salesforce CLI plugin that extracts Apex test class names from git commit messages for incremental test execution during deployments.
+Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.
 
 - [Why This Plugin?](#why-this-plugin)
 - [Install](#install)
