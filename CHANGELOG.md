@@ -5,6 +5,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.4.0...v4.5.0) (2026-08-03)
+
+
+### Features
+
+* **tsgit:** bump @scolladon/tsgit from 3.1.2 to 3.2.1 ([#113](https://github.com/mcarvin8/apex-tests-git-delta/issues/113)) ([e9523a2](https://github.com/mcarvin8/apex-tests-git-delta/commit/e9523a233d2d9538f867f136f63f9a502b54b04f))
+
+
+### Bug Fixes
+
+* **deps:** bump all deps ([#115](https://github.com/mcarvin8/apex-tests-git-delta/issues/115)) ([e2dea2b](https://github.com/mcarvin8/apex-tests-git-delta/commit/e2dea2beb92a4d75bed9fe14cd1003b8890c4283))
+
 ## [4.4.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.3.0...v4.4.0) (2026-08-03)
 
 
