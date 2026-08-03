@@ -3,30 +3,30 @@
   "description": "Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.",
   "version": "4.4.0",
   "dependencies": {
-    "@oclif/core": "4.2.7",
-    "@salesforce/core": "8.8.2",
-    "@salesforce/sf-plugins-core": "12.1.4",
+    "@oclif/core": "4.13.2",
+    "@salesforce/core": "9.1.0",
+    "@salesforce/sf-plugins-core": "13.0.0",
     "@scolladon/tsgit": "3.2.1",
     "txml": "6.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.1",
-    "@commitlint/cli": "19.7.1",
-    "@commitlint/config-conventional": "19.7.1",
-    "@salesforce/cli-plugins-testkit": "5.3.39",
+    "@commitlint/cli": "21.2.1",
+    "@commitlint/config-conventional": "21.2.0",
+    "@salesforce/cli-plugins-testkit": "5.3.64",
     "@salesforce/dev-config": "4.3.3",
     "@stryker-mutator/core": "9.6.1",
     "@stryker-mutator/vitest-runner": "9.6.1",
-    "@types/node": "22.19.21",
-    "@vitest/coverage-v8": "4.1.5",
-    "husky": "9.0.6",
-    "lint-staged": "17.0.8",
-    "oclif": "4.3.4",
+    "@types/node": "26.1.2",
+    "@vitest/coverage-v8": "4.1.10",
+    "husky": "9.1.7",
+    "lint-staged": "17.3.0",
+    "oclif": "4.23.29",
     "shx": "0.4.0",
     "tsx": "4.23.5",
     "typescript": "7.0.2",
-    "vitest": "4.1.5",
-    "wireit": "0.14.12"
+    "vitest": "4.1.10",
+    "wireit": "0.14.13"
   },
   "engines": {
     "node": ">=22.0.0"
