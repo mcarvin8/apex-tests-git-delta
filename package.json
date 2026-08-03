@@ -67,7 +67,9 @@
   },
   "scripts": {
     "build": "wireit",
-    "clean:lib": "shx rm -rf lib coverage .nyc_output",
+    "clean": "wireit",
+    "clean:build": "wireit",
+    "clean:package-manager": "wireit",
     "compile": "wireit",
     "format": "wireit",
     "lint": "wireit",
@@ -78,8 +80,7 @@
     "test:mutation": "stryker run",
     "test:mutation:incremental": "node scripts/incremental-mutation.mjs",
     "test:nuts": "wireit",
-    "test:only": "wireit",
-    "version": "oclif readme"
+    "test:only": "wireit"
   },
   "publishConfig": {
     "access": "public"
@@ -89,6 +90,35 @@
       "dependencies": [
         "compile",
         "lint"
+      ]
+    },
+    "clean": {
+      "command": "shx rm -rf 'reports/*' oclif.manifest.json oclif.lock package.tgz 'stderr*.txt' 'stdout*.txt' '.stryker-tmp/*'",
+      "files": [
+        ".stryker-tmp/*",
+        "lib",
+        "oclif.manifest.json",
+        "oclif.lock",
+        "package.tgz",
+        "reports/*",
+        "stderr*.txt",
+        "stdout*.txt"
+      ],
+      "dependencies": [
+        "clean:build"
+      ]
+    },
+    "clean:build": {
+      "command": "shx rm -rf lib .wireit",
+      "files": [
+        ".wireit/*",
+        "lib/*"
+      ]
+    },
+    "clean:package-manager": {
+      "command": "shx rm -rf node_modules tsconfig.tsbuildinfo",
+      "files": [
+        "node_modules/*"
       ]
     },
     "compile": {
