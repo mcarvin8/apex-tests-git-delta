@@ -5,6 +5,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.5.0...v5.0.0) (2026-08-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* **engines:** minimum supported node version raised from 22.0.0 to 22.22.
+
+### Bug Fixes
+
+* **engines:** raise node engine floor to 22.22 to match dep tree ([#116](https://github.com/mcarvin8/apex-tests-git-delta/issues/116)) ([ea1abb6](https://github.com/mcarvin8/apex-tests-git-delta/commit/ea1abb60521f8453d4d97d586da612b8de17fbeb))
+
 ## [4.5.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.4.0...v4.5.0) (2026-08-03)
 
 
