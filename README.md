@@ -26,7 +26,7 @@ Identify Apex test classes for incremental Salesforce deployments by parsing git
 ## Requirements
 
 - Salesforce CLI (`sf`)
-- Node.js **22.x or later**
+- Node.js **22.22 or later**
 - No git binary required - git operations are handled entirely in TypeScript
 
 ## Install
