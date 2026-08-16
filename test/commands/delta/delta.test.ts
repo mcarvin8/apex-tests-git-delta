@@ -64,19 +64,19 @@ describe('atgd unit test', () => {
   });
 
   it('return tests without any warnings.', async () => {
-    const result = await extractTestClasses('HEAD~5', 'HEAD~3', false, tempDir);
+    const result = await extractTestClasses('HEAD~5', 'HEAD~3', false, false, tempDir);
     expect(result.validatedClasses).toEqual('SandboxTest TestClass3 TestClass4');
   });
   it('return no tests without warnings.', async () => {
-    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, tempDir);
+    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, false, tempDir);
     expect(result.validatedClasses).toEqual('');
   });
   it('return no test with warnings.', async () => {
-    const result = await extractTestClasses('HEAD~2', 'HEAD~1', false, tempDir);
+    const result = await extractTestClasses('HEAD~2', 'HEAD~1', false, false, tempDir);
     expect(result.validatedClasses).toEqual('');
   });
   it('skip validation and return tests without warnings', async () => {
-    const result = await extractTestClasses('HEAD~1', 'HEAD', true, tempDir);
+    const result = await extractTestClasses('HEAD~1', 'HEAD', true, false, tempDir);
     expect(result.validatedClasses).toEqual('TestClass33');
   });
 });
@@ -119,7 +119,7 @@ describe('atgd merge-base flag', () => {
   });
 
   it('resolves --from as the merge base of --to and --from', async () => {
-    const result = await extractTestClasses('feature', 'HEAD', true, tempDir, true);
+    const result = await extractTestClasses('feature', 'HEAD', true, true, tempDir);
     expect(result.validatedClasses).toEqual('MainTest');
   });
 });

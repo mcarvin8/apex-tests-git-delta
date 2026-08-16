@@ -52,7 +52,6 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       flags['from'],
       flags['to'],
       flags['skip-test-validation'],
-      undefined,
       flags['merge-base'],
     );
     const tests = result.validatedClasses;

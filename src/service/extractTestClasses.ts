@@ -9,8 +9,8 @@ export async function extractTestClasses(
   fromRef: string,
   toRef: string,
   skipValidate: boolean,
-  baseDir?: string,
   useMergeBase = false,
+  baseDir?: string,
 ): Promise<{ validatedClasses: string; warnings: string[]; suites: string[] }> {
   const localTestClasses: Set<string> = new Set();
   const repo = await openRepo(baseDir);
