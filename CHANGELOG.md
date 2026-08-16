@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v5.0.0...v5.1.0) (2026-08-16)
+
+
+### Features
+
+* **delta:** add --merge-base flag to resolve --from as merge base ([#118](https://github.com/mcarvin8/apex-tests-git-delta/issues/118)) ([a784fd0](https://github.com/mcarvin8/apex-tests-git-delta/commit/a784fd0e695546140dcf3cf3fb7c876f106a7b28))
+
 ## [5.0.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v4.5.0...v5.0.0) (2026-08-05)
 
 

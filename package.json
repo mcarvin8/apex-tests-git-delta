@@ -1,7 +1,7 @@
 {
   "name": "apex-tests-git-delta",
   "description": "Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "dependencies": {
     "@oclif/core": "4.13.2",
     "@salesforce/core": "9.1.0",
