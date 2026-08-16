@@ -1,9 +1,33 @@
 'use strict';
 
-import { openRepository, type Repository } from '@scolladon/tsgit';
+import { type ObjectId, openRepository, type Repository } from '@scolladon/tsgit';
 
 export async function openRepo(baseDir?: string): Promise<Repository> {
   return openRepository({ cwd: baseDir ?? process.cwd() });
+}
+
+const MAX_TAG_PEEL_DEPTH = 5;
+
+// revParse resolves an annotated tag ref to the tag object itself, not the commit it
+// points at, and mergeBase only understands commits — so peel any tag chain by hand.
+async function peelToCommit(repo: Repository, oid: ObjectId): Promise<ObjectId> {
+  let current = oid;
+  for (let i = 0; i < MAX_TAG_PEEL_DEPTH; i++) {
+    const object = await repo.primitives.readObject(current);
+    if (object.type !== 'tag') return current;
+    current = object.data.object;
+  }
+  throw new Error(`Exceeded max tag peel depth (${MAX_TAG_PEEL_DEPTH}) resolving '${oid}'.`);
+}
+
+export async function resolveMergeBase(repo: Repository, fromRef: string, toRef: string): Promise<string> {
+  const fromOid = await peelToCommit(repo, await repo.revParse(fromRef));
+  const toOid = await peelToCommit(repo, await repo.revParse(toRef));
+  const [base] = await repo.primitives.mergeBase([toOid, fromOid]);
+  if (!base) {
+    throw new Error(`No merge base found between '${fromRef}' and '${toRef}'.`);
+  }
+  return base;
 }
 
 export async function listFilesAtCommit(repo: Repository, commitHash: string, directory: string): Promise<string[]> {

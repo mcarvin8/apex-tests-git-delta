@@ -31,6 +31,11 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
       required: true,
       default: false,
     }),
+    'merge-base': Flags.boolean({
+      char: 'm',
+      summary: messages.getMessage('flags.merge-base.summary'),
+      default: false,
+    }),
     format: Flags.option({
       options: ['space', 'sf'] as const,
     })({
@@ -43,7 +48,13 @@ export default class ApexTestDelta extends SfCommand<TestDeltaResult> {
   public async run(): Promise<TestDeltaResult> {
     const { flags } = await this.parse(ApexTestDelta);
 
-    const result = await extractTestClasses(flags['from'], flags['to'], flags['skip-test-validation']);
+    const result = await extractTestClasses(
+      flags['from'],
+      flags['to'],
+      flags['skip-test-validation'],
+      undefined,
+      flags['merge-base'],
+    );
     const tests = result.validatedClasses;
     const warnings = result.warnings;
     const suites = result.suites;

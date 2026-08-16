@@ -80,3 +80,46 @@ describe('atgd unit test', () => {
     expect(result.validatedClasses).toEqual('TestClass33');
   });
 });
+
+describe('atgd merge-base flag', () => {
+  let tempDir: string;
+  let repo: Repository;
+
+  beforeAll(async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const baseHash = await createTemporaryCommit(
+      'chore: base commit',
+      'force-app/main/default/classes/Base.cls',
+      'dummy base',
+      repo,
+      tempDir,
+    );
+    await repo.branch.create({ name: 'feature', startPoint: baseHash });
+    await repo.checkout({ rev: 'feature' });
+    await createTemporaryCommit(
+      'chore: commit with Apex::FeatureTest::Apex',
+      'force-app/main/default/classes/FeatureTest.cls',
+      'dummy feature',
+      repo,
+      tempDir,
+    );
+    await repo.checkout({ rev: baseHash, detach: true });
+    await createTemporaryCommit(
+      'chore: commit with Apex::MainTest::Apex',
+      'force-app/main/default/classes/MainTest.cls',
+      'dummy main',
+      repo,
+      tempDir,
+    );
+  });
+
+  afterAll(async () => {
+    await repo.dispose();
+    await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  });
+
+  it('resolves --from as the merge base of --to and --from', async () => {
+    const result = await extractTestClasses('feature', 'HEAD', true, tempDir, true);
+    expect(result.validatedClasses).toEqual('MainTest');
+  });
+});

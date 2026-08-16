@@ -1,6 +1,6 @@
 'use strict';
 
-import { openRepo } from './gitAdapter.js';
+import { openRepo, resolveMergeBase } from './gitAdapter.js';
 import { resolveTestSuites } from './resolveTestSuites.js';
 import { retrieveCommitMessages } from './retrieveCommitMessages.js';
 import { validateClassPaths } from './validateClassPaths.js';
@@ -10,11 +10,13 @@ export async function extractTestClasses(
   toRef: string,
   skipValidate: boolean,
   baseDir?: string,
+  useMergeBase = false,
 ): Promise<{ validatedClasses: string; warnings: string[]; suites: string[] }> {
   const localTestClasses: Set<string> = new Set();
   const repo = await openRepo(baseDir);
   try {
-    const { repoRoot, matchedMessages, matchedSuites } = await retrieveCommitMessages(fromRef, toRef, repo);
+    const resolvedFromRef = useMergeBase ? await resolveMergeBase(repo, fromRef, toRef) : fromRef;
+    const { repoRoot, matchedMessages, matchedSuites } = await retrieveCommitMessages(resolvedFromRef, toRef, repo);
 
     matchedMessages.forEach((message: string) => {
       // Split the commit message by commas or spaces

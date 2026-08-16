@@ -12,6 +12,7 @@ Determine Apex tests for incremental deployments by parsing commit messages betw
 - `sf atgd delta --from "HEAD~1" --to "HEAD" -v`
 - `sf atgd delta --from "HEAD~1" --to "HEAD" --format sf`
 - `sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)`
+- `sf atgd delta --to "develop" --from "main" --merge-base`
 
 # flags.from.summary
 
@@ -24,6 +25,10 @@ Commit SHA to where the commit message log is done.
 # flags.skip-test-validation.summary
 
 Skip validating that tests exist in the local package directories.
+
+# flags.merge-base.summary
+
+Resolve `--from` as the merge base of `--to` and `--from` (e.g. `--to develop --from main --merge-base`), resolved in-process with no local git binary required.
 
 # flags.format.summary
 
