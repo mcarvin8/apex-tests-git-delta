@@ -92,3 +92,53 @@ describe('atgd NUTs', () => {
     expect(output.replace('\n', '')).toEqual('--tests SandboxTest --tests TestClass3 --tests TestClass4');
   });
 });
+
+describe('atgd NUTs merge-base flag', () => {
+  let session: TestSession;
+  let tempDir: string;
+  let repo: Repository;
+  const originalDir = process.cwd();
+
+  beforeAll(async () => {
+    session = await TestSession.create({ devhubAuthStrategy: 'NONE' });
+    ({ tempDir, repo } = await setupTestRepo());
+    process.chdir(tempDir);
+    const baseHash = await createTemporaryCommit(
+      'chore: base commit',
+      'force-app/main/default/classes/Base.cls',
+      'dummy base',
+      repo,
+      tempDir,
+    );
+    await repo.branch.create({ name: 'feature', startPoint: baseHash });
+    await repo.checkout({ rev: 'feature' });
+    await createTemporaryCommit(
+      'chore: commit with Apex::FeatureTest::Apex',
+      'force-app/main/default/classes/FeatureTest.cls',
+      'dummy feature',
+      repo,
+      tempDir,
+    );
+    await repo.checkout({ rev: baseHash, detach: true });
+    await createTemporaryCommit(
+      'chore: commit with Apex::MainTest::Apex',
+      'force-app/main/default/classes/MainTest.cls',
+      'dummy main',
+      repo,
+      tempDir,
+    );
+  });
+
+  afterAll(async () => {
+    await repo.dispose();
+    await session?.clean();
+    process.chdir(originalDir);
+    await rm(tempDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  });
+
+  it('resolves --from as the merge base of --to and --from', async () => {
+    const command = 'atgd delta --from "feature" --to "HEAD" --skip-test-validation --merge-base';
+    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
+    expect(output.replace('\n', '')).toEqual('MainTest');
+  });
+});
