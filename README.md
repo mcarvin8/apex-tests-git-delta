@@ -107,7 +107,7 @@ sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)
 
 ```
 USAGE
-  $ sf atgd delta -f <value> -t <value> -v [-o space|sf] [--json]
+  $ sf atgd delta -f <value> -t <value> -v -m [-o space|sf] [--json]
 
 FLAGS
   -f, --from=<value>          Commit SHA from where the commit message log is done.
