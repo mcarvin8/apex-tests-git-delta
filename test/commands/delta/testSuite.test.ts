@@ -102,14 +102,14 @@ describe('atgd test suite parsing', () => {
   });
 
   it('expands a referenced suite into its member classes', async () => {
-    const result = await extractTestClasses('HEAD~4', 'HEAD~3', false, tempDir);
+    const result = await extractTestClasses('HEAD~4', 'HEAD~3', false, false, tempDir);
     expect(result.validatedClasses).toEqual('AccountTest ContactTest');
     expect(result.suites).toEqual(['MyRegressionSuite']);
     expect(result.warnings).toEqual([]);
   });
 
   it('unions suite members with directly-referenced classes and warns on missing suites', async () => {
-    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, tempDir);
+    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, false, tempDir);
     expect(result.validatedClasses).toEqual('SeedTest');
     expect(result.suites).toEqual([]);
     expect(result.warnings.length).toBeGreaterThan(0);
@@ -117,13 +117,13 @@ describe('atgd test suite parsing', () => {
   });
 
   it('skips validation but still expands suite members', async () => {
-    const result = await extractTestClasses('HEAD~4', 'HEAD~3', true, tempDir);
+    const result = await extractTestClasses('HEAD~4', 'HEAD~3', true, false, tempDir);
     expect(result.validatedClasses).toEqual('AccountTest ContactTest');
     expect(result.suites).toEqual(['MyRegressionSuite']);
   });
 
   it('warns when a suite has no testClassName entries', async () => {
-    const result = await extractTestClasses('HEAD~1', 'HEAD', false, tempDir);
+    const result = await extractTestClasses('HEAD~1', 'HEAD', false, false, tempDir);
     expect(result.validatedClasses).toEqual('');
     expect(result.suites).toEqual([]);
     expect(result.warnings.some((w) => w.includes('EmptySuite') && w.includes('no testClassName entries'))).toBe(true);
@@ -232,7 +232,7 @@ describe('atgd test suite wildcards and namespaces', () => {
 
   it('expands local wildcards and passes namespaced entries through', async () => {
     // HEAD~5 -> HEAD~4 contains the WildcardSuite reference commit.
-    const result = await extractTestClasses('HEAD~5', 'HEAD~4', false, tempDir);
+    const result = await extractTestClasses('HEAD~5', 'HEAD~4', false, false, tempDir);
     // 'A*Class' matches AClass, AnotherClass, AwesomeClass.
     // 'LocalTestClass' is literal local. Namespaced entries pass through.
     expect(result.validatedClasses).toEqual(
@@ -244,7 +244,7 @@ describe('atgd test suite wildcards and namespaces', () => {
 
   it('warns when a wildcard pattern matches no local classes', async () => {
     // HEAD~3 -> HEAD~2 is the NoMatchSuite reference commit.
-    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, tempDir);
+    const result = await extractTestClasses('HEAD~3', 'HEAD~2', false, false, tempDir);
     expect(result.validatedClasses).toEqual('');
     expect(result.suites).toEqual(['NoMatchSuite']);
     expect(result.warnings.some((w) => w.includes("'Zzz*Nope'") && w.includes('matched no local Apex classes'))).toBe(
@@ -253,7 +253,7 @@ describe('atgd test suite wildcards and namespaces', () => {
   });
 
   it("expands a pure '*' wildcard to every local class", async () => {
-    const result = await extractTestClasses('HEAD~1', 'HEAD', false, tempDir);
+    const result = await extractTestClasses('HEAD~1', 'HEAD', false, false, tempDir);
     // Includes every .cls committed prior to HEAD (sfdxConfig file isn't a .cls).
     const classes = result.validatedClasses.split(' ');
     expect(classes).toEqual(
@@ -265,7 +265,7 @@ describe('atgd test suite wildcards and namespaces', () => {
   it('returns multiple resolved suites in sorted order', async () => {
     // HEAD~5 -> HEAD~2 spans the Suite::WildcardSuite::Suite and Suite::NoMatchSuite::Suite
     // commits, forcing resolveTestSuites to sort more than one entry.
-    const result = await extractTestClasses('HEAD~5', 'HEAD~2', false, tempDir);
+    const result = await extractTestClasses('HEAD~5', 'HEAD~2', false, false, tempDir);
     expect(result.suites).toEqual(['NoMatchSuite', 'WildcardSuite']);
   });
 });
@@ -313,7 +313,7 @@ describe('atgd test suite blank entries', () => {
   });
 
   it('ignores blank testClassName entries without warning', async () => {
-    const result = await extractTestClasses('HEAD~1', 'HEAD', false, tempDir);
+    const result = await extractTestClasses('HEAD~1', 'HEAD', false, false, tempDir);
     expect(result.validatedClasses).toEqual('BlankTest');
     expect(result.suites).toEqual(['BlankSuite']);
     expect(result.warnings).toEqual([]);
@@ -348,7 +348,7 @@ describe('atgd backward-compatible single-line rc', () => {
   });
 
   it('still works with a one-line rc file and leaves suites empty', async () => {
-    const result = await extractTestClasses('HEAD~1', 'HEAD', false, tempDir);
+    const result = await extractTestClasses('HEAD~1', 'HEAD', false, false, tempDir);
     expect(result.validatedClasses).toEqual('LonelyTest');
     expect(result.suites).toEqual([]);
     expect(result.warnings).toEqual([]);

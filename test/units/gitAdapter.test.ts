@@ -4,7 +4,7 @@ import { rm } from 'node:fs/promises';
 import type { Repository } from '@scolladon/tsgit';
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { listFilesAtCommit, openRepo, readBlobAtCommitPath } from '../../src/service/gitAdapter.js';
+import { listFilesAtCommit, openRepo, readBlobAtCommitPath, resolveMergeBase } from '../../src/service/gitAdapter.js';
 import { createTemporaryCommit } from '../utils/createTemporaryCommit.js';
 import { setupTestRepo } from '../utils/setupTestRepo.js';
 
@@ -96,5 +96,48 @@ describe('readBlobAtCommitPath', () => {
     const content = await readBlobAtCommitPath(repo, commitHash, CLASS_PATH);
     expect(content).not.toBeNull();
     expect(Buffer.from(content as Uint8Array).toString('utf8')).toBe(CLASS_BODY);
+  });
+});
+
+describe('resolveMergeBase', () => {
+  it('resolves the common ancestor of two diverged commits', async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const baseHash = await createTemporaryCommit('chore: base', CLASS_PATH, CLASS_BODY, repo, tempDir);
+    await repo.branch.create({ name: 'feature', startPoint: baseHash });
+    await repo.checkout({ rev: 'feature' });
+    const featureHash = await createTemporaryCommit(
+      'chore: feature commit',
+      'force-app/main/default/classes/Feature.cls',
+      'public class Feature {}',
+      repo,
+      tempDir,
+    );
+    await repo.checkout({ rev: baseHash, detach: true });
+    const mainHash = await createTemporaryCommit(
+      'chore: main commit',
+      'force-app/main/default/classes/Main.cls',
+      'public class Main {}',
+      repo,
+      tempDir,
+    );
+
+    const base = await resolveMergeBase(repo, mainHash, featureHash);
+    expect(base).toEqual(baseHash);
+  });
+
+  it('peels an annotated tag to its commit before computing the merge base', async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const commitHash = await createTemporaryCommit('chore: add class', CLASS_PATH, CLASS_BODY, repo, tempDir);
+    await repo.tag.create({ name: 'v1', target: commitHash, message: 'release v1' });
+
+    const base = await resolveMergeBase(repo, 'v1', commitHash);
+    expect(base).toEqual(commitHash);
+  });
+
+  it('throws when the refs share no common ancestor', async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const commitHash = await createTemporaryCommit('chore: add class', CLASS_PATH, CLASS_BODY, repo, tempDir);
+
+    await expect(resolveMergeBase(repo, commitHash, NONEXISTENT_SHA)).rejects.toThrow();
   });
 });

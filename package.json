@@ -6,7 +6,7 @@
     "@oclif/core": "4.13.2",
     "@salesforce/core": "9.1.0",
     "@salesforce/sf-plugins-core": "13.0.0",
-    "@scolladon/tsgit": "3.2.1",
+    "@scolladon/tsgit": "3.4.0",
     "txml": "6.0.0"
   },
   "devDependencies": {
@@ -246,5 +246,8 @@
   },
   "bugs": {
     "url": "https://github.com/mcarvin8/apex-tests-git-delta/issues"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
   }
 }

@@ -41,7 +41,7 @@ describe('atgd unit test', () => {
   });
 
   it('return tests without any warnings.', async () => {
-    await expect(extractTestClasses('HEAD~1', 'HEAD', false, tempDir)).rejects.toThrow(
+    await expect(extractTestClasses('HEAD~1', 'HEAD', false, false, tempDir)).rejects.toThrow(
       `The regular expression in '${regExFilePath}' is invalid or the file wasn't found in the repo root folder.`,
     );
   });
