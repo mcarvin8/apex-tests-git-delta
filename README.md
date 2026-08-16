@@ -116,6 +116,9 @@ FLAGS
                               [default: HEAD]
   -v, --skip-test-validation  Skip validating that tests exist in the local package directories.
                               [default: false]
+  -m, --merge-base            Resolve --from as the merge base of --to and --from, resolved
+                              in-process with no local git binary required.
+                              [default: false]
   -o, --format=<option>       Output format for the test list.
                               [default: space] <options: space|sf>
 
@@ -137,6 +140,10 @@ EXAMPLES
   Get tests formatted for use with sf apex run test.
 
     $ sf atgd delta --from "HEAD~1" --to "HEAD" --format sf
+
+  Get tests since where "develop" diverged from "main", without needing a local git binary.
+
+    $ sf atgd delta --to "develop" --from "main" --merge-base
 ```
 
 ## Output Formats
