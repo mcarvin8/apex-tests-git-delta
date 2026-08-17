@@ -1,13 +1,24 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-    versioning-strategy: widen
+      interval: "monthly"
     commit-message:
-      prefix: 'feat(tsgit)'
-    cooldown:
-      default-days: 0
-    allow:
-      - dependency-name: '@scolladon/tsgit'
+      prefix: "build"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "fix(deps)"
+      prefix-development: "chore(dev-deps)"
+    groups:
+      dependencies:
+        dependency-type: "production"
+      dev-dependencies:
+        dependency-type: "development"
