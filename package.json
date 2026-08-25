@@ -10,7 +10,7 @@
     "txml": "6.0.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.8",
+    "@biomejs/biome": "2.5.10",
     "@commitlint/cli": "21.2.2",
     "@commitlint/config-conventional": "21.2.2",
     "@salesforce/cli-plugins-testkit": "5.3.66",
@@ -80,9 +80,10 @@
     "postpack": "shx rm -f oclif.manifest.json oclif.lock",
     "prepack": "wireit",
     "prepare": "husky",
+    "readme": "wireit",
     "test": "wireit",
-    "test:mutation": "stryker run",
-    "test:mutation:incremental": "node scripts/incremental-mutation.mjs",
+    "test:mutation": "wireit",
+    "test:mutation:incremental": "wireit",
     "test:nuts": "wireit",
     "test:only": "wireit"
   },
@@ -194,6 +195,21 @@
       ],
       "clean": false
     },
+    "readme": {
+      "command": "oclif readme",
+      "files": [
+        "src/commands/**/*.ts",
+        "messages/*.md",
+        "README.md"
+      ],
+      "dependencies": [
+        "build"
+      ],
+      "output": [
+        "README.md"
+      ],
+      "clean": false
+    },
     "test:compile": {
       "command": "tsc -p \"./test\" --pretty",
       "files": [
@@ -206,6 +222,39 @@
       "dependencies": [
         "test:compile",
         "test:only",
+        "lint"
+      ]
+    },
+    "test:mutation": {
+      "command": "stryker run",
+      "files": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "**/tsconfig.json",
+        "stryker.config.json",
+        "vitest.config.ts"
+      ],
+      "output": [
+        "reports/mutation/**"
+      ],
+      "dependencies": [
+        "lint"
+      ]
+    },
+    "test:mutation:incremental": {
+      "command": "node scripts/incremental-mutation.mjs",
+      "files": [
+        "src/**/*.ts",
+        "test/**/*.ts",
+        "**/tsconfig.json",
+        "stryker.config.json",
+        "vitest.config.ts",
+        "scripts/incremental-mutation.mjs"
+      ],
+      "output": [
+        "reports/mutation/**"
+      ],
+      "dependencies": [
         "lint"
       ]
     },

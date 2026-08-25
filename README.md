@@ -103,48 +103,56 @@ sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)
 
 ## Command
 
-### `sf atgd delta`
+<!-- commands -->
+* [`sf atgd delta`](#sf-atgd-delta)
+
+## `sf atgd delta`
+
+Determine Apex tests by parsing commit messages.
 
 ```
 USAGE
-  $ sf atgd delta -f <value> -t <value> -v -m [-o space|sf] [--json]
+  $ sf atgd delta -t <value> -f <value> -v [--json] [--flags-dir <value>] [-m] [-o space|sf]
 
 FLAGS
-  -f, --from=<value>          Commit SHA from where the commit message log is done.
-                              This SHA's commit message will not be included in the results.
-  -t, --to=<value>            Commit SHA to where the commit message log is done.
-                              [default: HEAD]
-  -v, --skip-test-validation  Skip validating that tests exist in the local package directories.
-                              [default: false]
-  -m, --merge-base            Resolve --from as the merge base of --to and --from, resolved
-                              in-process with no local git binary required.
-                              [default: false]
-  -o, --format=<option>       Output format for the test list.
-                              [default: space] <options: space|sf>
+  -f, --from=<value>          (required) Commit SHA from where the commit message log is done. This SHA's commit message
+                              will not be included in the results.
+  -m, --merge-base            Resolve `--from` as the merge base of `--to` and `--from` (e.g. `--to develop --from main
+                              --merge-base`), resolved in-process with no local git binary required.
+  -o, --format=<option>       [default: space] Output format for the test list. "space" (default) outputs a
+                              space-separated list. "sf" outputs each test prefixed with --tests for use in Salesforce
+                              CLI commands (e.g. --tests ClassA --tests ClassB).
+                              <options: space|sf>
+  -t, --to=<value>            (required) [default: HEAD] Commit SHA to where the commit message log is done.
+  -v, --skip-test-validation  (required) Skip validating that tests exist in the local package directories.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
-  Parse commit messages over a range and return the Apex tests to deploy against.
+  Determine Apex tests by parsing commit messages.
+
+  Determine Apex tests for incremental deployments by parsing commit messages between 2 commits. Commit messages may
+  reference individual Apex test classes (e.g. `Apex::MyTest::Apex`) or Apex Test Suites (e.g.
+  `Suite::MyTestSuite::Suite`) when a suite regex is configured on the 2nd line of `.apextestsgitdeltarc`. Matched
+  suites are resolved by reading the corresponding `<suiteName>.testSuite-meta.xml` at the `--to` commit and merging its
+  `<testClassName>` entries into the output.
 
 EXAMPLES
-  Get tests from the most recent commit, confirming they exist in the local package directories.
+  `sf atgd delta --from "HEAD~1" --to "HEAD"`
 
-    $ sf atgd delta --from "HEAD~1" --to "HEAD"
+  `sf atgd delta --from "HEAD~1" --to "HEAD" -v`
 
-  Get tests from the most recent commit, skipping the local package directory validation.
+  `sf atgd delta --from "HEAD~1" --to "HEAD" --format sf`
 
-    $ sf atgd delta --from "HEAD~1" --to "HEAD" -v
+  `sf apex run test $(sf atgd delta --from "HEAD~1" --to "HEAD" --format sf)`
 
-  Get tests formatted for use with sf apex run test.
-
-    $ sf atgd delta --from "HEAD~1" --to "HEAD" --format sf
-
-  Get tests since where "develop" diverged from "main", without needing a local git binary.
-
-    $ sf atgd delta --to "develop" --from "main" --merge-base
+  `sf atgd delta --to "develop" --from "main" --merge-base`
 ```
+
+_See code: [src/commands/atgd/delta.ts](https://github.com/mcarvin8/apex-tests-git-delta/blob/v5.1.1/src/commands/atgd/delta.ts)_
+<!-- commandsstop -->
 
 ## Output Formats
 
