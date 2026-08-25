@@ -1,0 +1,46 @@
+name: 'Apex Tests Git Delta'
+description: 'Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.'
+author: 'Matt Carvin'
+branding:
+  icon: 'check-square'
+  color: 'green'
+
+inputs:
+  from:
+    description: 'Commit SHA from where the commit message log is done. This SHA''s commit message will not be included in the results.'
+    required: true
+  to:
+    description: 'Commit SHA to where the commit message log is done.'
+    required: false
+    default: 'HEAD'
+  skip-test-validation:
+    description: 'Skip validating that tests exist in the local package directories.'
+    required: false
+    default: 'false'
+  merge-base:
+    description: 'Resolve "from" as the merge base of "to" and "from" (e.g. to=develop, from=main), resolved in-process with no local git binary required.'
+    required: false
+    default: 'false'
+  format:
+    description: 'Output format for the "tests" output. "space" (default) outputs a space-separated list. "sf" outputs each test prefixed with --tests for use in Salesforce CLI commands.'
+    required: false
+    default: 'space'
+  working-directory:
+    description: 'Directory containing the git repository and Salesforce project to inspect. Defaults to the GitHub Actions workspace root.'
+    required: false
+
+outputs:
+  tests:
+    description: 'The resolved test classes, formatted per the "format" input.'
+  test-count:
+    description: 'Number of distinct test classes in the result.'
+  suites:
+    description: 'Newline-separated list of resolved Apex test suite names, if any.'
+  suite-count:
+    description: 'Number of resolved Apex test suites.'
+  warnings:
+    description: 'Newline-separated list of warnings emitted while resolving tests, if any.'
+
+runs:
+  using: 'node24'
+  main: 'dist/action/index.cjs'

@@ -1,0 +1,150 @@
+# Manual smoke test: exercises the Action end to end on real GitHub Actions
+# infra, against a small disposable git repo built inline (this repo has no
+# Apex source of its own for the tool to scan, so a Salesforce-shaped fixture
+# is created on the fly instead of checking in static samples). Fixture setup
+# and the Action invocation must stay in the same job: each job runs on its
+# own fresh runner, so a fixture built in one job wouldn't exist in another.
+#
+# Two sources, deliberately not the same:
+# - pull_request: uses `./` (this checkout's actual action.yml/dist/action) -
+#   validates what's about to be merged before it ever reaches @v5.
+# - workflow_dispatch: uses `@v5` (the live published tag) - an on-demand
+#   check that what's actually public still works, run manually post-release.
+name: Smoke test (published Action)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/smoke-test-action.yml'
+      - '.github/scripts/build-smoke-fixture.sh'
+      - 'action.yml'
+      - 'dist/action/**'
+      - 'src/action/**'
+      - 'src/service/**'
+
+permissions:
+  contents: read
+
+jobs:
+  success-path-local:
+    name: Success path (local checkout)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create disposable Salesforce project git repo
+        id: fixture
+        run: bash "${{ github.workspace }}/.github/scripts/build-smoke-fixture.sh"
+
+      - name: Resolve Apex tests
+        id: delta
+        uses: ./
+        with:
+          from: ${{ steps.fixture.outputs.from }}
+          to: ${{ steps.fixture.outputs.to-success }}
+          working-directory: ${{ steps.fixture.outputs.dir }}
+
+      - name: Show outputs and confirm the resolved test
+        run: |
+          echo "tests: ${{ steps.delta.outputs.tests }}"
+          echo "test-count: ${{ steps.delta.outputs.test-count }}"
+          if [ "${{ steps.delta.outputs.tests }}" != "AccountTest" ]; then
+            echo "Expected tests output to be 'AccountTest' (got '${{ steps.delta.outputs.tests }}')."
+            exit 1
+          fi
+
+  warning-path-local:
+    name: Warning path (local checkout)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create disposable Salesforce project git repo
+        id: fixture
+        run: bash "${{ github.workspace }}/.github/scripts/build-smoke-fixture.sh"
+
+      - name: Resolve Apex tests referencing a class that does not exist
+        id: delta
+        uses: ./
+        with:
+          from: ${{ steps.fixture.outputs.to-success }}
+          to: ${{ steps.fixture.outputs.to-warning }}
+          working-directory: ${{ steps.fixture.outputs.dir }}
+
+      - name: Confirm a warning was emitted and no test was resolved
+        run: |
+          echo "warnings: ${{ steps.delta.outputs.warnings }}"
+          if [ -z "${{ steps.delta.outputs.warnings }}" ]; then
+            echo "Expected a warning about the missing class."
+            exit 1
+          fi
+          if [ "${{ steps.delta.outputs.test-count }}" != "0" ]; then
+            echo "Expected test-count to be 0 (got '${{ steps.delta.outputs.test-count }}')."
+            exit 1
+          fi
+
+  success-path-published:
+    name: Success path (published @v5)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create disposable Salesforce project git repo
+        id: fixture
+        run: bash "${{ github.workspace }}/.github/scripts/build-smoke-fixture.sh"
+
+      - name: Resolve Apex tests
+        id: delta
+        uses: mcarvin8/apex-tests-git-delta@v5
+        with:
+          from: ${{ steps.fixture.outputs.from }}
+          to: ${{ steps.fixture.outputs.to-success }}
+          working-directory: ${{ steps.fixture.outputs.dir }}
+
+      - name: Show outputs and confirm the resolved test
+        run: |
+          echo "tests: ${{ steps.delta.outputs.tests }}"
+          echo "test-count: ${{ steps.delta.outputs.test-count }}"
+          if [ "${{ steps.delta.outputs.tests }}" != "AccountTest" ]; then
+            echo "Expected tests output to be 'AccountTest' (got '${{ steps.delta.outputs.tests }}')."
+            exit 1
+          fi
+
+  warning-path-published:
+    name: Warning path (published @v5)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Create disposable Salesforce project git repo
+        id: fixture
+        run: bash "${{ github.workspace }}/.github/scripts/build-smoke-fixture.sh"
+
+      - name: Resolve Apex tests referencing a class that does not exist
+        id: delta
+        uses: mcarvin8/apex-tests-git-delta@v5
+        with:
+          from: ${{ steps.fixture.outputs.to-success }}
+          to: ${{ steps.fixture.outputs.to-warning }}
+          working-directory: ${{ steps.fixture.outputs.dir }}
+
+      - name: Confirm a warning was emitted and no test was resolved
+        run: |
+          echo "warnings: ${{ steps.delta.outputs.warnings }}"
+          if [ -z "${{ steps.delta.outputs.warnings }}" ]; then
+            echo "Expected a warning about the missing class."
+            exit 1
+          fi
+          if [ "${{ steps.delta.outputs.test-count }}" != "0" ]; then
+            echo "Expected test-count to be 0 (got '${{ steps.delta.outputs.test-count }}')."
+            exit 1
+          fi
