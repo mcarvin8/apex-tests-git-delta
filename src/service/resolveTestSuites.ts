@@ -2,11 +2,10 @@
 
 import { basename } from 'node:path';
 import type { Repository } from '@scolladon/tsgit';
-import type { TNode } from 'txml';
-import { simplify, parse as txmlParse } from 'txml';
 
 import { getPackageDirectories } from './getPackageDirectories.js';
 import { listFilesAtCommit, readBlobAtCommitPath } from './gitAdapter.js';
+import { parseXml } from './xmlParser.js';
 
 export type ResolvedTestSuites = {
   localClasses: Set<string>;
@@ -87,7 +86,7 @@ async function parseSuiteEntries(
   if (!blobContent) return null;
 
   const xml = new TextDecoder().decode(blobContent);
-  const parsed = simplify(txmlParse(xml) as TNode[]) as {
+  const parsed = parseXml(xml) as {
     ApexTestSuite?: {
       testClassName?: string | string[];
     };
