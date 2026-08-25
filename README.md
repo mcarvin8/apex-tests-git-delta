@@ -152,7 +152,7 @@ EXAMPLES
   `sf atgd delta --to "develop" --from "main" --merge-base`
 ```
 
-_See code: [src/commands/atgd/delta.ts](https://github.com/mcarvin8/apex-tests-git-delta/blob/v5.1.1/src/commands/atgd/delta.ts)_
+_See code: [src/commands/atgd/delta.ts](https://github.com/mcarvin8/apex-tests-git-delta/blob/v5.2.0/src/commands/atgd/delta.ts)_
 <!-- commandsstop -->
 
 ## GitHub Action
