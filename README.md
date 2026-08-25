@@ -7,13 +7,14 @@
 [![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmcarvin8%2Fapex-tests-git-delta%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mcarvin8/apex-tests-git-delta/main)
 
-Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages.
+Identify Apex test classes for incremental Salesforce deployments by parsing git commit messages. Available as a **Salesforce CLI plugin** for any provider, and as a **native GitHub Action** for GitHub Actions users who want to skip installing the CLI.
 
 - [Why This Plugin?](#why-this-plugin)
 - [Requirements](#requirements)
 - [Install](#install)
 - [Usage](#usage)
 - [Command](#command)
+- [GitHub Action](#github-action)
 - [Output Formats](#output-formats)
 - [Alternatives](#alternatives)
 - [Issues](#issues)
@@ -153,6 +154,48 @@ EXAMPLES
 
 _See code: [src/commands/atgd/delta.ts](https://github.com/mcarvin8/apex-tests-git-delta/blob/v5.1.1/src/commands/atgd/delta.ts)_
 <!-- commandsstop -->
+
+## GitHub Action
+
+For GitHub Actions, this is also available as a native Action - no `sf` CLI or plugin install required. It has no native/OS-level dependencies, so it runs on the standard `node24` Action runtime (no Docker image to pull).
+
+```yaml
+- name: Checkout
+  uses: actions/checkout@v7
+  with:
+    fetch-depth: 0 # full history required - the action walks commits between `from` and `to`
+
+- name: Resolve Apex tests
+  id: delta
+  uses: mcarvin8/apex-tests-git-delta@v5
+  with:
+    from: ${{ github.event.pull_request.base.sha }}
+    to: ${{ github.sha }}
+
+- name: Deploy with resolved tests
+  run: sf project deploy start -x package/package.xml -l RunSpecifiedTests --tests ${{ steps.delta.outputs.tests }}
+```
+
+### Inputs
+
+| Input                  | Description                                                                                                                        | Required | Default |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- |
+| `from`                  | Commit SHA from where the commit message log is done. This SHA's commit message will not be included in the results.                | Yes      |         |
+| `to`                    | Commit SHA to where the commit message log is done.                                                                                  | No       | `HEAD`  |
+| `skip-test-validation`  | Skip validating that tests exist in the local package directories.                                                                   | No       | `false` |
+| `merge-base`            | Resolve `from` as the merge base of `to` and `from`, resolved in-process with no local git binary required.                          | No       | `false` |
+| `format`                | Output format for the `tests` output. `space` outputs a space-separated list. `sf` outputs each test prefixed with `--tests`.        | No       | `space` |
+| `working-directory`     | Directory containing the git repository and Salesforce project to inspect.                                                           | No       | workspace root |
+
+### Outputs
+
+| Output        | Description                                                          |
+| -------------- | ---------------------------------------------------------------------- |
+| `tests`        | The resolved test classes, formatted per the `format` input.         |
+| `test-count`   | Number of distinct test classes in the result.                       |
+| `suites`       | Newline-separated list of resolved Apex test suite names, if any.    |
+| `suite-count`  | Number of resolved Apex test suites.                                  |
+| `warnings`     | Newline-separated list of warnings emitted while resolving tests, if any. |
 
 ## Output Formats
 
