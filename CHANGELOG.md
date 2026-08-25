@@ -5,6 +5,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v5.1.1...v5.2.0) (2026-08-25)
+
+
+### Features
+
+* add GitHub Action wrapper (node24) ([#127](https://github.com/mcarvin8/apex-tests-git-delta/issues/127)) ([484b694](https://github.com/mcarvin8/apex-tests-git-delta/commit/484b69458790ab715360fed23854aa5f28ff0eb2))
+
+
+### Bug Fixes
+
+* **deps:** replace txml with in-house XML parser ([#125](https://github.com/mcarvin8/apex-tests-git-delta/issues/125)) ([dde014a](https://github.com/mcarvin8/apex-tests-git-delta/commit/dde014a696bc4116f203c8d440de648ef960f5fa))
+
 ## [5.1.1](https://github.com/mcarvin8/apex-tests-git-delta/compare/v5.1.0...v5.1.1) (2026-08-17)
 
 
