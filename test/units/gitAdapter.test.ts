@@ -140,4 +140,35 @@ describe('resolveMergeBase', () => {
 
     await expect(resolveMergeBase(repo, commitHash, NONEXISTENT_SHA)).rejects.toThrow();
   });
+
+  it('throws when both refs resolve but no merge base exists between them', async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const commitHash = await createTemporaryCommit('chore: add class', CLASS_PATH, CLASS_BODY, repo, tempDir);
+    const commitOid = await repo.revParse(commitHash);
+    const commitObj = await repo.primitives.readObject(commitOid);
+    if (commitObj.type !== 'commit') throw new Error('expected commit object');
+
+    const orphanOid = await repo.primitives.createCommit({
+      tree: commitObj.data.tree,
+      parents: [],
+      author: commitObj.data.author,
+      committer: commitObj.data.committer,
+      message: 'chore: unrelated root commit',
+    });
+
+    await expect(resolveMergeBase(repo, orphanOid, commitHash)).rejects.toThrow(/No merge base found/);
+  });
+
+  it('throws when an annotated tag chain exceeds the max peel depth', async () => {
+    ({ tempDir, repo } = await setupTestRepo());
+    const commitHash = await createTemporaryCommit('chore: add class', CLASS_PATH, CLASS_BODY, repo, tempDir);
+
+    let targetRef = commitHash;
+    for (let i = 5; i >= 1; i--) {
+      await repo.tag.create({ name: `chain${i}`, target: targetRef, message: `tag ${i}` });
+      targetRef = `refs/tags/chain${i}`;
+    }
+
+    await expect(resolveMergeBase(repo, 'chain1', commitHash)).rejects.toThrow(/Exceeded max tag peel depth/);
+  });
 });
