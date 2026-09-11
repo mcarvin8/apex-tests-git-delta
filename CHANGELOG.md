@@ -5,6 +5,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v5.3.0...v5.4.0) (2026-09-11)
+
+
+### Features
+
+* **tsgit:** bump tsgit to v4 ([#130](https://github.com/mcarvin8/apex-tests-git-delta/issues/130)) ([bf8d538](https://github.com/mcarvin8/apex-tests-git-delta/commit/bf8d538ddc3d2fd070f9da9a37dcbf2fc7058e42))
+
 ## [5.3.0](https://github.com/mcarvin8/apex-tests-git-delta/compare/v5.2.0...v5.3.0) (2026-08-25)
 
 
