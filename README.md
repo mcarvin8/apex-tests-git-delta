@@ -4,7 +4,6 @@
 [![Downloads/week](https://img.shields.io/npm/dw/apex-tests-git-delta.svg)](https://npmjs.org/package/apex-tests-git-delta)
 [![GitHub Marketplace](https://img.shields.io/badge/marketplace-apex--tests--git--delta-blue?logo=github)](https://github.com/marketplace/actions/apex-tests-git-delta)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://raw.githubusercontent.com/mcarvin8/apex-tests-git-delta/main/LICENSE.md)
-[![Maintainability](https://qlty.sh/badges/00358247-0030-4cd2-b5c0-2b5553bdf0a6/maintainability.svg)](https://qlty.sh/gh/mcarvin8/projects/apex-tests-git-delta)
 [![codecov](https://codecov.io/gh/mcarvin8/apex-tests-git-delta/graph/badge.svg?token=26XDGPXWUE)](https://codecov.io/gh/mcarvin8/apex-tests-git-delta)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmcarvin8%2Fapex-tests-git-delta%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/mcarvin8/apex-tests-git-delta/main)
 
